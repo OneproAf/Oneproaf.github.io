@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎁 Congratulations!</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 30px;
+      max-width: 480px;
+      margin: auto;
+    }
+    .live-alert {
+      background: #222;
+      padding: 10px 15px;
+      margin-top: 30px;
+      border-radius: 8px;
+      color: #00ff99;
+      font-size: 15px;
+      box-shadow: 0 0 10px rgba(0,255,153,0.3);
+      min-height: 24px;
+    }
+    a.button {
+      background:#00ff99;
+      color:#000;
+      padding:15px 30px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:bold;
+      display: inline-block;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="color:#00ff99;">🎉 Congrats, South Africa!</h1>
+  <p style="font-size:18px;">Complete the quiz and unlock your reward 🎁</p>
+  <div style="font-size:20px;color:#ff4444;margin:20px 0;">⏳ Time left: <span id="timer">10:00</span></div>
+
+  <a class="button" href="https://ovret.com/link?z=9429917&var={SOURCE_ID}&ymid={CLICK_ID}">👉 Claim Reward</a>
+
+  <p style="font-size:12px;color:#aaa;margin-top:20px;">Valid for Android users only · 1 gift per person</p>
+
+  <div class="live-alert" id="liveAlert">🔄 Loading recent activity...</div>
+
+  <script>
+    // Countdown timer
+    let min = 10, sec = 0;
+    const timer = document.getElementById("timer");
+    setInterval(() => {
+      if (sec === 0) {
+        if (min === 0) return;
+        min--;
+        sec = 59;
+      } else {
+        sec--;
+      }
+      timer.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    }, 1000);
+
+    // Live activity generator
+    const liveMessages = [
+      "📍 Someone from South Africa just claimed a 🎧 wireless headset!",
+      "📍 SA user just won a $50 eVoucher 🛍️",
+      "📍 New prize claimed: Smartwatch ⌚ by a SA visitor!",
+      "📍 South Africa: 🎮 Gaming controller just sent!",
+      "📍 iPhone case 📱 delivered to Cape Town!",
+      "📍 Durban winner unlocked a surprise box 🎁",
+      "📍 New user from SA got Bluetooth Speaker 🔊!"
+    ];
+
+    const liveAlert = document.getElementById("liveAlert");
+
+    setInterval(() => {
+      const randomMsg = liveMessages[Math.floor(Math.random() * liveMessages.length)];
+      liveAlert.textContent = randomMsg;
+    }, 3000);
+  </script>
+
+</body>
+</html>
