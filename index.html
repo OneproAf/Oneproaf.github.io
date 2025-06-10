@@ -25,12 +25,12 @@
       min-height: 24px;
     }
     a.button {
-      background:#00ff99;
-      color:#000;
-      padding:15px 30px;
-      border-radius:10px;
-      text-decoration:none;
-      font-weight:bold;
+      background: #00ff99;
+      color: #000;
+      padding: 15px 30px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
       display: inline-block;
       margin-top: 20px;
     }
@@ -39,39 +39,41 @@
 <body>
 
   <h1 style="color:#00ff99;">🎉 Congrats, South Africa!</h1>
-  <p style="font-size:18px;">Complete short questions and unlock your reward 🎁</p>
-  <div style="font-size:20px;color:#ff4444;margin:20px 0;">⏳ Time left: <span id="timer">10:00</span></div>
+  <p style="font-size:18px;">Complete the quiz and unlock your reward 🎁</p>
+  <div style="font-size:20px;color:#ff4444;margin:20px 0;">🎁 Gifts left: <span id="giftCount">238</span></div>
 
   <a class="button" href="https://ovret.com/link?z=9429917&var={SOURCE_ID}&ymid={CLICK_ID}">👉 Claim Reward</a>
 
-  <p style="font-size:12px;color:#aaa;margin-top:20px;">Valid for Android and IOS users only · 1 gift per person</p>
+  <p style="font-size:12px;color:#aaa;margin-top:20px;">Valid for Android users only · 1 gift per person</p>
 
   <div class="live-alert" id="liveAlert">🔄 Loading recent activity...</div>
 
   <script>
-    // Countdown timer
-    let min = 10, sec = 0;
-    const timer = document.getElementById("timer");
-    setInterval(() => {
-      if (sec === 0) {
-        if (min === 0) return;
-        min--;
-        sec = 59;
+    // Gift count logic
+    let giftsLeft = 238;
+    const giftCountEl = document.getElementById("giftCount");
+
+    const giftInterval = setInterval(() => {
+      if (giftsLeft > 0) {
+        giftsLeft--;
+        giftCountEl.textContent = giftsLeft;
       } else {
-        sec--;
+        clearInterval(giftInterval);
       }
-      timer.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-    }, 1000);
+    }, 2000);
 
     // Live activity generator
     const liveMessages = [
-      "📍 Someone from South Africa just claimed a 🎧 wireless headset!",
-      "📍 SA user just won a $50 eVoucher 🛍️",
-      "📍 New prize claimed: Smartwatch ⌚ by a SA visitor!",
-      "📍 South Africa: 🎮 Gaming controller just sent!",
-      "📍 iPhone case 📱 delivered to Cape Town!",
-      "📍 Durban winner unlocked a surprise box 🎁",
-      "📍 New user from SA got Bluetooth Speaker 🔊!"
+      "📍 Someone from SA just claimed a new Computer 🖥️!",
+      "📍 A visitor from Durban won a Smartphone 📱!",
+      "📍 SA user just received a Mountain Bike 🚴‍♂️!",
+      "📍 New reward: Gaming Laptop 💻 claimed!",
+      "📍 Lucky winner got a Tablet from Johannesburg!",
+      "📍 Another prize: Smart TV 📺 just sent out!",
+      "📍 Cape Town user received a surprise Phone 📦!",
+      "📍 SA member just won a Scooter 🛵!",
+      "📍 Bluetooth Headphones 🎧 gifted to Pretoria!",
+      "📍 PlayStation 5 🎮 claimed by a new client!"
     ];
 
     const liveAlert = document.getElementById("liveAlert");
