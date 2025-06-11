@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎁 Congratulations, South Africa!</title>
+  <title>🎁 Congratulations!</title>
   <style>
     body {
       background: #111;
@@ -17,7 +17,7 @@
     .live-alert {
       background: #222;
       padding: 10px 15px;
-      margin-top: 30px;
+      margin-top: 20px;
       border-radius: 8px;
       color: #00ff99;
       font-size: 15px;
@@ -25,12 +25,12 @@
       min-height: 24px;
     }
     a.button {
-      background:#00ff99;
-      color:#000;
-      padding:15px 30px;
-      border-radius:10px;
-      text-decoration:none;
-      font-weight:bold;
+      background: #00ff99;
+      color: #000;
+      padding: 15px 30px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
       display: inline-block;
       margin-top: 20px;
     }
@@ -38,45 +38,45 @@
 </head>
 <body>
 
-  <h2 style="color:#ffcc00;">🎉 Congratulations, you are the winner!</h2>
-  <h1 style="color:#00ff99;">🎁 Choose your prize!</h1>
-  <p style="font-size:18px;">Complete the quiz and unlock your reward 🎁</p>
-
-  <div style="font-size:20px;color:#ff4444;margin:20px 0;">
-    🎁 Gifts Left: <span id="giftCounter">238</span>
-  </div>
+  <h1 style="color:#00ff99;">🎉 Congrats, South Africa!</h1>
+  <p style="font-size:18px;">📝 Complete a 1-minute form and choose your prize!</p>
+  <div style="font-size:20px;color:#ff4444;margin:20px 0;">🎁 Gifts left: <span id="giftCount">238</span></div>
 
   <a class="button" href="https://ovret.com/link?z=9429917&var={SOURCE_ID}&ymid={CLICK_ID}">👉 Claim Reward</a>
 
-  <p style="font-size:12px;color:#aaa;margin-top:20px;">
-    Valid for Android and iOS users only · 1 gift per person
-  </p>
+  <p style="font-size:12px;color:#aaa;margin-top:20px;">✅ Valid for Android & iOS · 1 gift per person</p>
 
   <div class="live-alert" id="liveAlert">🔄 Loading recent activity...</div>
 
   <script>
-    // Gifts counter
+    // Gift countdown
     let giftsLeft = 238;
-    const giftDisplay = document.getElementById("giftCounter");
-    setInterval(() => {
+    const giftCountEl = document.getElementById("giftCount");
+
+    const giftInterval = setInterval(() => {
       if (giftsLeft > 0) {
         giftsLeft--;
-        giftDisplay.textContent = giftsLeft;
+        giftCountEl.textContent = giftsLeft;
+      } else {
+        clearInterval(giftInterval);
       }
-    }, 2000); // every 2 seconds
+    }, 2000);
 
-    // Live activity generator
+    // Live activity feed
     const liveMessages = [
-      "📍 SA User won 🎧 Wireless Headphones Pro!",
-      "📍 Someone from Cape Town just received 💰 $100 eVoucher!",
-      "📍 Pretoria winner got 🖥️ Apple iPad Mini!",
-      "📍 New prize claimed: ⌚ Galaxy Smartwatch 6",
-      "📍 South Africa: 🖼️ 4K Smart TV sent out!",
-      "📍 Durban user unlocked a 🎁 Mystery Tech Box!",
-      "📍 New winner received 🎮 PlayStation 5!",
-      "📍 Bluetooth Speaker 🔊 shipped to Johannesburg!",
-      "📍 Cape Town: 🚲 Electric Scooter won!",
-      "📍 SA User just claimed a 💳 R1500 Gift Card!"
+      "📍 Someone from SA just claimed a new Computer 🖥️!",
+      "📍 A visitor from Durban won a Smartphone 📱!",
+      "📍 SA user just received a Mountain Bike 🚴‍♂️!",
+      "📍 New reward: Gaming Laptop 💻 claimed!",
+      "📍 Lucky winner got a Tablet from Johannesburg!",
+      "📍 Another prize: Smart TV 📺 just sent out!",
+      "📍 Cape Town user received a surprise Phone 📦!",
+      "📍 SA member just won a Scooter 🛵!",
+      "📍 Bluetooth Headphones 🎧 gifted to Pretoria!",
+      "📍 PlayStation 5 🎮 claimed by a new client!",
+      "🎁 Limited gifts – take yours now!",
+      "⚡ Hurry up before it's gone!",
+      "✅ Android & iOS supported – eligible users only!"
     ];
 
     const liveAlert = document.getElementById("liveAlert");
