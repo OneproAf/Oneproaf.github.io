@@ -3,100 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💼 Get Paid to Work Online in Canada</title>
+  <title>🎁 Congratulations!</title>
   <style>
     body {
-      background: #0f172a;
+      background: #111;
       color: #fff;
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       text-align: center;
       padding: 30px;
       max-width: 480px;
       margin: auto;
     }
-    h1 {
-      font-size: 26px;
-      color: #00ff99;
-    }
-    .box {
-      background: #1e293b;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-      box-shadow: 0 0 10px rgba(0,255,153,0.2);
-    }
-    .button {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 15px 30px;
-      background: #00ff99;
-      color: #000;
-      font-weight: bold;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 18px;
-    }
-    .small {
-      font-size: 13px;
-      color: #ccc;
-      margin-top: 15px;
-    }
-    ul {
-      text-align: left;
-      margin-top: 15px;
-      padding-left: 20px;
-    }
-    ul li {
-      margin-bottom: 8px;
-    }
-    .payout-alert {
-      margin-top: 20px;
+    .live-alert {
       background: #222;
-      padding: 12px;
+      padding: 10px 15px;
+      margin-top: 30px;
       border-radius: 8px;
-      font-size: 15px;
       color: #00ff99;
-      box-shadow: 0 0 10px rgba(0,255,153,0.2);
+      font-size: 15px;
+      box-shadow: 0 0 10px rgba(0,255,153,0.3);
+      min-height: 24px;
+    }
+    a.button {
+      background:#00ff99;
+      color:#000;
+      padding:15px 30px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:bold;
+      display: inline-block;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h1>💼 Work Online & Get Paid in Canada</h1>
-  <p style="font-size: 18px;">We’re helping Canadians earn from home — no experience needed</p>
+  <h2 style="color:#ffcc00;">🎉 Congratulations, you are the winner!</h2>
+  <h1 style="color:#00ff99;">🎁 Choose your prize!</h1>
+  <p style="font-size:18px;">Complete the quiz and unlock your reward 🎁</p>
 
-  <div class="box">
-    <p style="font-size: 16px; margin-bottom: 10px;"><strong>💰 From $30 CAD/hour</strong><br>Fast payouts · Flexible schedule</p>
-    <ul>
-      <li>✅ 100% online work from your phone or computer</li>
-      <li>✅ Get paid weekly or daily</li>
-      <li>✅ Only 1-minute form to apply</li>
-      <li>✅ Android & iOS supported</li>
-    </ul>
-    <a class="button" href="https://rtjxt.com/link?z=9436630&var={SOURCE_ID}&ymid={CLICK_ID}" target="_blank">
-      👉 Apply for Online Work
-    </a>
-    <p class="small">Limited spots · Must be 18+ · Free to register</p>
+  <div style="font-size:20px;color:#ff4444;margin:20px 0;">
+    🎁 Gifts Left: <span id="giftCounter">238</span>
   </div>
 
-  <div class="payout-alert" id="payoutAlert">🔄 Checking recent payouts...</div>
+  <a class="button" href="https://ovret.com/link?z=9429917&var={SOURCE_ID}&ymid={CLICK_ID}">👉 Claim Reward</a>
+
+  <p style="font-size:12px;color:#aaa;margin-top:20px;">
+    Valid for Android and iOS users only · 1 gift per person
+  </p>
+
+  <div class="live-alert" id="liveAlert">🔄 Loading recent activity...</div>
 
   <script>
-    const payoutMessages = [
-      "💸 $850 paid to Toronto user",
-      "💸 $1,200 sent to Vancouver",
-      "💸 $3,500 transferred to Calgary",
-      "💸 $2,150 deposited in Ottawa",
-      "💸 $975 payout sent to Quebec user",
-      "💸 $4,000 wired to Edmonton",
-      "💸 $500 bonus to Mississauga user"
-    ];
-    const payoutEl = document.getElementById("payoutAlert");
-    let i = 0;
+    // Gifts counter
+    let giftsLeft = 238;
+    const giftDisplay = document.getElementById("giftCounter");
     setInterval(() => {
-      payoutEl.textContent = payoutMessages[i % payoutMessages.length];
-      i++;
-    }, 5000);
+      if (giftsLeft > 0) {
+        giftsLeft--;
+        giftDisplay.textContent = giftsLeft;
+      }
+    }, 2000); // every 2 seconds
+
+    // Live activity generator
+    const liveMessages = [
+      "📍 SA User won 🎧 Wireless Headphones Pro!",
+      "📍 Someone from Cape Town just received 💰 $100 eVoucher!",
+      "📍 Pretoria winner got 🖥️ Apple iPad Mini!",
+      "📍 New prize claimed: ⌚ Galaxy Smartwatch 6",
+      "📍 South Africa: 🖼️ 4K Smart TV sent out!",
+      "📍 Durban user unlocked a 🎁 Mystery Tech Box!",
+      "📍 New winner received 🎮 PlayStation 5!",
+      "📍 Bluetooth Speaker 🔊 shipped to Johannesburg!",
+      "📍 Cape Town: 🚲 Electric Scooter won!",
+      "📍 SA User just claimed a 💳 R1500 Gift Card!"
+    ];
+
+    const liveAlert = document.getElementById("liveAlert");
+
+    setInterval(() => {
+      const randomMsg = liveMessages[Math.floor(Math.random() * liveMessages.length)];
+      liveAlert.textContent = randomMsg;
+    }, 3000);
   </script>
 
 </body>
