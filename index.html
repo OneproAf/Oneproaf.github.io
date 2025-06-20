@@ -2,90 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎁 Congratulations!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MoodScan AI</title>
+
+  <!-- Шрифти та Chart.js -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="../src/main.js" defer></script>
+
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 30px;
-      max-width: 480px;
-      margin: auto;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #eef2f7, #dbe4f3);
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
     }
-    .live-alert {
-      background: #222;
-      padding: 10px 15px;
-      margin-top: 20px;
-      border-radius: 8px;
-      color: #00ff99;
-      font-size: 15px;
-      box-shadow: 0 0 10px rgba(0,255,153,0.3);
-      min-height: 24px;
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #3f3d56;
     }
-    a.button {
-      background: #00ff99;
-      color: #000;
-      padding: 15px 30px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      display: inline-block;
+    #cameraContainer {
+      margin-bottom: 20px;
+      border: 3px solid #ccc;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    video {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 20px;
+    }
+    .btn-scan {
+      background-color: #4f46e5;
+      color: white;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
       margin-top: 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn-scan:hover {
+      background-color: #4338ca;
+    }
+    #resultBox {
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+      max-width: 600px;
+      width: 100%;
+      text-align: left;
+    }
+    #resultBox h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    #moodChart {
+      margin-top: 40px;
+      max-width: 600px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
+  <h1>MoodScan AI</h1>
 
-  <h1 style="color:#00ff99;">🎉 Congrats, South Africa </h1>
-  <p style="font-size:18px;">📝 Complete a 1-minute form and choose your prize!</p>
-  <div style="font-size:20px;color:#ff4444;margin:20px 0;">🎁 Gifts left: <span id="giftCount">238</span></div>
+  <div id="cameraContainer">
+    <video id="webcam" autoplay playsinline></video>
+  </div>
 
-  <a class="button" href="https://ovret.com/link?z=9429917&var={SOURCE_ID}&ymid={CLICK_ID}">👉 Claim Reward</a>
+  <button class="btn-scan" onclick="analyzeMood()">Scan My Mood</button>
 
-  <p style="font-size:12px;color:#aaa;margin-top:20px;">✅ Valid for Android & iOS · 1 gift per person</p>
+  <div id="resultBox">
+    <p>⏳ Your result will appear here after scanning...</p>
+  </div>
 
-  <div class="live-alert" id="liveAlert">🔄 Loading recent activity...</div>
-
-  <script>
-    // Gift countdown
-    let giftsLeft = 238;
-    const giftCountEl = document.getElementById("giftCount");
-
-    const giftInterval = setInterval(() => {
-      if (giftsLeft > 0) {
-        giftsLeft--;
-        giftCountEl.textContent = giftsLeft;
-      } else {
-        clearInterval(giftInterval);
-      }
-    }, 2000);
-
-    // Live activity feed
-    const liveMessages = [
-      "📍 Someone from SA just claimed a new Computer 🖥️!",
-      "📍 A visitor from Durban won a Smartphone 📱!",
-      "📍 SA user just received a Mountain Bike 🚴‍♂️!",
-      "📍 New reward: Gaming Laptop 💻 claimed!",
-      "📍 Lucky winner got a Tablet from Johannesburg!",
-      "📍 Another prize: Smart TV 📺 just sent out!",
-      "📍 Cape Town user received a surprise Phone 📦!",
-      "📍 SA member just won a Scooter 🛵!",
-      "📍 Bluetooth Headphones 🎧 gifted to Pretoria!",
-      "📍 PlayStation 5 🎮 claimed by a new client!",
-      "🎁 Limited gifts – take yours now!",
-      "⚡ Hurry up before it's gone!",
-      "✅ Android & iOS supported – eligible users only!"
-    ];
-
-    const liveAlert = document.getElementById("liveAlert");
-
-    setInterval(() => {
-      const randomMsg = liveMessages[Math.floor(Math.random() * liveMessages.length)];
-      liveAlert.textContent = randomMsg;
-    }, 3000);
-  </script>
-
+  <canvas id="moodChart"></canvas>
 </body>
 </html>
