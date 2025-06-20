@@ -4,17 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MoodScan AI</title>
+
+  <!-- Teachable Machine -->
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #111;
+      background-color: #0f0f0f;
       color: #fff;
+      font-family: Arial, sans-serif;
       padding: 20px;
       text-align: center;
     }
-    h1 { color: #00e676; }
     button {
       background: #00c853;
       color: white;
@@ -22,38 +25,30 @@
       border: none;
       border-radius: 8px;
       font-size: 16px;
-      margin: 10px;
       cursor: pointer;
+      margin: 10px 0;
     }
-    #webcam video {
+    video {
       width: 300px;
-      height: auto;
       border-radius: 10px;
-      margin-top: 20px;
+      margin-top: 10px;
     }
     #resultBox, #chatBox {
-      margin-top: 20px;
-      background: #222;
-      padding: 12px;
+      margin-top: 15px;
+      padding: 10px;
+      background: #1e1e1e;
       border-radius: 10px;
     }
   </style>
 </head>
 <body>
   <h1>MoodScan AI</h1>
-  <p>Check your mood using your camera & AI recommendations.</p>
+  <p>Scan your face to detect your mood and get AI-based recommendations.</p>
 
+  <button id="scanBtn">Scan My Mood</button>
   <div id="webcam"></div>
-<button id="scanBtn">Scan My Mood</button>
-<div id="webcam"></div>
-<div id="resultBox"></div>
-<div id="chatBox"></div>
-<canvas id="moodChart" width="300" height="150"></canvas>
-  
-
-  <div id="resultBox">Waiting for camera...</div>
+  <div id="resultBox">📷 Waiting for scan...</div>
   <div id="chatBox"></div>
-
   <canvas id="moodChart" width="300" height="150"></canvas>
 
   <script type="module" src="./src/main.js"></script>
