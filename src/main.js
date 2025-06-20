@@ -89,5 +89,7 @@ async function getChatGPTRecommendation(mood) {
 // Make function globally available
 window.analyzeMood = analyzeMood;
 
-// Initialize model on page load
-await loadTeachableModel();
+// ✅ Викликаємо модель правильно
+(async () => {
+  await loadTeachableModel();
+})();
