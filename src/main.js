@@ -1,79 +1,25 @@
-
-import Chart from 'chart.js/auto';
-
-let model, webcam, moodChart;
-let moodHistory = [];
-
-async function loadModel() {
-  const URL = "https://teachablemachine.withgoogle.com/models/6WobZImCA/";
-  model = await tmImage.load(URL + "model.json", URL + "metadata.json");
-
-  webcam = new tmImage.Webcam(200, 200, true);
-  await webcam.setup();
-  await webcam.play();
-  window.requestAnimationFrame(loop);
-
-  document.getElementById("webcam").appendChild(webcam.canvas);
-}
-
-async function loop() {
-  webcam.update();
-  window.requestAnimationFrame(loop);
-}
-
 window.analyzeMood = async function () {
+  const webcamContainer = document.getElementById("webcam");
   const resultBox = document.getElementById("resultBox");
-  resultBox.innerText = "🔍 Scanning...";
+
+  resultBox.innerText = "🎥 Requesting camera...";
 
   try {
-    const prediction = await model.predict(webcam.canvas);
-    const top = prediction.sort((a, b) => b.probability - a.probability)[0];
-    const mood = top.className;
-    const confidence = (top.probability * 100).toFixed(1);
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    
+    const video = document.createElement("video");
+    video.autoplay = true;
+    video.srcObject = stream;
+    video.style.borderRadius = "12px";
+    video.style.marginTop = "20px";
 
-    resultBox.innerText = `Mood: ${mood} (${confidence}%)`;
-    moodHistory.push(mood);
-    updateChart();
+    // Очистити попередній контент
+    webcamContainer.innerHTML = "";
+    webcamContainer.appendChild(video);
+
+    resultBox.innerText = "✅ Camera started!";
   } catch (error) {
-    resultBox.innerText = "❌ Error analyzing mood.";
-    console.error(error);
+    console.error("Camera error:", error);
+    resultBox.innerText = "❌ Could not access camera.";
   }
 };
-
-function updateChart() {
-  const counts = moodHistory.reduce((acc, mood) => {
-    acc[mood] = (acc[mood] || 0) + 1;
-    return acc;
-  }, {});
-
-  const labels = Object.keys(counts);
-  const data = Object.values(counts);
-
-  if (moodChart) moodChart.destroy();
-
-  const ctx = document.getElementById("moodChart").getContext("2d");
-  moodChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [{
-        label: "Mood Frequency",
-        data: data,
-        backgroundColor: "#00e676"
-      }]
-    },
-    options: { responsive: true }
-  });
-}
-
-(async () => {
-  const resultBox = document.getElementById("resultBox");
-  resultBox.innerText = "📷 Initializing camera...";
-  try {
-    await loadModel();
-    resultBox.innerText = "✅ Ready! Click to scan.";
-  } catch (err) {
-    console.error(err);
-    resultBox.innerText = "❌ Camera error. Try again.";
-  }
-})();
