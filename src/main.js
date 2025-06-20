@@ -68,6 +68,7 @@ async function fetchChatGPTRecommendation(mood) {
 (async () => {
   await loadTeachableModel();
   await renderMoodChart("moodChart");
+window.analyzeMood = analyzeMood;
 })();
 
 window.analyzeMood = analyzeMood;
