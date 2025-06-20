@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MoodScan AI – Emotion Detector</title>
 
   <!-- ✅ Teachable Machine -->
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+
+  <!-- ✅ Chart.js (for mood chart) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- ✅ Styles -->
   <style>
@@ -14,11 +17,11 @@
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: #121212;
-      color: white;
+      color: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      padding: 24px;
     }
 
     h1 {
@@ -27,21 +30,30 @@
     }
 
     .description {
-      max-width: 600px;
-      text-align: center;
       color: #ccc;
-      margin-bottom: 30px;
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 20px;
     }
 
     #webcam canvas {
       border-radius: 10px;
-      border: 2px solid #444;
       margin-top: 20px;
+    }
+
+    #resultBox {
+      margin-top: 20px;
+      padding: 14px 20px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      max-width: 360px;
+      text-align: center;
+      white-space: pre-line;
     }
 
     button {
       margin-top: 20px;
-      padding: 12px 24px;
+      padding: 12px 26px;
       font-size: 16px;
       background-color: #00c853;
       color: white;
@@ -50,17 +62,8 @@
       cursor: pointer;
     }
 
-    #resultBox {
-      margin-top: 20px;
-      background: #1e1e1e;
-      padding: 12px 18px;
-      border-radius: 10px;
-      max-width: 300px;
-      text-align: center;
-    }
-
     canvas#moodChart {
-      margin-top: 30px;
+      margin-top: 40px;
       max-width: 90vw;
     }
   </style>
@@ -69,19 +72,20 @@
 <body>
   <h1>MoodScan AI</h1>
   <p class="description">
-    This app uses your webcam and AI to detect your current emotional state and gives personalized advice based on your mood.
+    Analyze your emotional state using your camera and AI.  
+    Get mood-based music and activity recommendations instantly.
   </p>
 
   <!-- Webcam feed -->
   <div id="webcam"></div>
 
-  <!-- Mood result + recommendation -->
+  <!-- Result & Recommendation -->
   <div id="resultBox">Press the button to scan your mood</div>
 
   <!-- Action button -->
   <button onclick="analyzeMood()">Scan My Mood</button>
 
-  <!-- Chart -->
+  <!-- Mood chart -->
   <canvas id="moodChart" width="300" height="150"></canvas>
 
   <!-- Main logic -->
