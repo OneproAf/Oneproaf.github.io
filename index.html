@@ -1,85 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MoodScan AI</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://unpkg.com/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InstaText AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
       color: #222;
-      text-align: center;
-      padding: 40px 20px;
     }
-
-    h1 {
-      font-size: 2.5rem;
-      color: #3f3d56;
+    header {
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1, h2 {
+      color: #111;
       margin-bottom: 10px;
     }
-
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 30px;
-    }
-
-    #webcam video {
-      width: 280px;
-      border-radius: 16px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-    }
-
-    button {
-      padding: 12px 28px;
-      border: none;
-      border-radius: 30px;
-      background-color: #6200ee;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out;
-    }
-
-    button:hover {
-      background-color: #3700b3;
-    }
-
-    #resultBox, #chatBox {
-      margin-top: 25px;
-      font-size: 18px;
-      font-weight: 500;
-      padding: 10px;
-      background: white;
+    section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
-
-    canvas {
-      margin-top: 30px;
-      max-width: 90%;
+    label, select, input[type=file], button {
+      display: block;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 10px;
+      padding: 10px;
     }
-
-    #webcam {
-      margin: 20px auto;
+    button {
+      background-color: #111;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background-color: #333;
+    }
+    .captions {
+      margin-top: 20px;
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .caption-item {
+      margin-bottom: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #888;
     }
   </style>
 </head>
 <body>
-  <h1>MoodScan AI</h1>
-  <p>Scan your face to detect your mood and receive AI-powered music and lifestyle recommendations!</p>
-  <button id="scanBtn">🎯 Scan My Mood</button>
-  <div id="webcam"></div>
-  <div id="resultBox"></div>
-  <div id="chatBox"></div>
-  <canvas id="moodChart"></canvas>
+  <header>
+    <h1>InstaText AI</h1>
+    <p>Smart Captions Generator for Social Media</p>
+  </header>
+  <main>
+    <section>
+      <h2>📌 Project Description</h2>
+      <p>InstaText AI is an AI-powered tool that generates unique captions for your photos on Instagram, Facebook, and X. Just upload a photo, choose a style — and get ready-made captions with hashtags.</p>
+    </section><section>
+  <h2>🛠️ Features</h2>
+  <ul>
+    <li>📷 Upload photos from mobile or desktop</li>
+    <li>🎭 Choose caption style: Funny, Romantic, Smart, Deep, Trendy</li>
+    <li>🧠 Generate 3 caption options using GPT-4</li>
+    <li>🔗 Auto-generated relevant hashtags</li>
+    <li>📋 One-click copy text</li>
+    <li>📱 Fully mobile responsive</li>
+    <li>🌐 Hosted on GitHub Pages, no backend needed</li>
+  </ul>
+</section>
 
-  <script type="module" src="../src/main.js"></script>
-</body>
+<section>
+  <h2>🚀 Try it Now</h2>
+  <form id="captionForm">
+    <label for="imageUpload">📷 Upload photo:</label>
+    <input type="file" id="imageUpload" accept="image/*" required>
+
+    <label for="styleSelect">🎭 Choose caption style:</label>
+    <select id="styleSelect" required>
+      <option value="Funny">Funny</option>
+      <option value="Romantic">Romantic</option>
+      <option value="Smart">Smart</option>
+      <option value="Deep">Deep</option>
+      <option value="Trendy">Trendy</option>
+    </select>
+
+    <button type="submit">✨ Generate</button>
+  </form>
+
+  <div class="captions" id="captionResults" style="display:none;">
+    <div class="caption-item" id="cap1"></div>
+    <div class="caption-item" id="cap2"></div>
+    <div class="caption-item" id="cap3"></div>
+  </div>
+</section>
+
+  </main>  <footer>
+    <p>© 2025 InstaText AI. All rights reserved.</p>
+  </footer>  <script>
+    const form = document.getElementById('captionForm');
+    const results = document.getElementById('captionResults');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const style = document.getElementById('styleSelect').value;
+      const cap1 = document.getElementById('cap1');
+      const cap2 = document.getElementById('cap2');
+      const cap3 = document.getElementById('cap3');
+
+      // Simulated caption generation
+      cap1.innerHTML = `<strong>Caption 1:</strong> This is a ${style} caption with #style and #mood.`;
+      cap2.innerHTML = `<strong>Caption 2:</strong> Elevate your post with this ${style} vibe! #instagood #${style}`;
+      cap3.innerHTML = `<strong>Caption 3:</strong> Keep it ${style.toLowerCase()} ✨ #${style}Mood #SocialLife`;
+
+      results.style.display = 'block';
+    });
+  </script></body>
 </html>
