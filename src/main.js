@@ -1,26 +1,28 @@
 import Chart from 'chart.js/auto';
 
-let model, webcam, labelContainer, maxPredictions;
-let moodChart;
+let model, webcam, labelContainer, moodChart;
 let moodHistory = [];
 
+// Load Teachable Machine model and webcam
 async function loadTeachableModel() {
   const URL = "https://teachablemachine.withgoogle.com/models/6WobZImCA/";
   model = await tmImage.load(URL + "model.json", URL + "metadata.json");
 
   webcam = new tmImage.Webcam(200, 200, true); // width, height, flip
-  await webcam.setup(); // Запитує доступ до камери
+  await webcam.setup(); // Ask for camera access
   await webcam.play();
   window.requestAnimationFrame(loop);
 
   document.getElementById("webcam").appendChild(webcam.canvas);
 }
 
+// Loop webcam frame
 async function loop() {
   webcam.update();
   window.requestAnimationFrame(loop);
 }
 
+// Analyze mood from current frame
 async function analyzeMood() {
   const prediction = await model.predict(webcam.canvas);
   const top = prediction.sort((a, b) => b.probability - a.probability)[0];
@@ -35,6 +37,7 @@ async function analyzeMood() {
   getChatGPTRecommendation(mood);
 }
 
+// Update bar chart with mood history
 function updateChart(mood) {
   const moodCounts = moodHistory.reduce((acc, m) => {
     acc[m] = (acc[m] || 0) + 1;
@@ -44,9 +47,7 @@ function updateChart(mood) {
   const labels = Object.keys(moodCounts);
   const data = Object.values(moodCounts);
 
-  if (moodChart) {
-    moodChart.destroy();
-  }
+  if (moodChart) moodChart.destroy();
 
   const ctx = document.getElementById("moodChart").getContext("2d");
   moodChart = new Chart(ctx, {
@@ -56,17 +57,17 @@ function updateChart(mood) {
       datasets: [{
         label: 'Mood Frequency',
         data,
+        backgroundColor: '#00c853'
       }]
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { display: false }
-      }
+      plugins: { legend: { display: false } }
     }
   });
 }
 
+// Send mood to ChatGPT and get recommendation
 async function getChatGPTRecommendation(mood) {
   try {
     const response = await fetch("/chat", {
@@ -85,5 +86,8 @@ async function getChatGPTRecommendation(mood) {
   }
 }
 
+// Make function globally available
 window.analyzeMood = analyzeMood;
+
+// Initialize model on page load
 await loadTeachableModel();
