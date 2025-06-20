@@ -1,29 +1,19 @@
-import { saveMood } from "./firebase.js";
-import { renderRecommendation } from "./components/Recommendations.js";
-import { renderMoodChart } from "./components/EmotionChart.js";
+import Chart from 'chart.js/auto';
 
-let model, webcam, labelContainer;
-
-// 📦 Teachable Machine модель
-const URL = "https://teachablemachine.withgoogle.com/models/6WobZImCA/";
+let model, webcam, labelContainer, maxPredictions;
+let moodChart;
+let moodHistory = [];
 
 async function loadTeachableModel() {
-  const modelURL = URL + "model.json";
-  const metadataURL = URL + "metadata.json";
+  const URL = "https://teachablemachine.withgoogle.com/models/6WobZImCA/";
+  model = await tmImage.load(URL + "model.json", URL + "metadata.json");
 
-  model = await tmImage.load(modelURL, metadataURL);
-  console.log("✅ Teachable Machine model loaded");
-
-  webcam = new tmImage.Webcam(200, 200, true); // ширина, висота, фронтальна
-  await webcam.setup(); // доступ до камери
+  webcam = new tmImage.Webcam(200, 200, true); // width, height, flip
+  await webcam.setup(); // Запитує доступ до камери
   await webcam.play();
   window.requestAnimationFrame(loop);
 
   document.getElementById("webcam").appendChild(webcam.canvas);
-  labelContainer = document.getElementById("resultBox");
-  for (let i = 0; i < model.getTotalClasses(); i++) {
-    labelContainer.appendChild(document.createElement("div"));
-  }
 }
 
 async function loop() {
@@ -31,44 +21,69 @@ async function loop() {
   window.requestAnimationFrame(loop);
 }
 
-async function predictMood() {
-  const prediction = await model.predict(webcam.canvas);
-  prediction.sort((a, b) => b.probability - a.probability);
-  const topMood = prediction[0].className;
-  return topMood;
-}
-
 async function analyzeMood() {
-  const mood = await predictMood();
-  const recommendation = await fetchChatGPTRecommendation(mood);
+  const prediction = await model.predict(webcam.canvas);
+  const top = prediction.sort((a, b) => b.probability - a.probability)[0];
 
-  renderRecommendation(mood, recommendation);
-  await saveMood(mood, recommendation);
-  await renderMoodChart("moodChart");
+  const mood = top.className;
+  const confidence = (top.probability * 100).toFixed(1) + "%";
+
+  document.getElementById("resultBox").innerText = `You seem to be ${mood} (${confidence})`;
+
+  moodHistory.push(mood);
+  updateChart(mood);
+  getChatGPTRecommendation(mood);
 }
 
-async function fetchChatGPTRecommendation(mood) {
+function updateChart(mood) {
+  const moodCounts = moodHistory.reduce((acc, m) => {
+    acc[m] = (acc[m] || 0) + 1;
+    return acc;
+  }, {});
+
+  const labels = Object.keys(moodCounts);
+  const data = Object.values(moodCounts);
+
+  if (moodChart) {
+    moodChart.destroy();
+  }
+
+  const ctx = document.getElementById("moodChart").getContext("2d");
+  moodChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Mood Frequency',
+        data,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+async function getChatGPTRecommendation(mood) {
   try {
-    const res = await fetch("http://localhost:5000/chat", {
+    const response = await fetch("/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        message: `I'm feeling ${mood}. What should I do?`
-      })
+        message: `What should someone do when they feel ${mood}? Recommend 1 activity and 1 music genre.`,
+      }),
     });
 
-    const data = await res.json();
-    return data.reply || "No response from AI.";
+    const data = await response.json();
+    const advice = data.reply || "No recommendation received.";
+    document.getElementById("resultBox").innerText += `\n\n💡 ${advice}`;
   } catch (error) {
-    console.error("❌ Proxy error:", error);
-    return "Error: Unable to connect to AI.";
+    console.error("ChatGPT error:", error);
   }
 }
 
-(async () => {
-  await loadTeachableModel();
-  await renderMoodChart("moodChart");
 window.analyzeMood = analyzeMood;
-})();
-
-window.analyzeMood = analyzeMood;
+await loadTeachableModel();
