@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatBox = document.getElementById("chatBox");
   let model;
 
-  const modelURL = "https://teachablemachine.withgoogle.com/models/YOUR_MODEL_URL/";
+  const modelURL = "https://teachablemachine.withgoogle.com/models/G7S2GJZC8/"; // приклад моделі
   const modelJson = modelURL + "model.json";
   const metadataJson = modelURL + "metadata.json";
 
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         webcamContainer.innerHTML = "";
         webcamContainer.appendChild(video);
 
-        await new Promise((res) => setTimeout(res, 1500)); // Пауза для стабілізації
+        await new Promise((res) => setTimeout(res, 1500)); // чекати 1.5 сек
 
         const canvas = document.createElement("canvas");
         canvas.width = 300;
@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const confidence = prediction[0].probability.toFixed(2);
         resultBox.innerText = `🧠 Mood: ${mood} (${confidence})`;
 
-        // Зупиняємо камеру
         stream.getTracks().forEach(track => track.stop());
         video.remove();
 
