@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto';
 
-let model, webcam, labelContainer, moodChart;
+let model, webcam, moodChart;
 let moodHistory = [];
 
 // Load Teachable Machine model and webcam
@@ -16,28 +16,35 @@ async function loadTeachableModel() {
   document.getElementById("webcam").appendChild(webcam.canvas);
 }
 
-// Loop webcam frame
+// Webcam loop
 async function loop() {
   webcam.update();
   window.requestAnimationFrame(loop);
 }
 
-// Analyze mood from current frame
-async function analyzeMood() {
-  const prediction = await model.predict(webcam.canvas);
-  const top = prediction.sort((a, b) => b.probability - a.probability)[0];
+// Analyze mood from webcam image
+window.analyzeMood = async function () {
+  document.getElementById("resultBox").innerText = "🔍 Scanning your mood...";
 
-  const mood = top.className;
-  const confidence = (top.probability * 100).toFixed(1) + "%";
+  try {
+    const prediction = await model.predict(webcam.canvas);
+    const top = prediction.sort((a, b) => b.probability - a.probability)[0];
 
-  document.getElementById("resultBox").innerText = `You seem to be ${mood} (${confidence})`;
+    const mood = top.className;
+    const confidence = (top.probability * 100).toFixed(1) + "%";
 
-  moodHistory.push(mood);
-  updateChart(mood);
-  getChatGPTRecommendation(mood);
-}
+    document.getElementById("resultBox").innerText = `You seem to be ${mood} (${confidence})`;
 
-// Update bar chart with mood history
+    moodHistory.push(mood);
+    updateChart(mood);
+    getChatGPTRecommendation(mood);
+  } catch (err) {
+    console.error("❌ Error analyzing mood:", err);
+    document.getElementById("resultBox").innerText = "❌ Failed to scan. Please try again.";
+  }
+};
+
+// Update chart with mood history
 function updateChart(mood) {
   const moodCounts = moodHistory.reduce((acc, m) => {
     acc[m] = (acc[m] || 0) + 1;
@@ -55,19 +62,22 @@ function updateChart(mood) {
     data: {
       labels,
       datasets: [{
-        label: 'Mood Frequency',
+        label: 'Mood Count',
         data,
-        backgroundColor: '#00c853'
+        backgroundColor: '#00e676',
+        borderRadius: 6,
       }]
     },
     options: {
       responsive: true,
-      plugins: { legend: { display: false } }
+      plugins: {
+        legend: { display: false }
+      }
     }
   });
 }
 
-// Send mood to ChatGPT and get recommendation
+// Call OpenAI API for recommendation (optional backend needed)
 async function getChatGPTRecommendation(mood) {
   try {
     const response = await fetch("/chat", {
@@ -86,10 +96,14 @@ async function getChatGPTRecommendation(mood) {
   }
 }
 
-// Make function globally available
-window.analyzeMood = analyzeMood;
-
-// ✅ Викликаємо модель правильно
+// Init camera + model on load
 (async () => {
-  await loadTeachableModel();
+  document.getElementById("resultBox").innerText = "📷 Initializing camera...";
+  try {
+    await loadTeachableModel();
+    document.getElementById("resultBox").innerText = "✅ Camera ready. Press the button.";
+  } catch (err) {
+    console.error("❌ Camera error:", err);
+    document.getElementById("resultBox").innerText = "❌ Could not access camera.";
+  }
 })();
