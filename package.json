@@ -1,0 +1,12 @@
+{
+  "name": "moodscan-ai-web",
+  "version": "1.0.0",
+  "description": "MoodScan AI - Web version using TensorFlow.js and OpenAI API",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
