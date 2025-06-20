@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MoodScan AI</title>
 
-  <!-- Стилізація -->
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -50,14 +49,11 @@
   <h1>MoodScan AI</h1>
   <p>Scan your face and check your mood using your camera & AI</p>
 
-  <!-- Камера + результат -->
   <div id="webcam"></div>
   <div id="resultBox">Click the button below to start the camera.</div>
 
-  <!-- Кнопка -->
-  <button onclick="analyzeMood()">Scan My Mood</button>
+  <button id="scanBtn">Scan My Mood</button>
 
-  <!-- Підключення JS -->
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>
