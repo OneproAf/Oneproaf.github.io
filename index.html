@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MoodScan AI – Emotional Analyzer</title>
+  <title>MoodScan AI – Emotion Detector</title>
 
-  <!-- 🌟 Teachable Machine -->
+  <!-- ✅ Teachable Machine -->
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
-  <!-- 💅 Style -->
+  <!-- ✅ Styles -->
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #121212;
-      color: #fff;
+      background-color: #121212;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -22,75 +22,69 @@
     }
 
     h1 {
-      margin-bottom: 5px;
-      font-size: 28px;
       color: #00e676;
-    }
-
-    p.description {
-      font-size: 16px;
-      color: #ccc;
-      margin-bottom: 20px;
-      text-align: center;
-      max-width: 600px;
-    }
-
-    #webcam canvas {
-      border: 3px solid #444;
-      border-radius: 10px;
       margin-bottom: 10px;
     }
 
-    #resultBox {
-      margin: 15px 0;
-      padding: 10px;
-      background: #1f1f1f;
+    .description {
+      max-width: 600px;
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 30px;
+    }
+
+    #webcam canvas {
       border-radius: 10px;
-      width: 100%;
+      border: 2px solid #444;
+      margin-top: 20px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #00c853;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #resultBox {
+      margin-top: 20px;
+      background: #1e1e1e;
+      padding: 12px 18px;
+      border-radius: 10px;
       max-width: 300px;
       text-align: center;
     }
 
-    button {
-      padding: 12px 24px;
-      background-color: #00c853;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
     canvas#moodChart {
-      margin-top: 40px;
+      margin-top: 30px;
       max-width: 90vw;
     }
   </style>
 </head>
 
 <body>
-  <!-- Назва -->
   <h1>MoodScan AI</h1>
-
-  <!-- Опис -->
   <p class="description">
-    MoodScan AI is a web app that uses your camera to detect your emotional state with AI and recommends personalized actions via ChatGPT.
+    This app uses your webcam and AI to detect your current emotional state and gives personalized advice based on your mood.
   </p>
 
-  <!-- Камера -->
+  <!-- Webcam feed -->
   <div id="webcam"></div>
 
-  <!-- Результат -->
-  <div id="resultBox">Click the button below to scan your mood</div>
+  <!-- Mood result + recommendation -->
+  <div id="resultBox">Press the button to scan your mood</div>
 
-  <!-- Кнопка -->
+  <!-- Action button -->
   <button onclick="analyzeMood()">Scan My Mood</button>
 
-  <!-- Графік -->
+  <!-- Chart -->
   <canvas id="moodChart" width="300" height="150"></canvas>
 
-  <!-- Скрипт -->
+  <!-- Main logic -->
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>
