@@ -6,7 +6,7 @@ let model;
 const video = document.getElementById("webcam");
 const resultBox = document.getElementById("resultBox");
 
-// 📸 Камера
+// 📸 Налаштування камери
 async function setupCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -19,7 +19,7 @@ async function setupCamera() {
   }
 }
 
-// 🧠 Модель BlazeFace
+// 🧠 Завантаження моделі BlazeFace
 async function loadModel() {
   model = await blazeface.load();
   console.log("✅ BlazeFace model loaded");
@@ -32,7 +32,7 @@ async function analyzeMood() {
   const predictions = await model.estimateFaces(video, false);
 
   if (predictions.length > 0) {
-    const mood = getRandomMood();
+    const mood = getRandomMood(); // тимчасовий симулятор
     const recommendation = await fetchChatGPTRecommendation(mood);
 
     renderRecommendation(mood, recommendation);
@@ -43,19 +43,21 @@ async function analyzeMood() {
   }
 }
 
-// 🎲 Симуляція емоції (тимчасово)
+// 🎲 Симуляція емоції
 function getRandomMood() {
   const moods = ["Happy", "Sad", "Angry", "Calm", "Stressed", "Excited"];
   return moods[Math.floor(Math.random() * moods.length)];
 }
 
-// 🔁 Виклик проксі-сервера (локально або Render)
+// 🤖 Виклик ChatGPT через проксі
 async function fetchChatGPTRecommendation(mood) {
   try {
     const res = await fetch("http://localhost:5000/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: `I'm feeling ${mood}. What should I do?` })
+      body: JSON.stringify({
+        message: `I'm feeling ${mood}. What should I do?`
+      })
     });
 
     const data = await res.json();
@@ -66,12 +68,12 @@ async function fetchChatGPTRecommendation(mood) {
   }
 }
 
-// 🚀 Старт
+// 🚀 Ініціалізація після завантаження сторінки
 (async () => {
   await setupCamera();
   await loadModel();
   await renderMoodChart("moodChart");
 })();
 
-// 👇 Робить analyzeMood доступним для кнопки з index.html
+// ✅ Важливо для кнопки в HTML
 window.analyzeMood = analyzeMood;
