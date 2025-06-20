@@ -1,6 +1,7 @@
 import { getRecommendations } from "./recommendations.js";
 import { updateEmotionChart } from "./emotionChart.js";
 
+// 👇 Оце обов'язково
 const tmImage = window.tmImage;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,37 +24,35 @@ document.addEventListener("DOMContentLoaded", () => {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       const video = document.createElement("video");
       video.srcObject = stream;
-      video.play();
+      await video.play();
 
-      video.onloadedmetadata = async () => {
-        video.width = 300;
-        video.height = 300;
-        webcamContainer.innerHTML = "";
-        webcamContainer.appendChild(video);
+      video.width = 300;
+      video.height = 300;
+      webcamContainer.innerHTML = "";
+      webcamContainer.appendChild(video);
 
-        await new Promise((res) => setTimeout(res, 1500));
+      await new Promise((res) => setTimeout(res, 1500));
 
-        const canvas = document.createElement("canvas");
-        canvas.width = 300;
-        canvas.height = 300;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const canvas = document.createElement("canvas");
+      canvas.width = 300;
+      canvas.height = 300;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        const prediction = await model.predict(canvas);
-        prediction.sort((a, b) => b.probability - a.probability);
-        const mood = prediction[0].className;
-        const confidence = prediction[0].probability.toFixed(2);
-        resultBox.innerText = `🧠 Mood: ${mood} (${confidence})`;
+      const prediction = await model.predict(canvas);
+      prediction.sort((a, b) => b.probability - a.probability);
+      const mood = prediction[0].className;
+      const confidence = prediction[0].probability.toFixed(2);
+      resultBox.innerText = `🧠 Mood: ${mood} (${confidence})`;
 
-        stream.getTracks().forEach(track => track.stop());
-        video.remove();
+      stream.getTracks().forEach(track => track.stop());
+      webcamContainer.innerHTML = "";
 
-        chatBox.innerText = "💬 AI analyzing...";
-        const response = await getRecommendations(mood);
-        chatBox.innerText = response;
+      chatBox.innerText = "💬 AI analyzing...";
+      const response = await getRecommendations(mood);
+      chatBox.innerText = response;
 
-        updateEmotionChart(mood);
-      };
+      updateEmotionChart(mood);
     } catch (err) {
       resultBox.innerText = "❌ Error: " + err.message;
       console.error(err);
