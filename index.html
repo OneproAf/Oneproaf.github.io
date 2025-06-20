@@ -8,7 +8,7 @@
   <!-- 🌟 Teachable Machine -->
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
-  <!-- 💅 Стилі -->
+  <!-- 💅 Style -->
   <style>
     body {
       margin: 0;
@@ -70,28 +70,27 @@
 </head>
 
 <body>
-  <!-- 🧠 Назва -->
+  <!-- Назва -->
   <h1>MoodScan AI</h1>
 
-  <!-- 🧾 Опис -->
+  <!-- Опис -->
   <p class="description">
-    MoodScan AI is an emotional well-being web app that scans your face using your camera,
-    detects your mood in real-time with AI, and gives personalized recommendations powered by ChatGPT.
+    MoodScan AI is a web app that uses your camera to detect your emotional state with AI and recommends personalized actions via ChatGPT.
   </p>
 
-  <!-- 📷 Камера -->
+  <!-- Камера -->
   <div id="webcam"></div>
 
-  <!-- 📊 Результат -->
-  <div id="resultBox">Click the button to scan your mood</div>
+  <!-- Результат -->
+  <div id="resultBox">Click the button below to scan your mood</div>
 
-  <!-- 🔘 Кнопка -->
+  <!-- Кнопка -->
   <button onclick="analyzeMood()">Scan My Mood</button>
 
-  <!-- 📈 Графік -->
+  <!-- Графік -->
   <canvas id="moodChart" width="300" height="150"></canvas>
 
-  <!-- 🔁 Скрипти -->
+  <!-- Скрипт -->
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>
