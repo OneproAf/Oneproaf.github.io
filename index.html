@@ -1,3 +1,63 @@
-<div id="webcam"></div>
-<div id="resultBox"></div>
-<button onclick="analyzeMood()">Scan My Mood</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MoodScan AI</title>
+
+  <!-- Стилізація -->
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #00e676;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #ccc;
+    }
+    button {
+      background: #00c853;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    video {
+      border-radius: 12px;
+      margin-top: 20px;
+      width: 300px;
+      height: auto;
+    }
+    #resultBox {
+      margin-top: 20px;
+      padding: 10px;
+      background: #222;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>MoodScan AI</h1>
+  <p>Scan your face and check your mood using your camera & AI</p>
+
+  <!-- Камера + результат -->
+  <div id="webcam"></div>
+  <div id="resultBox">Click the button below to start the camera.</div>
+
+  <!-- Кнопка -->
+  <button onclick="analyzeMood()">Scan My Mood</button>
+
+  <!-- Підключення JS -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
