@@ -5,79 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MoodScan AI</title>
 
-  <!-- Шрифти та Chart.js -->
+  <!-- Fonts & External Libs -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script type="module" src="../src/main.js" defer></script>
+  <script type="module" src="./src/main.js" defer></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom right, #eef2f7, #dbe4f3);
-      color: #222;
+      padding: 40px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      padding: 40px 20px;
+      color: #222;
     }
     h1 {
       font-size: 2.5rem;
-      font-weight: 600;
       margin-bottom: 20px;
-      color: #3f3d56;
-    }
-    #cameraContainer {
-      margin-bottom: 20px;
-      border: 3px solid #ccc;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
     video {
       width: 100%;
       max-width: 600px;
-      border-radius: 20px;
+      border-radius: 16px;
+      border: 3px solid #ccc;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .btn-scan {
+      margin-top: 20px;
       background-color: #4f46e5;
       color: white;
-      padding: 14px 32px;
       border: none;
-      border-radius: 12px;
+      padding: 14px 28px;
       font-size: 1rem;
-      margin-top: 20px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s;
-    }
-    .btn-scan:hover {
-      background-color: #4338ca;
     }
     #resultBox {
       margin-top: 30px;
-      padding: 20px;
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+      padding: 20px;
+      border-radius: 12px;
       max-width: 600px;
-      width: 100%;
-      text-align: left;
-    }
-    #resultBox h2 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-    }
-    #moodChart {
-      margin-top: 40px;
-      max-width: 600px;
-      width: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
   </style>
 </head>
@@ -94,6 +66,6 @@
     <p>⏳ Your result will appear here after scanning...</p>
   </div>
 
-  <canvas id="moodChart"></canvas>
+  <canvas id="moodChart" style="margin-top: 30px; max-width: 600px;"></canvas>
 </body>
 </html>
