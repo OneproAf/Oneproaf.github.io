@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('image', imageData, 'mood-image.jpg');
 
         try {
-            const response = await fetch('http://localhost:8000/api/analyze-mood', {
+            const response = await fetch('https://oneproaf-github-io.onrender.com', {
                 method: 'POST',
                 body: formData
             });
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const recommendationsEl = document.getElementById('recommendations');
         recommendationsEl.innerHTML = '<p>Loading advice...</p>';
         try {
-            const response = await fetch(`http://localhost:8000/api/get-advice?mood=${mood}`);
+            const response = await fetch(`https://oneproaf-github-io.onrender.com`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const musicEl = document.getElementById('musicRecommendations');
         musicEl.innerHTML = '<h4>Music For You:</h4>';
         try {
-            const response = await fetch(`http://localhost:8000/api/get-music?mood=${mood}`);
+            const response = await fetch(`https://oneproaf-github-io.onrender.com${mood}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.value = '';
 
         try {
-            const response = await fetch('http://localhost:8000/api/psychologist-chat', {
+            const response = await fetch('https://oneproaf-github-io.onrender.com', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: userMessage })
