@@ -130,7 +130,7 @@ async function sendMessageToAI() {
     chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
 
     try {
-        const response = await fetch('http://localhost:8000/api/psychologist-chat', {
+        const response = await fetch('https://oneproaf-github-io.onrender.com/api/psychologist-chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -227,7 +227,7 @@ async function detectMood(imageData) {
         formData.append('image', imageData);
 
         // Send to backend API
-        const response = await fetch('http://localhost:8000/api/analyze-mood', {
+        const response = await fetch('https://oneproaf-github-io.onrender.com/api/analyze-mood', {
             method: 'POST',
             body: formData
         });
