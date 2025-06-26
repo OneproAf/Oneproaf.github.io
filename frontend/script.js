@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('image', imageData, 'mood-image.jpg');
 
         try {
-            const response = await fetch('http://localhost:8000/api/analyze-mood', {
+            const response = await fetch('https://oneproaf-github-io.onrender.com', {
                 method: 'POST',
                 body: formData
             });
