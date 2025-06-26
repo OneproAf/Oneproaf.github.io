@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('image', imageData, 'mood-image.jpg');
 
         try {
-            const response = await fetch('https://oneproaf-github-io.onrender.com', {
+            const response = await fetch('https://moodscan-ai-backend.onrender.com/api/analyze-mood', {
                 method: 'POST',
                 body: formData
             });
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const recommendationsEl = document.getElementById('recommendations');
         recommendationsEl.innerHTML = '<p>Loading advice...</p>';
         try {
-            const response = await fetch(`https://oneproaf-github-io.onrender.com`);
+            const response = await fetch(`https://moodscan-ai-backend.onrender.com/api/get-advice?mood=${mood}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const musicEl = document.getElementById('musicRecommendations');
         musicEl.innerHTML = '<h4>Music For You:</h4>';
         try {
-            const response = await fetch(`https://oneproaf-github-io.onrender.com${mood}`);
+            const response = await fetch(`https://moodscan-ai-backend.onrender.com/api/get-music?mood=${mood}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -252,17 +252,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AI Psychologist Chat ---
     async function sendMessageToAI() {
-        const userMessage = userInput.value.trim();
-        if (!userMessage) return;
+        const message = userInput.value.trim();
+        if (!message) return;
 
-        addMessageToChat('user-message', userMessage);
+        addMessageToChat('user-message', message);
         userInput.value = '';
 
         try {
-            const response = await fetch('https://oneproaf-github-io.onrender.com', {
+            const response = await fetch('https://moodscan-ai-backend.onrender.com/api/psychologist-chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMessage })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
             });
             
             if (!response.ok) {
