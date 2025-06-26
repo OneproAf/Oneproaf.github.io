@@ -17,7 +17,7 @@ const port = 8000;
 // Configure CORS
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://moodscanproai.netlify.app/'
+  'https://moodscanai.netlify.app' // Your live frontend URL
 ];
 app.use(cors({
   origin: function (origin, callback) {
