@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const MODEL_URL = 'https://justadudewhohacks.github.io/face-api.js/models';
+
+    // --- Pre-load Face-API Models ---
+    async function loadModels() {
+        try {
+            await Promise.all([
+                faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+                faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
+            ]);
+            console.log("Face-API models loaded successfully");
+        } catch (err) {
+            console.error("Error loading Face-API.js models: ", err);
+        }
+    }
+    loadModels(); // Start loading models as soon as the page is ready
+
     // Page sections
     const mainPage = document.getElementById('main-page');
     const scanPage = document.getElementById('scan-section');
