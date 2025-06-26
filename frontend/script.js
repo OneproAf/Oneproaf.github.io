@@ -76,10 +76,6 @@ function showScreen(screenToShow) {
 
 document.addEventListener('DOMContentLoaded', () => {
     showScreen(homeScreen);
-    // Disable scan button until models are loaded
-    if (scanMoodHomeBtn) {
-        scanMoodHomeBtn.disabled = true;
-    }
 });
 
 
@@ -176,24 +172,7 @@ userInput.addEventListener('keydown', (event) => {
 });
 
 
-// --- Face-API.js & Mood Detection Logic ---
-
-const MODEL_URL = '/models';
-
-Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-    faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
-]).then(() => {
-    console.log("AI Models loaded successfully.");
-    scanMoodHomeBtn.disabled = false; // Enable button now that models are ready
-}).catch(err => {
-    console.error("Error loading Face-API.js models: ", err);
-    alert("Could not load AI models. Some features might be unavailable.");
-    scanMoodHomeBtn.disabled = true;
-});
-
+// --- Video and Image Handling ---
 
 async function startVideo() {
     try {
@@ -206,38 +185,68 @@ async function startVideo() {
     }
 }
 
-captureMoodBtn.addEventListener('click', () => detectMood(video));
+captureMoodBtn.addEventListener('click', () => {
+    // Create a canvas to capture the video frame
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0);
+    
+    canvas.toBlob((blob) => {
+        detectMood(blob);
+    }, 'image/jpeg');
+});
+
 uploadImageBtn.addEventListener('click', () => imageUpload.click());
 
 imageUpload.addEventListener('change', async (event) => {
     const file = event.target.files[0];
     if (file) {
-        const img = await faceapi.bufferToImage(file);
         video.style.display = 'none';
-        detectMood(img);
+        detectMood(file);
     }
 });
 
-async function detectMood(input) {
-    if (!input) {
-        moodResult.textContent = "No input source for scanning.";
+// --- Mood Detection Function (Updated for Backend API) ---
+
+async function detectMood(imageData) {
+    if (!imageData) {
+        moodResult.textContent = "No image data provided.";
         showScreen(resultsSection);
         return;
     }
 
-    const detections = await faceapi.detectSingleFace(input, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+    // Show loading indicator
+    moodResult.textContent = "Analyzing your mood...";
+    showScreen(resultsSection);
 
-    if (detections) {
-        const expressions = detections.expressions;
-        const dominantMood = Object.keys(expressions).reduce((a, b) => expressions[a] > expressions[b] ? a : b);
-        displayMoodResult(dominantMood, expressions);
-        updateMoodChart(dominantMood);
-        showScreen(resultsSection);
-    } else {
-        moodResult.textContent = "Face not detected. Please try again.";
+    try {
+        // Create FormData object
+        const formData = new FormData();
+        formData.append('image', imageData);
+
+        // Send to backend API
+        const response = await fetch('http://localhost:8000/api/analyze-mood', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        // Call the existing displayMoodResult function with the response data
+        displayMoodResult(data.mood, data.percentages);
+        updateMoodChart(data.mood);
+
+    } catch (error) {
+        console.error("Error during mood detection:", error);
+        moodResult.textContent = "Error analyzing mood. Please try again.";
         recommendationsDiv.innerHTML = '';
         musicRecommendationsDiv.innerHTML = '';
-        showScreen(resultsSection);
     }
 }
 
@@ -246,7 +255,10 @@ function displayMoodResult(mood, expressions) {
     let recommendations = '';
     let musicGenre = '';
 
-    switch (mood) {
+    // Convert mood to lowercase for switch statement
+    const moodLower = mood.toLowerCase();
+
+    switch (moodLower) {
         case 'happy':
             moodText = 'Happy! ✨';
             recommendations = 'Keep up the great spirit! Share your joy with someone.';
@@ -272,6 +284,26 @@ function displayMoodResult(mood, expressions) {
             recommendations = 'Everything is stable. Perhaps it\'s a good time to rest or do something that relaxes you.';
             musicGenre = 'chill, acoustic';
             break;
+        case 'fearful':
+            moodText = 'Fearful 😨';
+            recommendations = 'It\'s natural to feel afraid. Try deep breathing exercises or talking to someone you trust.';
+            musicGenre = 'calm, soothing, nature sounds';
+            break;
+        case 'disgusted':
+            moodText = 'Disgusted 🤢';
+            recommendations = 'Take a moment to process what you\'re feeling. Sometimes stepping away helps.';
+            musicGenre = 'clean, fresh, uplifting';
+            break;
+        case 'confused':
+            moodText = 'Confused 😕';
+            recommendations = 'Confusion is a normal part of learning. Try breaking things down into smaller steps.';
+            musicGenre = 'clear, structured, instrumental';
+            break;
+        case 'tired':
+            moodText = 'Tired 😴';
+            recommendations = 'Rest is important. Consider taking a short break or getting some sleep.';
+            musicGenre = 'lullaby, ambient, peaceful';
+            break;
         default:
             moodText = 'Mood not clearly defined.';
             recommendations = 'Your mood could not be determined. Please try again.';
@@ -279,7 +311,11 @@ function displayMoodResult(mood, expressions) {
             break;
     }
 
-    moodText += ` (${(expressions[mood] * 100).toFixed(1)}%)`;
+    // Add confidence percentage if available
+    if (expressions && expressions[mood]) {
+        moodText += ` (${(expressions[mood] * 100).toFixed(1)}%)`;
+    }
+    
     moodResult.textContent = moodText;
     recommendationsDiv.innerHTML = `<p>${recommendations}</p>`;
     musicRecommendationsDiv.innerHTML = `<p>Recommended music: ${musicGenre}</p><p>(Spotify API integration here)</p>`;
@@ -288,24 +324,30 @@ function displayMoodResult(mood, expressions) {
 function updateMoodChart(currentMood) {
     const now = new Date();
     const timeLabel = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-    moodHistory.push({ time: timeLabel, mood: currentMood });
+    // Store mood in lowercase for consistency
+    const moodLower = currentMood.toLowerCase();
+    moodHistory.push({ time: timeLabel, mood: moodLower });
     if (moodHistory.length > 15) {
         moodHistory.shift();
     }
 
     const labels = moodHistory.map(entry => entry.time);
-    const datasets = ['happy', 'sad', 'angry', 'neutral', 'surprised'].map(mood => {
+    const datasets = ['happy', 'sad', 'angry', 'neutral', 'surprised', 'fearful', 'disgusted', 'confused', 'tired'].map(mood => {
         const colorMap = {
             happy: '#00e676',
             sad: '#69f0ae',
             angry: '#FF5722',
             neutral: '#e0e0e0',
-            surprised: '#00bcd4'
+            surprised: '#00bcd4',
+            fearful: '#9c27b0',
+            disgusted: '#795548',
+            confused: '#ff9800',
+            tired: '#607d8b'
         };
         return {
             label: mood.charAt(0).toUpperCase() + mood.slice(1),
             data: moodHistory.map(entry => entry.mood === mood ? 1 : 0),
-            borderColor: colorMap[mood],
+            borderColor: colorMap[mood] || '#cccccc',
             backgroundColor: 'rgba(0, 0, 0, 0.1)', // Simplified for clarity
             tension: 0.3,
             fill: false
