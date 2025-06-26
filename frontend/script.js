@@ -1,327 +1,350 @@
+// --- Get DOM Elements (Old and New) ---
+
+// Mood Scan & General Elements
+const video = document.getElementById('video');
+const overlayCanvas = document.getElementById('overlayCanvas');
+const moodResult = document.getElementById('moodResult');
+const recommendationsDiv = document.getElementById('recommendations');
+const musicRecommendationsDiv = document.getElementById('musicRecommendations');
+const moodChartCanvas = document.getElementById('moodChart');
+
+// Screen Containers
+const homeScreen = document.getElementById('home-screen');
+const appScreens = document.getElementById('app-screens');
+const scanSection = document.getElementById('scan-section');
+const resultsSection = document.getElementById('results-section');
+const chartSection = document.getElementById('chart-section');
+const aiPsychologistScreen = document.getElementById('ai-psychologist-screen');
+const scanHistoryScreen = document.getElementById('scan-history-screen');
+const authScreen = document.getElementById('auth-screen');
+
+// Home Screen Buttons
+const scanMoodHomeBtn = document.getElementById('scanMoodBtn');
+const aiPsychologistBtn = document.getElementById('aiPsychologistBtn');
+const scanHistoryBtn = document.getElementById('scanHistoryBtn');
+const authBtn = document.getElementById('authBtn');
+
+// Scan Screen Action Buttons
+const captureMoodBtn = document.getElementById('captureMoodBtn');
+const imageUpload = document.getElementById('imageUpload');
+const uploadImageBtn = document.getElementById('uploadImageBtn');
+
+// AI Psychologist Chat Elements
+const chatContainer = document.getElementById('chat-container');
+const userInput = document.getElementById('userInput');
+const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+// Back Buttons
+const backToHomeBtn1 = document.getElementById('backToHomeBtn1');
+const backToHomeBtn2 = document.getElementById('backToHomeBtn2');
+const backToHomeBtn3 = document.getElementById('backToHomeBtn3');
+const backToHomeBtn4 = document.getElementById('backToHomeBtn4');
+const backToHomeBtn5 = document.getElementById('backToHomeBtn5');
+const backToHomeBtn6 = document.getElementById('backToHomeBtn6');
+
+// --- State Variables ---
+let chartInstance = null;
+const moodHistory = [];
+
+
+// --- Navigation Logic ---
+
+function showScreen(screenToShow) {
+    // Hide all app screens first
+    scanSection.style.display = 'none';
+    resultsSection.style.display = 'none';
+    chartSection.style.display = 'none';
+    aiPsychologistScreen.style.display = 'none';
+    scanHistoryScreen.style.display = 'none';
+    authScreen.style.display = 'none';
+
+    if (screenToShow === homeScreen) {
+        homeScreen.style.display = 'flex';
+        appScreens.style.display = 'none';
+        // Stop video if returning to home
+        if (video.srcObject) {
+            const tracks = video.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+        }
+    } else {
+        homeScreen.style.display = 'none';
+        appScreens.style.display = 'block';
+        screenToShow.style.display = 'block';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const MODEL_URL = 'https://justadudewhohacks.github.io/face-api.js/models';
-
-    // --- Pre-load Face-API Models ---
-    async function loadModels() {
-        try {
-            await Promise.all([
-                faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-                faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
-            ]);
-            console.log("Face-API models loaded successfully");
-        } catch (err) {
-            console.error("Error loading Face-API.js models: ", err);
-        }
+    showScreen(homeScreen);
+    // Disable scan button until models are loaded
+    if (scanMoodHomeBtn) {
+        scanMoodHomeBtn.disabled = true;
     }
-    loadModels(); // Start loading models as soon as the page is ready
+});
 
-    // Page sections
-    const mainPage = document.getElementById('main-page');
-    const scanPage = document.getElementById('scan-section');
-    const psychologistPage = document.getElementById('ai-psychologist-screen');
-    const appScreens = document.getElementById('app-screens');
 
-    // Main page buttons
-    const scanMoodBtn = document.getElementById('scanMoodBtn');
-    const aiPsychologistBtn = document.getElementById('aiPsychologistBtn');
+// --- Navigation Event Listeners ---
+
+scanMoodHomeBtn.addEventListener('click', () => {
+    showScreen(scanSection);
+    startVideo();
+});
+
+aiPsychologistBtn.addEventListener('click', () => {
+    showScreen(aiPsychologistScreen);
+});
+
+scanHistoryBtn.addEventListener('click', () => {
+    showScreen(chartSection);
+    if (chartInstance) {
+        chartInstance.update();
+    } else if (moodHistory.length > 0) {
+        updateMoodChart(moodHistory[moodHistory.length - 1].mood);
+    }
+});
+
+authBtn.addEventListener('click', () => {
+    showScreen(authScreen);
+});
+
+// Add all back button listeners
+[backToHomeBtn1, backToHomeBtn2, backToHomeBtn3, backToHomeBtn4, backToHomeBtn5, backToHomeBtn6].forEach(btn => {
+    if (btn) {
+        btn.addEventListener('click', () => showScreen(homeScreen));
+    }
+});
+
+
+// --- NEW: AI Psychologist Chat Logic ---
+
+async function sendMessageToAI() {
+    const userMessage = userInput.value.trim();
+    if (userMessage === "") {
+        return; // Do nothing if the input is empty
+    }
+
+    // Display user's message immediately
+    const userMessageElem = document.createElement('p');
+    userMessageElem.textContent = `You: ${userMessage}`;
+    userMessageElem.style.textAlign = 'right';
+    userMessageElem.style.color = '#ffffff';
+    chatContainer.appendChild(userMessageElem);
     
-    // Scan page elements
-    const video = document.getElementById('video');
-    const overlayCanvas = document.getElementById('overlayCanvas');
-    const captureMoodBtn = document.getElementById('captureMoodBtn');
-    const imageUpload = document.getElementById('imageUpload');
-    const uploadImageBtn = document.getElementById('uploadImageBtn');
-    const resultsDisplay = document.getElementById('results-display');
-    const dominantMoodEl = document.getElementById('dominant-mood');
-    const moodPercentageEl = document.getElementById('mood-percentage');
-    const moodStatisticsEl = document.getElementById('mood-statistics');
-    const adviceContainer = document.getElementById('advice-container');
-    const musicContainer = document.getElementById('music-container');
-    const psychologistRecommendationBtn = document.getElementById('psychologist-recommendation');
-    const backToMainFromScanBtn = document.getElementById('back-to-main-from-scan');
+    userInput.value = ""; // Clear the input box
+    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
 
-    // Results page elements
-    const resultsSection = document.getElementById('results-section');
-    const dominantMoodResultEl = document.getElementById('dominant-mood-result');
-    const moodPercentageResultEl = document.getElementById('mood-percentage-result');
-    const moodStatisticsResultEl = document.getElementById('mood-statistics-result');
-    const backButton = document.querySelector('#results-section .back-button');
-    const backToHomeBtn2 = document.getElementById('backToHomeBtn2');
+    try {
+        const response = await fetch('http://localhost:8000/api/psychologist-chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: userMessage })
+        });
 
-    // Psychologist chat elements
-    const chatContainer = document.getElementById('chat-container');
-    const userInput = document.getElementById('userInput');
-    const sendMessageBtn = document.getElementById('sendMessageBtn');
-    const backToMainFromChatBtn = document.getElementById('back-to-main-from-chat');
-    
-    let stream;
-
-    // --- Navigation ---
-    function showPage(pageToShow) {
-        mainPage.classList.add('hidden');
-        appScreens.classList.add('hidden');
-        psychologistPage.classList.add('hidden');
-        
-        if (pageToShow === scanPage || pageToShow === psychologistPage || pageToShow === resultsSection) {
-            appScreens.classList.remove('hidden');
-            // Hide all sections within app-screens first
-            document.querySelectorAll('#app-screens > section').forEach(s => s.classList.add('hidden'));
-            // Then show the target one
-            pageToShow.classList.remove('hidden');
-        } else {
-             mainPage.classList.remove('hidden');
-        }
-    }
-
-    scanMoodBtn.addEventListener('click', () => {
-        showPage(scanPage);
-        startCamera();
-    });
-
-    aiPsychologistBtn.addEventListener('click', () => {
-        showPage(psychologistPage);
-    });
-    
-    psychologistRecommendationBtn.addEventListener('click', () => {
-       showPage(psychologistPage);
-    });
-
-    backToMainFromScanBtn.addEventListener('click', () => {
-        showPage(mainPage);
-        stopCamera();
-    });
-
-    backToMainFromChatBtn.addEventListener('click', () => {
-        showPage(mainPage);
-    });
-
-
-    // --- Camera & Analysis ---
-    async function startCamera() {
-        if (stream) return;
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            video.srcObject = stream;
-        } catch (err) {
-            console.error("Error accessing the camera:", err);
-            alert("Could not access the camera. Please ensure you have given permission.");
-        }
-    }
-
-    function stopCamera() {
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-            stream = null;
-        }
-    }
-
-    uploadImageBtn.addEventListener('click', () => {
-        imageUpload.click();
-    });
-
-    imageUpload.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            analyzeImage(file);
-        }
-    });
-
-    captureMoodBtn.addEventListener('click', () => {
-        overlayCanvas.width = video.videoWidth;
-        overlayCanvas.height = video.videoHeight;
-        overlayCanvas.getContext('2d').drawImage(video, 0, 0);
-        overlayCanvas.toBlob(blob => {
-            analyzeImage(blob);
-        }, 'image/jpeg');
-    });
-
-    async function analyzeImage(imageData) {
-        // Simple loading indicator
-        document.body.style.cursor = 'wait';
-        showPage(scanPage); // Ensure scan section is visible
-        const loadingP = document.createElement('p');
-        loadingP.textContent = 'Analyzing your mood...';
-        scanPage.appendChild(loadingP);
-
-
-        const formData = new FormData();
-        formData.append('image', imageData, 'mood-image.jpg');
-
-        try {
-            const response = await fetch('https://moodscan-ai-backend.onrender.com/api/analyze-mood', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.statusText}`);
-            }
-
-            const result = await response.json();
-            displayMoodResults(result); // Call the new display function
-            showPage(resultsSection); // Show results page
-
-        } catch (error) {
-            console.error('Error analyzing image:', error);
-            alert(`Analysis failed. Please try again. Error: ${error.message}`);
-        } finally {
-            document.body.style.cursor = 'default';
-            loadingP.remove();
-        }
-    }
-    
-    // --- Display Results ---
-    function displayMoodResults(analysis) {
-        const { mood, percentages } = analysis;
-        
-        dominantMoodEl.textContent = mood;
-        const confidence = (percentages[mood] || 1) * 100;
-        moodPercentageEl.textContent = `${confidence.toFixed(1)}%`;
-
-        moodStatisticsEl.innerHTML = ''; // Clear previous results
-        
-        for (const [emotion, score] of Object.entries(percentages)) {
-            const row = document.createElement('div');
-            row.className = 'mood-stat-row';
-
-            const name = document.createElement('span');
-            name.textContent = emotion;
-            
-            const barContainer = document.createElement('div');
-            barContainer.className = 'progress-bar-container';
-            
-            const bar = document.createElement('div');
-            bar.className = 'progress-bar';
-            bar.style.width = `${score * 100}%`;
-            
-            barContainer.appendChild(bar);
-            row.appendChild(name);
-            row.appendChild(barContainer);
-            moodStatisticsEl.appendChild(row);
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
         }
 
-        const psychologistBtn = document.getElementById('psychologist-recommendation');
-        const badMoods = ["Sad", "Angry", "Fearful", "Disgusted"];
-        if (badMoods.includes(mood)) {
-            psychologistBtn.style.display = 'block';
-        } else {
-            psychologistBtn.style.display = 'none';
-        }
+        const data = await response.json();
+        const aiReply = data.reply;
 
-        getMoodAdvice(mood);
-        getMusicRecommendations(mood);
-    }
+        // Display AI's message
+        const aiMessageElem = document.createElement('p');
+        aiMessageElem.innerHTML = `<i>AI: ${aiReply}</i>`; // Use innerHTML to render formatted text if any
+        aiMessageElem.style.color = '#a7ffeb';
+        chatContainer.appendChild(aiMessageElem);
+        chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
 
-    async function getMoodAdvice(mood) {
-        const recommendationsEl = document.getElementById('recommendations');
-        recommendationsEl.innerHTML = '<p>Loading advice...</p>';
-        try {
-            const response = await fetch(`https://moodscan-ai-backend.onrender.com/api/get-advice?mood=${mood}`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            recommendationsEl.innerHTML = `<h4>Wellness Tip:</h4><p>${data.advice}</p>`;
-        } catch (error) {
-            console.error('Error fetching advice:', error);
-            recommendationsEl.innerHTML = '<p style="color: #ff9a9a;">Could not fetch advice at this time.</p>';
-        }
-    }
-
-    async function getMusicRecommendations(mood) {
-        const musicEl = document.getElementById('musicRecommendations');
-        musicEl.innerHTML = '<h4>Music For You:</h4>';
-        try {
-            const response = await fetch(`https://moodscan-ai-backend.onrender.com/api/get-music?mood=${mood}`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            const playlistContainer = document.createElement('div');
-            playlistContainer.className = 'playlist-container';
-
-            data.playlists.forEach(playlist => {
-                const card = document.createElement('a');
-                card.href = playlist.url;
-                card.target = '_blank';
-                card.className = 'playlist-card';
-
-                const img = document.createElement('img');
-                img.src = playlist.imageUrl;
-                img.alt = `Cover for ${playlist.name}`;
-                
-                const name = document.createElement('span');
-                name.textContent = playlist.name;
-
-                card.appendChild(img);
-                card.appendChild(name);
-                playlistContainer.appendChild(card);
-            });
-            musicEl.appendChild(playlistContainer);
-
-        } catch (error) {
-            console.error('Error fetching music:', error);
-            musicEl.innerHTML += '<p style="color: #ff9a9a;">Could not fetch music recommendations.</p>';
-        }
-    }
-
-
-    // --- AI Psychologist Chat ---
-    async function sendMessageToAI() {
-        const message = userInput.value.trim();
-        if (!message) return;
-
-        addMessageToChat('user-message', message);
-        userInput.value = '';
-
-        try {
-            const response = await fetch('https://moodscan-ai-backend.onrender.com/api/psychologist-chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: message })
-            });
-            
-            if (!response.ok) {
-                 const errData = await response.json();
-                 throw new Error(errData.details || 'The AI is currently unavailable.');
-            }
-
-            const data = await response.json();
-            addMessageToChat('ai-message', data.reply);
-
-        } catch (error) {
-            console.error('Error sending message to AI:', error);
-            addMessageToChat('ai-message', `Sorry, I encountered an error: ${error.message}`);
-        }
-    }
-
-    function addMessageToChat(className, text) {
-        const p = document.createElement('p');
-        p.className = className;
-        p.textContent = text;
-        chatContainer.appendChild(p);
+    } catch (error) {
+        console.error("Error communicating with AI psychologist:", error);
+        const errorElem = document.createElement('p');
+        errorElem.textContent = "AI Assistant: Sorry, I'm having trouble connecting right now. Please try again later.";
+        errorElem.style.color = '#ff8a80'; // Red color for error
+        chatContainer.appendChild(errorElem);
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
+}
 
-    sendMessageBtn.addEventListener('click', sendMessageToAI);
-    userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            sendMessageToAI();
+// Event listeners for the chat
+sendMessageBtn.addEventListener('click', sendMessageToAI);
+userInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent default form submission on enter
+        sendMessageToAI();
+    }
+});
+
+
+// --- Face-API.js & Mood Detection Logic ---
+
+const MODEL_URL = '/models';
+
+Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+    faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
+]).then(() => {
+    console.log("AI Models loaded successfully.");
+    scanMoodHomeBtn.disabled = false; // Enable button now that models are ready
+}).catch(err => {
+    console.error("Error loading Face-API.js models: ", err);
+    alert("Could not load AI models. Some features might be unavailable.");
+    scanMoodHomeBtn.disabled = true;
+});
+
+
+async function startVideo() {
+    try {
+        video.style.display = 'block';
+        const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+        video.srcObject = stream;
+    } catch (err) {
+        console.error("Error accessing camera: ", err);
+        alert("Could not access the camera. Please check permissions.");
+    }
+}
+
+captureMoodBtn.addEventListener('click', () => detectMood(video));
+uploadImageBtn.addEventListener('click', () => imageUpload.click());
+
+imageUpload.addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const img = await faceapi.bufferToImage(file);
+        video.style.display = 'none';
+        detectMood(img);
+    }
+});
+
+async function detectMood(input) {
+    if (!input) {
+        moodResult.textContent = "No input source for scanning.";
+        showScreen(resultsSection);
+        return;
+    }
+
+    const detections = await faceapi.detectSingleFace(input, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+
+    if (detections) {
+        const expressions = detections.expressions;
+        const dominantMood = Object.keys(expressions).reduce((a, b) => expressions[a] > expressions[b] ? a : b);
+        displayMoodResult(dominantMood, expressions);
+        updateMoodChart(dominantMood);
+        showScreen(resultsSection);
+    } else {
+        moodResult.textContent = "Face not detected. Please try again.";
+        recommendationsDiv.innerHTML = '';
+        musicRecommendationsDiv.innerHTML = '';
+        showScreen(resultsSection);
+    }
+}
+
+function displayMoodResult(mood, expressions) {
+    let moodText = '';
+    let recommendations = '';
+    let musicGenre = '';
+
+    switch (mood) {
+        case 'happy':
+            moodText = 'Happy! ✨';
+            recommendations = 'Keep up the great spirit! Share your joy with someone.';
+            musicGenre = 'pop, cheerful, upbeat';
+            break;
+        case 'sad':
+            moodText = 'Sad 😔';
+            recommendations = 'It\'s okay to be sad sometimes. Try listening to calming music, talking to a friend, or going for a walk.';
+            musicGenre = 'lofi, ambient, classical';
+            break;
+        case 'angry':
+            moodText = 'Angry 😠';
+            recommendations = 'Try taking a deep breath, counting to ten, or engaging in physical activity to let off some steam.';
+            musicGenre = 'calm, instrumental, jazz';
+            break;
+        case 'surprised':
+            moodText = 'Surprised 😮';
+            recommendations = 'Something unexpected? Try writing down your thoughts or sharing what surprised you with someone.';
+            musicGenre = 'folk, experimental';
+            break;
+        case 'neutral':
+            moodText = 'Neutral 😐';
+            recommendations = 'Everything is stable. Perhaps it\'s a good time to rest or do something that relaxes you.';
+            musicGenre = 'chill, acoustic';
+            break;
+        default:
+            moodText = 'Mood not clearly defined.';
+            recommendations = 'Your mood could not be determined. Please try again.';
+            musicGenre = 'unknown';
+            break;
+    }
+
+    moodText += ` (${(expressions[mood] * 100).toFixed(1)}%)`;
+    moodResult.textContent = moodText;
+    recommendationsDiv.innerHTML = `<p>${recommendations}</p>`;
+    musicRecommendationsDiv.innerHTML = `<p>Recommended music: ${musicGenre}</p><p>(Spotify API integration here)</p>`;
+}
+
+function updateMoodChart(currentMood) {
+    const now = new Date();
+    const timeLabel = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+    moodHistory.push({ time: timeLabel, mood: currentMood });
+    if (moodHistory.length > 15) {
+        moodHistory.shift();
+    }
+
+    const labels = moodHistory.map(entry => entry.time);
+    const datasets = ['happy', 'sad', 'angry', 'neutral', 'surprised'].map(mood => {
+        const colorMap = {
+            happy: '#00e676',
+            sad: '#69f0ae',
+            angry: '#FF5722',
+            neutral: '#e0e0e0',
+            surprised: '#00bcd4'
+        };
+        return {
+            label: mood.charAt(0).toUpperCase() + mood.slice(1),
+            data: moodHistory.map(entry => entry.mood === mood ? 1 : 0),
+            borderColor: colorMap[mood],
+            backgroundColor: 'rgba(0, 0, 0, 0.1)', // Simplified for clarity
+            tension: 0.3,
+            fill: false
+        };
+    });
+
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(moodChartCanvas, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        stepSize: 1,
+                        callback: (value) => (value === 1 ? 'Yes' : 'No'),
+                        color: '#c0c0c0'
+                    },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    title: { display: true, text: 'Detected', color: '#a7ffeb' }
+                },
+                x: {
+                    ticks: { color: '#c0c0c0' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    title: { display: true, text: 'Time', color: '#a7ffeb' }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: '#e0e0e0' } }
+            }
         }
     });
-
-    backButton.addEventListener('click', () => {
-        showPage(scanPage);
-        startCamera();
-    });
-
-    backToHomeBtn2.addEventListener('click', () => {
-        showPage(mainPage);
-        stopCamera();
-    });
-}); 
+}

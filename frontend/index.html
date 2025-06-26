@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoodScan AI: AI-Based Mood Detection & Wellness Recommender</title>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -47,9 +46,6 @@
             <div id="recommendations"></div>
             <h3>Music for Your Mood:</h3>
             <div id="musicRecommendations"></div>
-            <button id="psychologist-recommendation" class="home-button" style="display: none; margin-top: 20px;">
-                Feeling Overwhelmed? Talk to our AI Psychologist
-            </button>
             <button id="backToHomeBtn2" class="back-button">Back to Home</button>
         </section>
 
@@ -61,13 +57,16 @@
 
         <section id="ai-psychologist-screen" style="display: none;">
             <h2>AI Psychologist</h2>
+            
             <div id="chat-container" style="border: 1px solid #444; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; border-radius: 5px; background-color: #111;">
                 <p style="color: #a7ffeb;"><i>Hello! I am your AI assistant. How can I help you today?</i></p>
             </div>
+
             <div id="chat-input-container" style="display: flex; gap: 10px;">
                 <input type="text" id="userInput" placeholder="Type your message here..." style="flex-grow: 1; padding: 10px; border-radius: 5px; border: 1px solid #555; background-color: #333; color: #fff;">
                 <button id="sendMessageBtn">Send</button>
             </div>
+
             <button id="backToHomeBtn4" class="back-button">Back to Home</button>
         </section>
 
@@ -84,12 +83,13 @@
         </section>
     </main>
 
+
     <footer>
         <p>&copy; 2025 MoodScan AI. All rights reserved.</p>
     </footer>
 
     <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script defer src="script.js"></script> 
+    <script defer src="script.js"></script>
 </body>
 </html>
