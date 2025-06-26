@@ -1,0 +1,194 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import multer from 'multer';
+import cors from 'cors';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import SpotifyWebApi from 'spotify-web-api-node';
+
+// Initialize GoogleGenerativeAI
+console.log('Is API Key loaded:', !!process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+const app = express();
+const port = 8000;
+
+// Configure CORS
+app.use(cors());
+app.use(express.json());
+
+// Set up multer for in-memory image storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Converts a ReadableStream to a Buffer.
+async function streamToBuffer(readableStream) {
+  const chunks = [];
+  for await (const chunk of readableStream) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+// Function to analyze image with Gemini
+async function analyzeImageWithGemini(imageBuffer) {
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const prompt = "Analyze the primary emotion of the person in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral. Respond with only the single word for the emotion.";
+  
+  const imagePart = {
+    inlineData: {
+      data: imageBuffer.toString("base64"),
+      mimeType: "image/jpeg", // or "image/png"
+    },
+  };
+
+  const result = await model.generateContent([prompt, imagePart]);
+  const response = await result.response;
+  const text = response.text();
+  return text.trim();
+}
+
+// Function to get wellness advice
+async function getWellnessAdvice(emotion) {
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const prompt = `The user is feeling ${emotion}. Provide a short, actionable, and empathetic wellness tip in 2-3 sentences.`;
+  
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  return text;
+}
+
+// API endpoint to analyze mood
+app.post("/api/analyze-mood", upload.single("image"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No image file uploaded." });
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = "Analyze the primary human emotion in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Return a single JSON object with two keys: a 'mood' key with the dominant emotion as a string, and a 'percentages' key containing all detected expressions and their confidence scores.";
+
+    const imagePart = {
+      inlineData: {
+        data: req.file.buffer.toString("base64"),
+        mimeType: req.file.mimetype,
+      },
+    };
+
+    const result = await model.generateContent([prompt, imagePart]);
+    const response = await result.response;
+    const text = response.text().replace(/```json\n|```/g, '').trim();
+
+    // Parse the JSON string from Gemini's response
+    const analysisResult = JSON.parse(text);
+
+    res.status(200).json(analysisResult);
+
+  } catch (error) {
+    console.error('Error during mood analysis:', error);
+    res.status(500).json({ error: 'An error occurred while analyzing the image.', details: error.message });
+  }
+});
+
+// API endpoint for mood-based advice
+app.get('/api/get-advice', async (req, res) => {
+  const { mood } = req.query;
+
+  if (!mood) {
+    return res.status(400).json({ error: 'Mood query parameter is required.' });
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = `A user is feeling ${mood}. Provide a short, actionable, and empathetic wellness tip in 2-3 sentences. Respond with a single JSON object with one key: "advice".`;
+    
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text().replace(/```json\n|```/g, '').trim();
+
+    const adviceResult = JSON.parse(text);
+
+    res.status(200).json(adviceResult);
+
+  } catch (error) {
+    console.error('Error getting mood advice:', error);
+    res.status(500).json({ error: 'Failed to get mood advice.', details: error.message });
+  }
+});
+
+// API endpoint for AI Psychologist Chat
+app.post('/api/psychologist-chat', async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required.' });
+    }
+
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = `Act as an empathetic AI psychologist. Respond helpfully and compassionately to the following user message: "${message}"`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({ reply: text });
+
+  } catch (error) {
+    console.error('Detailed AI Error:', error);
+    res.status(500).json({ error: "Failed to get a response from the AI psychologist.", details: error.message });
+  }
+});
+
+// API endpoint for Spotify Music Recommendations
+app.get('/api/get-music', async (req, res) => {
+  const { mood } = req.query;
+
+  if (!mood) {
+    return res.status(400).json({ error: 'Mood query parameter is required.' });
+  }
+
+  const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+  });
+
+  const moodMap = {
+    'Happy': 'happy hits',
+    'Sad': 'sad songs',
+    'Angry': 'angry rock',
+    'Neutral': 'chill focus',
+    'Surprised': 'discover weekly',
+    'Calm': 'peaceful piano'
+  };
+  const searchQuery = moodMap[mood] || 'chill';
+
+  try {
+    const data = await spotifyApi.clientCredentialsGrant();
+    spotifyApi.setAccessToken(data.body['access_token']);
+
+    const playlistData = await spotifyApi.searchPlaylists(searchQuery, { limit: 5 });
+
+    if (!playlistData.body.playlists || !playlistData.body.playlists.items.length) {
+      return res.status(404).json({ error: 'No playlists found for this mood.' });
+    }
+
+    const playlists = playlistData.body.playlists.items.map(p => ({
+      name: p.name,
+      url: p.external_urls.spotify,
+      imageUrl: p.images[0]?.url || '' // Get the first image, provide fallback
+    }));
+
+    res.json({ playlists });
+
+  } catch (error) {
+    console.error('Error fetching from Spotify:', error);
+    res.status(500).json({ error: 'Failed to fetch music recommendations.', details: error.message });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+}); 

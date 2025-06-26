@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodScan AI: AI-Based Mood Detection & Wellness Recommender</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo-text">
+                <span class="mood-text">Mood</span><span class="scan-text">Scan</span> <span class="ai-text">AI</span>
+            </div>
+            <div class="scan-wave"></div>
+        </div>
+        <p class="tagline">AI-Based Mood Detection & Wellness Recommender</p>
+    </header>
+
+    <main id="home-screen">
+        <section class="buttons-section">
+            <button id="scanMoodBtn" class="home-button">Scan My Mood</button>
+            <button id="aiPsychologistBtn" class="home-button">AI Psychologist</button>
+            <button id="scanHistoryBtn" class="home-button">Scan History</button>
+            <button id="authBtn" class="home-button">Login / Register</button>
+        </section>
+    </main>
+
+    <main id="app-screens" style="display: none;">
+        <section id="scan-section">
+            <h2>Scan Your Mood</h2>
+            <div class="video-container">
+                <video id="video" width="640" height="480" autoplay muted></video>
+                <canvas id="overlayCanvas"></canvas>
+            </div>
+            <button id="captureMoodBtn">Capture Mood</button>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+            <button id="uploadImageBtn">Upload Photo</button>
+            <button id="backToHomeBtn1" class="back-button">Back to Home</button>
+        </section>
+
+        <section id="results-section" style="display: none;">
+            <h2>Your Mood:</h2>
+            <p id="moodResult"></p>
+            <h3>Recommendations:</h3>
+            <div id="recommendations"></div>
+            <h3>Music for Your Mood:</h3>
+            <div id="musicRecommendations"></div>
+            <button id="backToHomeBtn2" class="back-button">Back to Home</button>
+        </section>
+
+        <section id="chart-section" style="display: none;">
+            <h2>Emotion Dynamics:</h2>
+            <canvas id="moodChart"></canvas>
+            <button id="backToHomeBtn3" class="back-button">Back to Home</button>
+        </section>
+
+        <section id="ai-psychologist-screen" style="display: none;">
+            <h2>AI Psychologist</h2>
+            
+            <div id="chat-container" style="border: 1px solid #444; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; border-radius: 5px; background-color: #111;">
+                <p style="color: #a7ffeb;"><i>Hello! I am your AI assistant. How can I help you today?</i></p>
+            </div>
+
+            <div id="chat-input-container" style="display: flex; gap: 10px;">
+                <input type="text" id="userInput" placeholder="Type your message here..." style="flex-grow: 1; padding: 10px; border-radius: 5px; border: 1px solid #555; background-color: #333; color: #fff;">
+                <button id="sendMessageBtn">Send</button>
+            </div>
+
+            <button id="backToHomeBtn4" class="back-button">Back to Home</button>
+        </section>
+
+        <section id="scan-history-screen" style="display: none;">
+            <h2>Scan History</h2>
+            <p>Your graph and details of previous scans will be displayed here.</p>
+            <button id="backToHomeBtn5" class="back-button">Back to Home</button>
+        </section>
+
+        <section id="auth-screen" style="display: none;">
+            <h2>Login / Register</h2>
+            <p>Forms for user login and registration will be here.</p>
+            <button id="backToHomeBtn6" class="back-button">Back to Home</button>
+        </section>
+    </main>
+
+
+    <footer>
+        <p>&copy; 2025 MoodScan AI. All rights reserved.</p>
+    </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+/* General Body Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a; /* Deep, dark charcoal background */
+    color: #e0e0e0; /* Light gray for general text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    padding: 40px 20px;
+    width: 100%;
+    background: linear-gradient(135deg, #0a0a0a, #222222); /* Subtle dark gradient for the header */
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    margin-bottom: 30px;
+}
+
+/* Logo container in header */
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px; /* Space between logo and tagline */
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.logo-text {
+    font-size: 3.5em; /* Adjusted for impact */
+    font-weight: 700;
+    letter-spacing: 2px;
+    white-space: nowrap; /* Keeps words on one line if possible */
+    overflow: hidden; /* Hides text before animation */
+    padding-right: 15px; /* Space between text and wave */
+}
+
+.logo-text span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: text-fade-in 1.5s forwards;
+}
+
+.logo-text .mood-text {
+    color: #00e676; /* Vibrant green for "Mood" */
+    animation-delay: 0.2s;
+}
+
+.logo-text .scan-text {
+    color: #69f0ae; /* Lighter green for "Scan" */
+    animation-delay: 0.5s;
+}
+
+.logo-text .ai-text {
+    color: #a7ffeb; /* Even lighter green/aqua for "AI" */
+    animation-delay: 0.8s;
+}
+
+/* Keyframes for text fade in animation */
+@keyframes text-fade-in {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scan Wave Animation */
+.scan-wave {
+    width: 60px; /* Width of the wave effect */
+    height: 60px; /* Height of the wave effect */
+    border: 4px solid #00e676; /* Vibrant green border for the wave */
+    border-radius: 50%; /* Make it circular */
+    position: relative;
+    overflow: hidden;
+    transform: scale(0); /* Start scaled down */
+    animation: wave-scale-in 0.8s forwards 1.2s; /* Scale in after text */
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.6); /* Glow effect */
+}
+
+.scan-wave::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px; /* Thickness of the pulse line */
+    background: linear-gradient(to right, transparent, #a7ffeb, transparent); /* Lighter green pulse */
+    transform: translateY(-50%) translateX(-100%); /* Start off-screen left */
+    animation: pulse-scan 2s infinite linear 1.8s; /* Animate pulse across the circle */
+}
+
+/* Keyframes for wave scale in animation */
+@keyframes wave-scale-in {
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Keyframes for pulse scan animation */
+@keyframes pulse-scan {
+    0% {
+        transform: translateY(-50%) translateX(-100%);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50%) translateX(100%);
+        opacity: 0;
+    }
+}
+
+p.tagline { /* Target the tagline specifically */
+    font-size: 1.1em;
+    opacity: 0.9;
+    color: #c0c0c0;
+}
+
+/* Main Content Areas */
+main {
+    background-color: #2a2a2a; /* Slightly lighter dark gray for content area */
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    width: 90%;
+    max-width: 900px;
+    margin-bottom: 40px;
+    box-sizing: border-box; /* Includes padding in width */
+}
+
+/* Home Screen Specifics */
+#home-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px; /* Ensure enough height */
+}
+
+.buttons-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between buttons */
+    width: 80%; /* Control button section width */
+    max-width: 400px; /* Max width for button stack */
+}
+
+/* Section Headings */
+section h2 {
+    font-size: 2.2em;
+    color: #00e676; /* Vibrant green accent for headings */
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+    text-shadow: 0 0 8px rgba(0, 230, 118, 0.4); /* Subtle glow */
+}
+
+section h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #00e676;
+    border-radius: 2px;
+}
+
+/* Video & Canvas Container */
+.video-container {
+    position: relative;
+    width: 100%; /* Make it responsive */
+    max-width: 640px; /* Max width for video */
+    margin: 0 auto 30px;
+    border: 2px solid #00e676; /* Green border */
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #000;
+    aspect-ratio: 4/3; /* Maintains 4:3 aspect ratio */
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4); /* Stronger glow for video */
+}
+
+#video, #overlayCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Covers the container */
+}
+
+/* Buttons (General) */
+button {
+    background-color: #00c853; /* Bright green for buttons */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px; /* Pill-shaped buttons */
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 10px 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 200, 83, 0.4);
+}
+
+button:hover {
+    background-color: #00a040; /* Darker green on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 15px rgba(0, 200, 83, 0.6);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 200, 83, 0.4);
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+/* Specific Home Screen Buttons */
+.home-button {
+    width: 100%; /* Full width within its container */
+    padding: 15px 30px; /* Larger padding for main buttons */
+    font-size: 1.3em; /* Larger font size */
+    margin: 0; /* Remove default button margin, gap handles spacing */
+    background-color: #00c853;
+    box-shadow: 0 6px 15px rgba(0, 200, 83, 0.5);
+}
+
+.home-button:hover {
+    background-color: #00a040;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 200, 83, 0.7);
+}
+
+.home-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0, 200, 83, 0.4);
+}
+
+/* Back buttons */
+.back-button {
+    background-color: #333;
+    color: #a7ffeb;
+    margin-top: 30px;
+    padding: 10px 20px;
+    font-size: 1em;
+    box-shadow: none;
+}
+
+.back-button:hover {
+    background-color: #444;
+    transform: translateY(-1px);
+}
+
+/* Results & Chat Section */
+#results-section, #chart-section, #ai-psychologist-screen, #scan-history-screen, #auth-screen {
+    background-color: #222222;
+    padding: 30px;
+    border-radius: 10px;
+    margin-top: 30px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: left;
+}
+
+#moodResult {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #a7ffeb;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(167, 255, 235, 0.8);
+}
+
+#recommendations, #musicRecommendations {
+    margin-top: 20px;
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #c0c0c0;
+}
+
+#recommendations p, #musicRecommendations p {
+    margin-bottom: 10px;
+}
+
+/* Chart Section */
+#moodChart {
+    background-color: #0d0d0d;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Footer Styles */
+footer {
+    margin-top: auto; /* Pushes the footer to the bottom */
+    padding: 20px;
+    text-align: center;
+    color: #777;
+    font-size: 0.9em;
+    width: 100%;
+    background-color: #0a0a0a;
+    border-top: 1px solid #222222;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 2.5em;
+        padding-right: 10px;
+    }
+    .scan-wave {
+        width: 50px;
+        height: 50px;
+    }
+    main {
+        padding: 25px;
+        width: 95%;
+    }
+    section h2 {
+        font-size: 1.8em;
+    }
+    .video-container {
+        max-width: 100%;
+    }
+    .home-button {
+        padding: 12px 25px;
+        font-size: 1.2em;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    #moodResult {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-container {
+        flex-direction: column;
+    }
+    .logo-text {
+        font-size: 2em;
+        padding-right: 0;
+        margin-bottom: 10px;
+    }
+    .scan-wave {
+        width: 40px;
+        height: 40px;
+    }
+    p.tagline {
+        font-size: 0.9em;
+    }
+    .home-button, button {
+        display: block;
+        width: calc(100% - 20px);
+        margin: 10px auto;
+    }
+}

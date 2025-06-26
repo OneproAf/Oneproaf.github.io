@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodScan AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="main-page">
+        <header>
+            <h1>Welcome to MoodScan AI</h1>
+            <p>Your personal guide to understanding and improving your emotional well-being.</p>
+        </header>
+        <nav>
+            <button id="scanMoodBtn">Scan My Mood</button>
+            <button id="aiPsychologistBtn">Talk to AI Psychologist</button>
+        </nav>
+    </div>
+
+    <main id="app-screens" class="hidden">
+        <section id="scan-section">
+            <h2>Scan Your Mood</h2>
+            <div class="video-container">
+                <video id="video" width="640" height="480" autoplay muted></video>
+                <canvas id="overlayCanvas" style="display:none;"></canvas>
+            </div>
+            <button id="captureMoodBtn">Capture Mood</button>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+            <button id="uploadImageBtn">Upload Photo</button>
+            <div id="results-display" class="hidden">
+                <h3>Analysis Results</h3>
+                <div id="dominant-mood-container">
+                    Your Dominant Mood: <strong id="dominant-mood"></strong> 
+                    (<span id="mood-percentage"></span>% confidence)
+                </div>
+                <div id="mood-statistics"></div>
+                <div id="advice-container"></div>
+                <div id="music-container"></div>
+                <button id="psychologist-recommendation" class="hidden">
+                    Feeling overwhelmed? Talk to our AI Psychologist
+                </button>
+            </div>
+            <button id="back-to-main-from-scan">Back to Main</button>
+        </section>
+
+        <section id="results-section" style="display: none;">
+            <h2>Your Mood:</h2>
+            <h3 id="dominant-mood"></h3>
+            <p>Confidence: <b id="mood-percentage"></b></p>
+            <div id="mood-statistics">
+            </div>
+            <div id="recommendations"></div>
+            <div id="musicRecommendations"></div>
+            <button id="backToHomeBtn2" class="back-button">Back to Home</button>
+            <button id="psychologist-recommendation" class="home-button" style="display: none; margin-top: 20px;">
+                Feeling Overwhelmed? Talk to our AI Psychologist
+            </button>
+        </section>
+    </main>
+
+    <section id="ai-psychologist-screen" class="hidden">
+        <div class="container">
+            <h2>AI Psychologist Chat</h2>
+            <div id="chat-container"></div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Type your message here...">
+                <button id="sendMessageBtn">Send</button>
+            </div>
+             <button id="back-to-main-from-chat">Back to Main</button>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html> 
