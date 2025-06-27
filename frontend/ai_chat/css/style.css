@@ -1,253 +1,148 @@
-/* General Body & Typography Styles */
-:root {
-    --background-color: #f4f4f9; /* Light, almost white gray */
-    --card-background-color: #ffffff;
-    --primary-text-color: #1c1c1e; /* Near black for high contrast */
-    --secondary-text-color: #8a8a8e; /* Lighter gray for secondary info */
-    --border-color: #e5e5ea;
-    --accent-color: #007aff; /* Using a standard blue for primary actions, can be changed */
-    --system-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+/* Basic Reset & Full-Screen Setup */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling on the body itself */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #1a1a1a; /* Dark background for the body */
+    color: #e0e0e0; /* Light text color for general elements */
 }
 
-body {
-    font-family: var(--system-font);
-    margin: 0;
-    padding: 20px;
-    background-color: var(--background-color);
-    color: var(--primary-text-color);
+.chat-container {
     display: flex;
     flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    max-width: 600px; /* Optional: Constrain width for desktop for better readability */
+    margin: 0 auto; /* Center the container */
+    background-color: #000000; /* Black background for the chat container */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Darker shadow */
+}
+
+/* Header */
+.chat-header {
+    display: flex;
     align-items: center;
-    min-height: 100vh;
-    box-sizing: border-box;
-}
-
-/* Header Styles */
-header {
-    text-align: center;
-    padding: 20px;
-    width: 100%;
-    max-width: 900px;
-    margin-bottom: 20px;
-}
-
-.logo-text {
-    font-size: 2.5em;
-    font-weight: 700;
-    letter-spacing: -1px;
-}
-
-.logo-text .mood-text,
-.logo-text .scan-text,
-.logo-text .ai-text {
-    color: var(--primary-text-color);
-}
-
-.scan-wave {
-    display: none; /* Removing the complex wave animation for a cleaner look */
-}
-
-p.tagline {
-    font-size: 1.1em;
-    color: var(--secondary-text-color);
-}
-
-/* Main Content & Card Styles */
-main {
-    background-color: transparent;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-    width: 100%;
-    max-width: 900px;
-    margin-bottom: 40px;
-    box-sizing: border-box;
-}
-
-section {
-    background-color: var(--card-background-color);
-    padding: 24px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
-}
-
-section h2 {
-    font-size: 1.8em;
-    margin-top: 0;
-    margin-bottom: 24px;
-    text-align: left;
-    text-shadow: none;
-    color: var(--primary-text-color);
-}
-
-section h2::after {
-    display: none; /* Removing the underline for a cleaner look */
-}
-
-/* Home Screen Buttons */
-.buttons-section {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    background-color: transparent;
-    box-shadow: none;
-    border: none;
-    padding: 0;
-}
-
-/* General Button Styles */
-button {
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: 12px;
-    border: none;
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    margin: 0;
-}
-
-button:hover {
-    opacity: 0.85;
-    transform: translateY(-2px);
-}
-
-button:active {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.home-button {
-    background-color: var(--accent-color);
+    padding: 15px;
+    background-color: #004d00; /* Dark green header */
     color: white;
-}
-
-#captureMoodBtn, #uploadImageBtn, #sendMessageBtn {
-    background-color: var(--primary-text-color);
-    color: white;
-    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    flex-shrink: 0; /* Don't shrink header */
 }
 
 .back-button {
-    background-color: #e5e5ea; /* Light gray for secondary/back buttons */
-    color: var(--primary-text-color);
-    margin-top: 24px;
-}
-
-/* Video Container */
-.video-container {
-    position: relative;
-    width: 100%;
-    margin: 0 auto 20px;
-    border-radius: 16px;
-    overflow: hidden;
-    background-color: #000;
-    aspect-ratio: 4/3;
-    border: 1px solid var(--border-color);
-    box-shadow: none;
-}
-
-#video, #overlayCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Results & Chat Section Styling */
-#moodResult {
-    font-size: 2em;
-    font-weight: 600;
-    margin-top: 0;
-    color: var(--primary-text-color);
-    text-align: left;
-    text-shadow: none;
-}
-
-#recommendations p, #musicRecommendations p, #chat-container p {
-    font-size: 1.1em;
-    line-height: 1.6;
-    color: var(--secondary-text-color);
-}
-
-/* New Chat Interface Styles */
-#chat-container {
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    height: 300px;
-    overflow-y: scroll;
-    margin-bottom: 16px;
-}
-
-#chat-container p {
-    margin: 0 0 12px 0;
-    padding: 10px 15px;
-    border-radius: 18px;
-    max-width: 80%;
-    word-wrap: break-word;
-}
-
-#chat-container p i { /* AI messages */
-    background-color: #e5e5ea;
-    color: var(--primary-text-color);
-    display: block;
-    float: left;
-    clear: both;
-    font-style: normal;
-}
-
-#chat-container p:not(:has(i)) { /* User messages */
-    background-color: var(--accent-color);
+    background: none;
+    border: none;
     color: white;
-    float: right;
-    clear: both;
-}
-
-#chat-input-container {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 15px;
     display: flex;
-    gap: 10px;
     align-items: center;
 }
 
-#userInput {
+.back-button .icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.chat-title {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: normal;
+}
+
+/* Chat History (Main Content Area) */
+.chat-history {
+    flex-grow: 1; /* Takes up available space */
+    padding: 10px;
+    overflow-y: auto; /* Enable scrolling for messages */
+    background-color: #0d0d0d; /* Slightly lighter black for chat background */
+    display: flex; /* For aligning messages */
+    flex-direction: column; /* Messages stack vertically */
+    padding-bottom: 20px; /* Space for the last message not to be hidden by input area */
+}
+
+/* Message Bubbles */
+.message {
+    max-width: 80%;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 18px; /* Rounded corners for bubbles */
+    line-height: 1.4;
+    word-wrap: break-word; /* Ensure long words break */
+    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.user-message {
+    align-self: flex-end; /* Align to the right */
+    background-color: #006600; /* Vibrant green for user messages */
+    color: white; /* White text on green */
+    border-bottom-right-radius: 2px; /* Pointy tail effect */
+}
+
+.ai-message {
+    align-self: flex-start; /* Align to the left */
+    background-color: #262626; /* Dark grey/off-black for AI messages */
+    color: #e0e0e0; /* Light text on dark background */
+    border-bottom-left-radius: 2px; /* Pointy tail effect */
+}
+
+/* Input Area */
+.chat-input-area {
+    display: flex;
+    padding: 10px;
+    background-color: #1a1a1a; /* Darker background for input area */
+    border-top: 1px solid #333; /* Darker border */
+    flex-shrink: 0; /* Don't shrink input area */
+}
+
+#message-input {
     flex-grow: 1;
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    background-color: #fff;
-    color: var(--primary-text-color);
+    border: 1px solid #444; /* Darker border */
+    border-radius: 20px; /* Rounded input field */
+    padding: 10px 15px;
     font-size: 1em;
+    outline: none;
+    margin-right: 10px;
+    background-color: #0d0d0d; /* Black input field */
+    color: #e0e0e0; /* Light text color */
 }
 
-#sendMessageBtn {
-    width: auto;
-    padding: 16px;
-    background-color: var(--accent-color);
+#message-input::placeholder {
+    color: #888; /* Lighter placeholder text for contrast */
 }
 
-/* Footer Styles */
-footer {
-    margin-top: auto;
-    padding: 20px;
-    text-align: center;
-    color: var(--secondary-text-color);
-    font-size: 0.9em;
-    width: 100%;
+#message-input:focus {
+    border-color: #006600; /* Green border on focus */
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    main {
-        width: 100%;
-    }
+#send-button {
+    background-color: #006600; /* Green send button */
+    color: white;
+    border: none;
+    border-radius: 50%; /* Circular button */
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3); /* Darker shadow */
+    transition: background-color 0.2s ease;
+}
+
+#send-button .icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    transform: translateX(2px); /* Adjust icon position slightly */
+}
+
+#send-button:hover {
+    background-color: #004d00; /* Darker green on hover */
 }
 

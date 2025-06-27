@@ -1,152 +1,195 @@
-/* General Body & Typography Styles */
-:root {
-    --background-color: #f4f4f9; /* Light, almost white gray */
-    --card-background-color: #ffffff;
-    --primary-text-color: #1c1c1e; /* Near black for high contrast */
-    --secondary-text-color: #8a8a8e; /* Lighter gray for secondary info */
-    --border-color: #e5e5ea;
-    --accent-color: #007aff; /* Using a standard blue for primary actions, can be changed */
-    --system-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-}
-
+/* General Body Styles */
 body {
-    font-family: var(--system-font);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: var(--background-color);
-    color: var(--primary-text-color);
+    padding: 0;
+    background-color: #1a1a1a; /* Deep, dark charcoal background */
+    color: #e0e0e0; /* Light gray for general text */
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    box-sizing: border-box;
+    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
 }
 
 /* Header Styles */
 header {
     text-align: center;
-    padding: 20px;
+    padding: 40px 20px;
     width: 100%;
-    max-width: 900px;
-    margin-bottom: 20px;
+    background: linear-gradient(135deg, #0a0a0a, #222222); /* Subtle dark gradient for the header */
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    margin-bottom: 30px;
+}
+
+/* Logo container in header */
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px; /* Space between logo and tagline */
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
 }
 
 .logo-text {
-    font-size: 2.5em;
+    font-size: 3.5em; /* Adjusted for impact */
     font-weight: 700;
-    letter-spacing: -1px;
+    letter-spacing: 2px;
+    white-space: nowrap; /* Keeps words on one line if possible */
+    overflow: hidden; /* Hides text before animation */
+    padding-right: 15px; /* Space between text and wave */
 }
 
-.logo-text .mood-text,
-.logo-text .scan-text,
+.logo-text span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: text-fade-in 1.5s forwards;
+}
+
+.logo-text .mood-text {
+    color: #00e676; /* Vibrant green for "Mood" */
+    animation-delay: 0.2s;
+}
+
+.logo-text .scan-text {
+    color: #69f0ae; /* Lighter green for "Scan" */
+    animation-delay: 0.5s;
+}
+
 .logo-text .ai-text {
-    color: var(--primary-text-color);
+    color: #a7ffeb; /* Even lighter green/aqua for "AI" */
+    animation-delay: 0.8s;
 }
 
+/* Keyframes for text fade in animation */
+@keyframes text-fade-in {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scan Wave Animation */
 .scan-wave {
-    display: none; /* Removing the complex wave animation for a cleaner look */
+    width: 60px; /* Width of the wave effect */
+    height: 60px; /* Height of the wave effect */
+    border: 4px solid #00e676; /* Vibrant green border for the wave */
+    border-radius: 50%; /* Make it circular */
+    position: relative;
+    overflow: hidden;
+    transform: scale(0); /* Start scaled down */
+    animation: wave-scale-in 0.8s forwards 1.2s; /* Scale in after text */
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.6); /* Glow effect */
 }
 
-p.tagline {
-    font-size: 1.1em;
-    color: var(--secondary-text-color);
-}
-
-/* Main Content & Card Styles */
-main {
-    background-color: transparent;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
+.scan-wave::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
     width: 100%;
+    height: 4px; /* Thickness of the pulse line */
+    background: linear-gradient(to right, transparent, #a7ffeb, transparent); /* Lighter green pulse */
+    transform: translateY(-50%) translateX(-100%); /* Start off-screen left */
+    animation: pulse-scan 2s infinite linear 1.8s; /* Animate pulse across the circle */
+}
+
+/* Keyframes for wave scale in animation */
+@keyframes wave-scale-in {
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Keyframes for pulse scan animation */
+@keyframes pulse-scan {
+    0% {
+        transform: translateY(-50%) translateX(-100%);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50%) translateX(100%);
+        opacity: 0;
+    }
+}
+
+p.tagline { /* Target the tagline specifically */
+    font-size: 1.1em;
+    opacity: 0.9;
+    color: #c0c0c0;
+}
+
+/* Main Content Areas */
+main {
+    background-color: #2a2a2a; /* Slightly lighter dark gray for content area */
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    width: 90%;
     max-width: 900px;
     margin-bottom: 40px;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Includes padding in width */
 }
 
-section {
-    background-color: var(--card-background-color);
-    padding: 24px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
+/* Home Screen Specifics */
+#home-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px; /* Ensure enough height */
 }
 
-section h2 {
-    font-size: 1.8em;
-    margin-top: 0;
-    margin-bottom: 24px;
-    text-align: left;
-    text-shadow: none;
-    color: var(--primary-text-color);
-}
-
-section h2::after {
-    display: none; /* Removing the underline for a cleaner look */
-}
-
-/* Home Screen Buttons */
 .buttons-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    background-color: transparent;
-    box-shadow: none;
-    border: none;
-    padding: 0;
+    gap: 20px; /* Space between buttons */
+    width: 80%; /* Control button section width */
+    max-width: 400px; /* Max width for button stack */
 }
 
-/* General Button Styles */
-button {
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: 12px;
-    border: none;
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    margin: 0;
+/* Section Headings */
+section h2 {
+    font-size: 2.2em;
+    color: #00e676; /* Vibrant green accent for headings */
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+    text-shadow: 0 0 8px rgba(0, 230, 118, 0.4); /* Subtle glow */
 }
 
-button:hover {
-    opacity: 0.85;
-    transform: translateY(-2px);
+section h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #00e676;
+    border-radius: 2px;
 }
 
-button:active {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.home-button {
-    background-color: var(--accent-color);
-    color: white;
-}
-
-#captureMoodBtn, #uploadImageBtn, #sendMessageBtn {
-    background-color: var(--primary-text-color);
-    color: white;
-    margin-top: 10px;
-}
-
-.back-button {
-    background-color: #e5e5ea; /* Light gray for secondary/back buttons */
-    color: var(--primary-text-color);
-    margin-top: 24px;
-}
-
-/* Video Container */
+/* Video & Canvas Container */
 .video-container {
     position: relative;
-    width: 100%;
-    margin: 0 auto 20px;
-    border-radius: 16px;
+    width: 100%; /* Make it responsive */
+    max-width: 640px; /* Max width for video */
+    margin: 0 auto 30px;
+    border: 2px solid #00e676; /* Green border */
+    border-radius: 8px;
     overflow: hidden;
     background-color: #000;
-    aspect-ratio: 4/3;
-    border: 1px solid var(--border-color);
-    box-shadow: none;
+    aspect-ratio: 4/3; /* Maintains 4:3 aspect ratio */
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4); /* Stronger glow for video */
 }
 
 #video, #overlayCanvas {
@@ -155,98 +198,176 @@ button:active {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Covers the container */
 }
 
-/* Results & Chat Section Styling */
-#moodResult {
-    font-size: 2em;
+/* Buttons (General) */
+button {
+    background-color: #00c853; /* Bright green for buttons */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px; /* Pill-shaped buttons */
+    cursor: pointer;
+    font-size: 1.1em;
     font-weight: 600;
-    margin-top: 0;
-    color: var(--primary-text-color);
-    text-align: left;
-    text-shadow: none;
+    margin: 10px 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 200, 83, 0.4);
 }
 
-#recommendations p, #musicRecommendations p, #chat-container p {
+button:hover {
+    background-color: #00a040; /* Darker green on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 15px rgba(0, 200, 83, 0.6);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 200, 83, 0.4);
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+/* Specific Home Screen Buttons */
+.home-button {
+    width: 100%; /* Full width within its container */
+    padding: 15px 30px; /* Larger padding for main buttons */
+    font-size: 1.3em; /* Larger font size */
+    margin: 0; /* Remove default button margin, gap handles spacing */
+    background-color: #00c853;
+    box-shadow: 0 6px 15px rgba(0, 200, 83, 0.5);
+}
+
+.home-button:hover {
+    background-color: #00a040;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 200, 83, 0.7);
+}
+
+.home-button:active {
+    transform: translateY(0);
+}
+
+/* Back buttons */
+.back-button {
+    background-color: #6c757d; /* A neutral gray for back buttons */
+    margin-top: 20px; /* Give it some space */
+    display: block; /* Make it a block to center it */
+    color: #a7ffeb;
+    padding: 10px 20px;
+    font-size: 1em;
+    box-shadow: none;
+}
+
+.back-button:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+}
+
+/* Results & Chat Section */
+#results-section, #chart-section, #scan-history-screen, #auth-screen {
+    text-align: center;
+    padding: 20px;
+}
+
+#moodResult {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #a7ffeb;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(167, 255, 235, 0.8);
+}
+
+#recommendations, #musicRecommendations {
+    margin-top: 20px;
     font-size: 1.1em;
     line-height: 1.6;
-    color: var(--secondary-text-color);
+    color: #c0c0c0;
 }
 
-/* New Chat Interface Styles */
-#chat-container {
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    height: 300px;
-    overflow-y: scroll;
-    margin-bottom: 16px;
+#recommendations p, #musicRecommendations p {
+    margin-bottom: 10px;
 }
 
-#chat-container p {
-    margin: 0 0 12px 0;
-    padding: 10px 15px;
-    border-radius: 18px;
-    max-width: 80%;
-    word-wrap: break-word;
-}
-
-#chat-container p i { /* AI messages */
-    background-color: #e5e5ea;
-    color: var(--primary-text-color);
-    display: block;
-    float: left;
-    clear: both;
-    font-style: normal;
-}
-
-#chat-container p:not(:has(i)) { /* User messages */
-    background-color: var(--accent-color);
-    color: white;
-    float: right;
-    clear: both;
-}
-
-#chat-input-container {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-#userInput {
-    flex-grow: 1;
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    background-color: #fff;
-    color: var(--primary-text-color);
-    font-size: 1em;
-}
-
-#sendMessageBtn {
-    width: auto;
-    padding: 16px;
-    background-color: var(--accent-color);
+/* Chart Section */
+#moodChart {
+    background-color: #0d0d0d;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
 /* Footer Styles */
 footer {
-    margin-top: auto;
+    margin-top: auto; /* Pushes the footer to the bottom */
     padding: 20px;
     text-align: center;
-    color: var(--secondary-text-color);
+    color: #777;
     font-size: 0.9em;
     width: 100%;
+    background-color: #0a0a0a;
+    border-top: 1px solid #222222;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    body {
-        padding: 10px;
+    .logo-text {
+        font-size: 2.5em;
+        padding-right: 10px;
+    }
+    .scan-wave {
+        width: 50px;
+        height: 50px;
     }
     main {
-        width: 100%;
+        padding: 25px;
+        width: 95%;
+    }
+    section h2 {
+        font-size: 1.8em;
+    }
+    .video-container {
+        max-width: 100%;
+    }
+    .home-button {
+        padding: 12px 25px;
+        font-size: 1.2em;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    #moodResult {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-container {
+        flex-direction: column;
+    }
+    .logo-text {
+        font-size: 2em;
+        padding-right: 0;
+        margin-bottom: 10px;
+    }
+    .scan-wave {
+        width: 40px;
+        height: 40px;
+    }
+    p.tagline {
+        font-size: 0.9em;
+    }
+    .home-button, button {
+        display: block;
+        width: calc(100% - 20px);
+        margin: 10px auto;
     }
 }
