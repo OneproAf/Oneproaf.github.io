@@ -1,86 +1,89 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const chatHistory = document.getElementById('chat-history');
-    const messageInput = document.getElementById('message-input');
-    const sendButton = document.getElementById('send-button');
-    const backButton = document.querySelector('.back-button');
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('userInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
 
-    // Function to add a message to the chat history
+    // Function to add a message to the chat container
     function addMessage(text, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', `${sender}-message`);
-        messageDiv.innerHTML = `<p>${text}</p>`;
-        chatHistory.appendChild(messageDiv);
+        const messageP = document.createElement('p');
+        if (sender === 'ai') {
+            messageP.innerHTML = `<i>${text}</i>`;
+        } else {
+            messageP.textContent = text;
+        }
+        chatContainer.appendChild(messageP);
 
         // Scroll to the bottom to show the latest message
-        chatHistory.scrollTop = chatHistory.scrollHeight;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     // Event listener for the send button
-    sendButton.addEventListener('click', () => {
+    sendMessageBtn.addEventListener('click', () => {
         sendMessage();
     });
 
     // Event listener for pressing Enter in the input field
-    messageInput.addEventListener('keypress', (e) => {
+    userInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             sendMessage();
         }
     });
 
-    function sendMessage() {
-        const messageText = messageInput.value.trim();
+    async function sendMessage() {
+        const messageText = userInput.value.trim();
 
         if (messageText) {
             addMessage(messageText, 'user');
-            messageInput.value = ''; // Clear the input field
+            userInput.value = ''; // Clear the input field
 
-            // --- AI Response Simulation (REPLACE WITH ACTUAL AI INTEGRATION) ---
-            // In a real application, you would send messageText to your AI backend here.
-            // The AI would process it and send back a response.
-            // For now, let's simulate a delayed AI response.
-            setTimeout(() => {
-                const aiResponse = generateSimpleAiResponse(messageText); // Simple placeholder
-                addMessage(aiResponse, 'ai');
-            }, 1000); // Simulate network delay
-            // --- END AI Response Simulation ---
+            // Show loading indicator
+            const loadingP = document.createElement('p');
+            loadingP.innerHTML = '<i>Thinking...</i>';
+            chatContainer.appendChild(loadingP);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                // Send message to backend API
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: messageText })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
+                // Remove loading message
+                chatContainer.removeChild(loadingP);
+                
+                // Add AI response
+                addMessage(data.response, 'ai');
+            } catch (error) {
+                console.error('Error:', error);
+                // Remove loading message
+                chatContainer.removeChild(loadingP);
+                // Add error message
+                addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+            }
         }
     }
 
-    // Simple placeholder for AI response logic
-    function generateSimpleAiResponse(userMessage) {
-        userMessage = userMessage.toLowerCase();
-        if (userMessage.includes('hello') || userMessage.includes('hi')) {
-            return "Hello there! How can I assist you today?";
-        } else if (userMessage.includes('stress') || userMessage.includes('anxiety')) {
-            return "I understand you're feeling stress/anxiety. Can you tell me more about what's causing it?";
-        } else if (userMessage.includes('thank you') || userMessage.includes('thanks')) {
-            return "You're welcome! I'm here to help.";
-        } else if (userMessage.includes('help')) {
-            return "I'm designed to provide support and guidance. What specific help are you looking for?";
+    // Function to go back to main app
+    window.goBack = function() {
+        // Check if we have a referrer (came from another page)
+        if (document.referrer && document.referrer.includes(window.location.origin)) {
+            window.history.back();
+        } else {
+            // Fallback to main page
+            window.location.href = '/';
         }
-        return "I'm listening. Please tell me more about what's on your mind.";
-    }
+    };
 
-    // Event listener for the back button (for navigation)
-    backButton.addEventListener('click', () => {
-        alert('Navigating back... (In a real app, this would go to a previous screen)');
-        // In a real application, you might use:
-        // window.history.back();
-        // Or navigate to a different route in a single-page application framework
-    });
-
-    // --- Initial / Session History Loading (Conceptual) ---
-    // In a real application, you would load previous session messages here
-    // from your backend database when the page loads.
-    // Example:
-    // fetch('/api/session-history')
-    //     .then(response => response.json())
-    //     .then(messages => {
-    //         messages.forEach(msg => addMessage(msg.text, msg.sender));
-    //     });
-    // For demonstration, let's add some initial messages:
+    // Add initial welcome message
     addMessage("Hello! I'm your AI psychologist. How are you feeling today?", 'ai');
-    addMessage("I'm feeling a bit overwhelmed with work.", 'user');
-    addMessage("I understand. Let's explore that together. What aspects of work are contributing to this feeling?", 'ai');
-    // --- End Initial Loading ---
 });

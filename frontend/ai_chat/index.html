@@ -7,28 +7,33 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="chat-container">
-        <header class="chat-header">
-            <button class="back-button" aria-label="Go back">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
-                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                </svg>
-            </button>
-            <h1 class="chat-title">AI Psychologist</h1>
-        </header>
+    <header>
+        <div class="logo-text">
+            <span class="mood-text">Face</span><span class="scan-text">Mood</span><span class="ai-text">AI</span>
+        </div>
+        <p class="tagline">AI Psychologist Chat</p>
+    </header>
 
-        <main class="chat-history" id="chat-history">
-            </main>
+    <main>
+        <section>
+            <h2>Chat with AI Psychologist</h2>
+            
+            <div id="chat-container">
+                <!-- Chat messages will appear here -->
+            </div>
+            
+            <div id="chat-input-container">
+                <input type="text" id="userInput" placeholder="Type your message...">
+                <button id="sendMessageBtn">Send</button>
+            </div>
+            
+            <button class="back-button" onclick="goBack()">← Back to Main App</button>
+        </section>
+    </main>
 
-        <footer class="chat-input-area">
-            <input type="text" id="message-input" placeholder="Type your message...">
-            <button id="send-button" aria-label="Send message">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                </svg>
-            </button>
-        </footer>
-    </div>
+    <footer>
+        <p>FaceMoodAI - AI-Powered Mood Analysis & Support</p>
+    </footer>
 
     <script src="js/script.js"></script>
 </body>
