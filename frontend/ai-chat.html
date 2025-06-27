@@ -263,7 +263,13 @@
 
         // Function to go back to the main app
         function goBack() {
-            window.history.back();
+            // Try to go back in history first
+            if (document.referrer && document.referrer.includes(window.location.origin)) {
+                window.history.back();
+            } else {
+                // If no referrer or different origin, go to main page
+                window.location.href = 'index.html';
+            }
         }
     </script>
 </body>
