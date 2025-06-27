@@ -72,36 +72,42 @@ async function getWellnessAdvice(emotion) {
   return text;
 }
 
+// Helper function to convert buffer to Gemini-compatible format
+function fileToGenerativePart(buffer, mimeType) {
+  return {
+    inlineData: {
+      data: buffer.toString("base64"),
+      mimeType,
+    },
+  };
+}
+
 // API endpoint to analyze mood
-app.post("/api/analyze-mood", upload.single("image"), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No image file uploaded." });
-  }
+app.post('/api/analyze-mood', upload.single('image'), async (req, res) => {
+console.log('Received request for /api/analyze-mood');
+if (!req.file) {
+return res.status(400).json({ error: 'No image file uploaded.' });
+}
 
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const prompt = "Analyze the primary human emotion in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Return a single JSON object with two keys: a 'mood' key with the dominant emotion as a string, and a 'percentages' key containing all detected expressions and their confidence scores.";
+try {
+const visionModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const prompt = "Analyze the primary human emotion in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Return only a single, valid JSON object with two keys: a 'mood' key with the dominant emotion as a string, and a 'percentages' key containing all detected expressions and their confidence scores from 0 to 1.";
 
-    const imagePart = {
-      inlineData: {
-        data: req.file.buffer.toString("base64"),
-        mimeType: req.file.mimetype,
-      },
-    };
-
-    const result = await model.generateContent([prompt, imagePart]);
-    const response = await result.response;
-    const text = response.text().replace(/```json\n|```/g, '').trim();
-
-    // Parse the JSON string from Gemini's response
-    const analysisResult = JSON.parse(text);
-
-    res.status(200).json(analysisResult);
-
-  } catch (error) {
-    console.error('Error during mood analysis:', error);
-    res.status(500).json({ error: 'An error occurred while analyzing the image.', details: error.message });
-  }
+const imagePart = fileToGenerativePart(req.file.buffer, req.file.mimetype);
+const result = await visionModel.generateContent([prompt, imagePart]);
+const responseText = result.response.text();
+// Clean up the response from the AI
+const cleanedJsonString = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+const jsonResponse = JSON.parse(cleanedJsonString);
+console.log('Successfully analyzed mood:', jsonResponse.mood);
+res.status(200).json(jsonResponse);
+} catch (error) {
+console.error('Detailed AI Error in /analyze-mood:', error);
+res.status(500).json({
+error: "Internal server error during mood analysis.",
+details: error.message
+});
+}
 });
 
 // API endpoint for mood-based advice
