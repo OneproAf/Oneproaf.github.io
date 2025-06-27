@@ -16,11 +16,15 @@ const resultsSection = document.getElementById('results-section');
 const chartSection = document.getElementById('chart-section');
 const scanHistoryScreen = document.getElementById('scan-history-screen');
 const authScreen = document.getElementById('auth-screen');
+const pricingScreen = document.getElementById('pricing-screen');
+const moodHistoryDashboardScreen = document.getElementById('mood-history-dashboard-screen');
+const wellnessContentScreen = document.getElementById('wellness-content-screen');
 
 // Home Screen Buttons
 const scanMoodHomeBtn = document.getElementById('scanMoodBtn');
 const aiPsychologistBtn = document.getElementById('aiPsychologistBtn');
 const scanHistoryBtn = document.getElementById('scanHistoryBtn');
+const pricingBtn = document.getElementById('pricingBtn');
 const authBtn = document.getElementById('authBtn');
 
 // Scan Screen Action Buttons
@@ -34,6 +38,9 @@ const backToHomeBtn2 = document.getElementById('backToHomeBtn2');
 const backToHomeBtn3 = document.getElementById('backToHomeBtn3');
 const backToHomeBtn5 = document.getElementById('backToHomeBtn5');
 const backToHomeBtn6 = document.getElementById('backToHomeBtn6');
+const backToHomeBtn7 = document.getElementById('backToHomeBtn7');
+const backToHomeBtn8 = document.getElementById('backToHomeBtn8');
+const backToHomeBtn9 = document.getElementById('backToHomeBtn9');
 
 // --- State Variables ---
 let chartInstance = null;
@@ -49,6 +56,9 @@ function showScreen(screenToShow) {
     chartSection.style.display = 'none';
     scanHistoryScreen.style.display = 'none';
     authScreen.style.display = 'none';
+    pricingScreen.style.display = 'none';
+    moodHistoryDashboardScreen.style.display = 'none';
+    wellnessContentScreen.style.display = 'none';
 
     if (screenToShow === homeScreen) {
         homeScreen.style.display = 'flex';
@@ -92,12 +102,16 @@ scanHistoryBtn.addEventListener('click', () => {
     }
 });
 
+pricingBtn.addEventListener('click', () => {
+    showScreen(pricingScreen);
+});
+
 authBtn.addEventListener('click', () => {
     showScreen(authScreen);
 });
 
 // Add all back button listeners
-[backToHomeBtn1, backToHomeBtn2, backToHomeBtn3, backToHomeBtn5, backToHomeBtn6].forEach(btn => {
+[backToHomeBtn1, backToHomeBtn2, backToHomeBtn3, backToHomeBtn5, backToHomeBtn6, backToHomeBtn7, backToHomeBtn8, backToHomeBtn9].forEach(btn => {
     if (btn) {
         btn.addEventListener('click', () => showScreen(homeScreen));
     }
