@@ -140,25 +140,40 @@ app.get('/api/get-advice', async (req, res) => {
 
 // API endpoint for AI Psychologist Chat
 app.post('/api/chat', async (req, res) => {
+  console.log('Received request for /api/chat');
   try {
     const { message } = req.body;
+    console.log('Message received:', message);
 
     if (!message) {
+      console.log('Validation failed: Message is required.');
       return res.status(400).json({ error: 'Message is required.' });
     }
+
+    console.log('Checking for Gemini API Key...');
+    if (!process.env.GEMINI_API_KEY) {
+        console.error('Gemini API Key is not configured.');
+        return res.status(500).json({ error: 'Server configuration error: AI service is not available.' });
+    }
+    console.log('Gemini API Key found.');
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = `Act as an empathetic AI psychologist. Respond helpfully and compassionately to the following user message: "${message}"`;
 
+    console.log('Sending prompt to Gemini...');
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
+    console.log('Received response from Gemini.');
 
     res.json({ response: text });
 
   } catch (error) {
-    console.error('Detailed AI Error:', error);
-    res.status(500).json({ error: "Failed to get a response from the AI psychologist.", details: error.message });
+    console.error('Detailed AI Error in /api/chat:', error);
+    res.status(500).json({ 
+        error: "Failed to get a response from the AI psychologist.", 
+        details: error.message 
+    });
   }
 });
 
