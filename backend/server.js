@@ -199,9 +199,11 @@ app.get('/api/get-music', async (req, res) => {
     }
 
     const items = playlistData.body.playlists.items;
-    // Prevent crash if Spotify returns null items or items is null
+    // Debug: Log items to help diagnose nulls in production
+    console.log('Spotify playlist items:', items);
+    // Prevent crash if Spotify returns null items or items is null, and only map playlists with a name
     const playlists = (items || [])
-      .filter(playlist => playlist)
+      .filter(playlist => playlist && playlist.name)
       .map(playlist => ({
         name: playlist.name,
         url: playlist.external_urls.spotify,
