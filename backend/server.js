@@ -1,3 +1,5 @@
+console.log('SERVER V3 - Spotify defensive code is running');
+
 import dotenv from 'dotenv';
 dotenv.config();
 
