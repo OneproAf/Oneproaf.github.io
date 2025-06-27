@@ -240,15 +240,33 @@ app.get('/api/get-playlist-tracks', async (req, res) => {
       return res.status(404).json({ error: 'No tracks found in this playlist.' });
     }
 
-    // Extract track names using the filter and map pattern
+    // Debug: Log the first item structure to understand the data format
+    if (tracksData.body.items.length > 0) {
+      console.log('First track item structure:', JSON.stringify(tracksData.body.items[0], null, 2));
+    }
+
+    // Extract track names using flexible filtering
     const names = tracksData.body.items
-      .filter(item => item && item.track && item.track.name)
-      .map(item => item.track.name);
+      .filter(item => {
+        // Handle different possible structures
+        return item && (
+          (item.track && item.track.name) || // Standard Spotify playlist track structure
+          item.name // Direct track structure
+        );
+      })
+      .map(item => {
+        // Extract name from the appropriate location
+        return item.track ? item.track.name : item.name;
+      });
 
     console.log(`Found ${names.length} tracks in playlist.`);
     res.status(200).json({ 
       trackNames: names,
-      totalTracks: names.length
+      totalTracks: names.length,
+      debug: {
+        totalItems: tracksData.body.items.length,
+        firstItemStructure: tracksData.body.items[0] ? Object.keys(tracksData.body.items[0]) : null
+      }
     });
 
   } catch (error) {
@@ -259,4 +277,35 @@ app.get('/api/get-playlist-tracks', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
+});
+
+// Generic endpoint for extracting track names from any Spotify tracks data
+app.post('/api/extract-track-names', async (req, res) => {
+  try {
+    const { data } = req.body;
+
+    if (!data || !data.tracks || !data.tracks.items) {
+      return res.status(400).json({ error: 'Invalid data structure. Expected data.tracks.items array.' });
+    }
+
+    // Use the exact pattern provided by the user
+    const trackNames = data.tracks.items
+      .filter(item => item && item.name)
+      .map(item => item.name);
+
+    console.log(`Extracted ${trackNames.length} track names from data.`);
+    res.status(200).json({ 
+      trackNames,
+      totalTracks: trackNames.length,
+      originalDataStructure: {
+        totalItems: data.tracks.items.length,
+        hasTracks: !!data.tracks,
+        hasItems: !!data.tracks.items
+      }
+    });
+
+  } catch (error) {
+    console.error('Error extracting track names:', error);
+    res.status(500).json({ error: 'Failed to extract track names.', details: error.message });
+  }
 }); 
