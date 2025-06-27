@@ -29,65 +29,10 @@ function initializeFirebase() {
 // Start Firebase initialization
 initializeFirebase();
 
-// --- Get DOM Elements (Old and New) ---
-
-// Mood Scan & General Elements
-const video = document.getElementById('video');
-const overlayCanvas = document.getElementById('overlayCanvas');
-const moodResult = document.getElementById('moodResult');
-const recommendationsDiv = document.getElementById('recommendations');
-const musicRecommendationsDiv = document.getElementById('musicRecommendations');
-
-// Screen Containers
-const homeScreen = document.getElementById('home-screen');
-const scanSection = document.getElementById('scan-mood-screen');
-const resultsSection = document.getElementById('results-section');
-const scanHistoryScreen = document.getElementById('scan-history-screen');
-const authScreen = document.getElementById('auth-screen');
-const pricingScreen = document.getElementById('pricing-screen');
-const moodHistoryDashboardScreen = document.getElementById('mood-history-dashboard-screen');
-const wellnessContentScreen = document.getElementById('wellness-content-screen');
-const privacyPolicyScreen = document.getElementById('privacy-policy-screen');
-
-// Home Screen Buttons
-const scanMoodHomeBtn = document.getElementById('scanMoodHomeBtn');
-const aiPsychologistBtn = document.getElementById('aiPsychologistBtn');
-const scanHistoryBtn = document.getElementById('scanHistoryBtn');
-const pricingBtn = document.getElementById('pricingBtn');
-const wellnessBtn = document.getElementById('wellnessBtn');
-const authBtn = document.getElementById('authBtn');
-const privacyLink = document.getElementById('privacy-link');
-const enableNotificationsBtn = document.getElementById('enable-notifications-btn');
-
-// Scan Screen Action Buttons
-const captureMoodBtn = document.getElementById('captureMoodBtn');
-const imageUpload = document.getElementById('imageUpload');
-const uploadImageBtn = document.getElementById('uploadImageBtn');
-
-// Back Buttons
-const backToHomeBtn1 = document.getElementById('backToHomeBtn1');
-const backToHomeBtn2 = document.getElementById('backToHomeBtn2');
-const backToHomeBtn5 = document.getElementById('backToHomeBtn5');
-const backToHomeBtn6 = document.getElementById('backToHomeBtn6');
-const backToHomeBtn7 = document.getElementById('backToHomeBtn7');
-const backToHomeBtn8 = document.getElementById('backToHomeBtn8');
-const backToHomeBtn9 = document.getElementById('backToHomeBtn9');
-const backToHomeBtn10 = document.getElementById('backToHomeBtn10');
-const backToHomeBtn3 = document.getElementById('backToHomeBtn3');
-const backToHomeBtn4 = document.getElementById('backToHomeBtn4');
-
-// Auth Elements
-const registerForm = document.getElementById('register-form');
-const loginForm = document.getElementById('login-form');
-const googleSignInBtn = document.getElementById('google-signin-btn');
-const streakDisplay = document.getElementById('streak-display');
-const streakCount = document.getElementById('streak-count');
-
 // --- State Variables ---
 let chartInstance = null;
 const moodHistory = [];
 let latestScanData = null;
-
 
 // --- Navigation Logic ---
 
@@ -127,7 +72,8 @@ function showScreen(screenToShow) {
     }
 
     // Stop video if navigating away from the scan screen
-    if (screenToShow !== scanSection && video.srcObject) {
+    const video = document.getElementById('video');
+    if (screenToShow !== document.getElementById('scan-mood-screen') && video && video.srcObject) {
         const tracks = video.srcObject.getTracks();
         tracks.forEach(track => track.stop());
         video.srcObject = null;
@@ -147,6 +93,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startApplication() {
+        // --- Get DOM Elements (Old and New) ---
+
+        // Mood Scan & General Elements
+        const video = document.getElementById('video');
+        const overlayCanvas = document.getElementById('overlayCanvas');
+        const moodResult = document.getElementById('moodResult');
+        const recommendationsDiv = document.getElementById('recommendations');
+        const musicRecommendationsDiv = document.getElementById('musicRecommendations');
+
+        // Screen Containers
+        const homeScreen = document.getElementById('home-screen');
+        const scanSection = document.getElementById('scan-mood-screen');
+        const resultsSection = document.getElementById('results-section');
+        const scanHistoryScreen = document.getElementById('scan-history-screen');
+        const authScreen = document.getElementById('auth-screen');
+        const pricingScreen = document.getElementById('pricing-screen');
+        const moodHistoryDashboardScreen = document.getElementById('mood-history-dashboard-screen');
+        const wellnessContentScreen = document.getElementById('wellness-content-screen');
+        const privacyPolicyScreen = document.getElementById('privacy-policy-screen');
+
+        // Home Screen Buttons
+        const scanMoodHomeBtn = document.getElementById('scanMoodHomeBtn');
+        const aiPsychologistBtn = document.getElementById('aiPsychologistBtn');
+        const scanHistoryBtn = document.getElementById('scanHistoryBtn');
+        const pricingBtn = document.getElementById('pricingBtn');
+        const wellnessBtn = document.getElementById('wellnessBtn');
+        const authBtn = document.getElementById('authBtn');
+        const privacyLink = document.getElementById('privacy-link');
+        const enableNotificationsBtn = document.getElementById('enable-notifications-btn');
+
+        // Scan Screen Action Buttons
+        const captureMoodBtn = document.getElementById('captureMoodBtn');
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadImageBtn = document.getElementById('uploadImageBtn');
+
+        // Back Buttons
+        const backToHomeBtn1 = document.getElementById('backToHomeBtn1');
+        const backToHomeBtn2 = document.getElementById('backToHomeBtn2');
+        const backToHomeBtn5 = document.getElementById('backToHomeBtn5');
+        const backToHomeBtn6 = document.getElementById('backToHomeBtn6');
+        const backToHomeBtn7 = document.getElementById('backToHomeBtn7');
+        const backToHomeBtn8 = document.getElementById('backToHomeBtn8');
+        const backToHomeBtn9 = document.getElementById('backToHomeBtn9');
+        const backToHomeBtn10 = document.getElementById('backToHomeBtn10');
+        const backToHomeBtn3 = document.getElementById('backToHomeBtn3');
+        const backToHomeBtn4 = document.getElementById('backToHomeBtn4');
+
+        // Auth Elements
+        const registerForm = document.getElementById('register-form');
+        const loginForm = document.getElementById('login-form');
+        const googleSignInBtn = document.getElementById('google-signin-btn');
+        const streakDisplay = document.getElementById('streak-display');
+        const streakCount = document.getElementById('streak-count');
+
         // --- Language Switcher Logic ---
         const savedLanguage = localStorage.getItem('language') || 'en';
         setLanguage(savedLanguage);
