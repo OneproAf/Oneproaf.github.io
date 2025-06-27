@@ -196,13 +196,18 @@ app.get('/api/get-music', async (req, res) => {
       return res.status(404).json({ error: 'No playlists found for this mood.' });
     }
 
-    const playlists = playlistData.body.playlists.items.map(p => ({
-      name: p.name,
-      url: p.external_urls.spotify,
-      imageUrl: p.images[0]?.url || '' // Get the first image, provide fallback
-    }));
+    const items = playlistData.body.playlists.items;
+    const playlists = items
+      .filter(playlist => playlist) // Safely filter out any null items from the list
+      .map(playlist => ({
+        name: playlist.name,
+        url: playlist.external_urls.spotify,
+        // Safely check for an image and provide a fallback if none exists
+        imageUrl: (playlist.images && playlist.images.length > 0) ? playlist.images[0].url : 'https://i.scdn.co/image/ab67616d0000b273821d6e34F4f36a545a452583'
+      }));
 
-    res.json({ playlists });
+    console.log(`Found ${playlists.length} playlists for the mood.`);
+    res.status(200).json({ playlists });
 
   } catch (error) {
     console.error('Error fetching from Spotify:', error);
