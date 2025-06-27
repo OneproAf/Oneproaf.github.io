@@ -139,7 +139,7 @@ app.get('/api/get-advice', async (req, res) => {
 });
 
 // API endpoint for AI Psychologist Chat
-app.post('/api/psychologist-chat', async (req, res) => {
+app.post('/api/chat', async (req, res) => {
   try {
     const { message } = req.body;
 
@@ -154,7 +154,7 @@ app.post('/api/psychologist-chat', async (req, res) => {
     const response = await result.response;
     const text = response.text();
 
-    res.json({ reply: text });
+    res.json({ response: text });
 
   } catch (error) {
     console.error('Detailed AI Error:', error);
