@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Prevent zoom on double tap for mobile
+    messageInput.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        messageInput.focus();
+    });
+
     function sendMessage() {
         const messageText = messageInput.value.trim();
 
@@ -61,13 +67,42 @@ document.addEventListener('DOMContentLoaded', () => {
         return "I'm listening. Please tell me more about what's on your mind.";
     }
 
-    // Event listener for the back button (for navigation)
-    backButton.addEventListener('click', () => {
-        alert('Navigating back... (In a real app, this would go to a previous screen)');
-        // In a real application, you might use:
-        // window.history.back();
-        // Or navigate to a different route in a single-page application framework
-    });
+    // Function to go back to main app
+    window.goBack = function() {
+        // Check if we have a referrer (came from another page)
+        if (document.referrer && document.referrer.includes(window.location.origin)) {
+            window.history.back();
+        } else {
+            // Fallback to main page
+            window.location.href = '/';
+        }
+    };
+
+    // Handle mobile viewport issues
+    function setViewportHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    // Set viewport height on load and resize
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+
+    // Prevent body scroll on mobile
+    document.body.addEventListener('touchmove', (e) => {
+        if (e.target.closest('.chat-history')) {
+            return; // Allow scrolling in chat history
+        }
+        e.preventDefault();
+    }, { passive: false });
+
+    // Focus input when page loads on mobile
+    if ('ontouchstart' in window) {
+        setTimeout(() => {
+            messageInput.focus();
+        }, 500);
+    }
 
     // --- Initial / Session History Loading (Conceptual) ---
     // In a real application, you would load previous session messages here
