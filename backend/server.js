@@ -217,6 +217,46 @@ app.get('/api/get-music', async (req, res) => {
   }
 });
 
+// New API endpoint to get tracks from a playlist
+app.get('/api/get-playlist-tracks', async (req, res) => {
+  const { playlistId } = req.query;
+
+  if (!playlistId) {
+    return res.status(400).json({ error: 'Playlist ID is required.' });
+  }
+
+  const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+  });
+
+  try {
+    const data = await spotifyApi.clientCredentialsGrant();
+    spotifyApi.setAccessToken(data.body['access_token']);
+
+    const tracksData = await spotifyApi.getPlaylistTracks(playlistId, { limit: 50 });
+
+    if (!tracksData.body || !tracksData.body.items) {
+      return res.status(404).json({ error: 'No tracks found in this playlist.' });
+    }
+
+    // Extract track names using the filter and map pattern
+    const names = tracksData.body.items
+      .filter(item => item && item.track && item.track.name)
+      .map(item => item.track.name);
+
+    console.log(`Found ${names.length} tracks in playlist.`);
+    res.status(200).json({ 
+      trackNames: names,
+      totalTracks: names.length
+    });
+
+  } catch (error) {
+    console.error('Error fetching playlist tracks:', error);
+    res.status(500).json({ error: 'Failed to fetch playlist tracks.', details: error.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 }); 
