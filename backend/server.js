@@ -175,11 +175,14 @@ app.get('/api/get-music', async (req, res) => {
 
   const moodMap = {
     'Happy': 'happy hits',
-    'Sad': 'sad songs',
-    'Angry': 'angry rock',
+    'Sad': 'sad songs acoustic',
+    'Angry': 'angry workout rock',
     'Neutral': 'chill focus',
     'Surprised': 'discover weekly',
-    'Calm': 'peaceful piano'
+    'Fearful': 'calm soothing',
+    'Disgusted': 'clean fresh',
+    'Confused': 'clear instrumental',
+    'Tired': 'lullaby peaceful'
   };
   const searchQuery = moodMap[mood] || 'chill';
 

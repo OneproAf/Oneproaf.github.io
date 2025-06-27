@@ -250,6 +250,41 @@ async function detectMood(imageData) {
     }
 }
 
+// --- Music Recommendations Function ---
+
+async function getMusicRecommendations(mood) {
+    try {
+        const response = await fetch(`https://oneproaf-github-io.onrender.com/api/get-music?mood=${encodeURIComponent(mood)}`);
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.playlists && data.playlists.length > 0) {
+            const playlistsHTML = data.playlists.map(playlist => `
+                <div class="playlist-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+                    <a href="${playlist.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                        <img src="${playlist.imageUrl}" alt="${playlist.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
+                        <span style="font-weight: 500; color: #a7ffeb;">${playlist.name}</span>
+                    </a>
+                </div>
+            `).join('');
+            
+            musicRecommendationsDiv.innerHTML = `
+                <h4 style="color: #a7ffeb; margin-bottom: 10px;">🎵 Music for Your Mood:</h4>
+                ${playlistsHTML}
+            `;
+        } else {
+            musicRecommendationsDiv.innerHTML = '<p style="color: #888;">No music recommendations available for this mood.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching music recommendations:', error);
+        musicRecommendationsDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load music recommendations.</p>';
+    }
+}
+
 function displayMoodResult(mood, expressions) {
     let moodText = '';
     let recommendations = '';
@@ -318,7 +353,7 @@ function displayMoodResult(mood, expressions) {
     
     moodResult.textContent = moodText;
     recommendationsDiv.innerHTML = `<p>${recommendations}</p>`;
-    musicRecommendationsDiv.innerHTML = `<p>Recommended music: ${musicGenre}</p><p>(Spotify API integration here)</p>`;
+    getMusicRecommendations(mood);
 }
 
 function updateMoodChart(currentMood) {
