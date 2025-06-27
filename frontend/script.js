@@ -50,7 +50,7 @@ const wellnessContentScreen = document.getElementById('wellness-content-screen')
 const privacyPolicyScreen = document.getElementById('privacy-policy-screen');
 
 // Home Screen Buttons
-const scanMoodHomeBtn = document.getElementById('scanMoodBtn');
+const scanMoodHomeBtn = document.getElementById('scanMoodHomeBtn');
 const aiPsychologistBtn = document.getElementById('aiPsychologistBtn');
 const scanHistoryBtn = document.getElementById('scanHistoryBtn');
 const pricingBtn = document.getElementById('pricingBtn');
@@ -201,34 +201,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        scanMoodHomeBtn.addEventListener('click', () => {
-            showScreen(scanSection);
-            startVideo();
-        });
+        if (scanMoodHomeBtn) {
+            scanMoodHomeBtn.addEventListener('click', () => {
+                showScreen(scanSection);
+                startVideo();
+            });
+        }
 
-        aiPsychologistBtn.addEventListener('click', () => {
-            // Open the standalone AI chat page in the same tab
-            window.location.href = 'ai_chat/index.html';
-        });
+        if (aiPsychologistBtn) {
+            aiPsychologistBtn.addEventListener('click', () => {
+                // Open the standalone AI chat page in the same tab
+                window.location.href = 'ai_chat/index.html';
+            });
+        }
 
-        scanHistoryBtn.addEventListener('click', renderDashboardCharts);
+        if (scanHistoryBtn) {
+            scanHistoryBtn.addEventListener('click', renderDashboardCharts);
+        }
 
-        wellnessBtn.addEventListener('click', () => {
-            showScreen(wellnessContentScreen);
-        });
+        if (wellnessBtn) {
+            wellnessBtn.addEventListener('click', () => {
+                showScreen(wellnessContentScreen);
+            });
+        }
 
-        privacyLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            showScreen(privacyPolicyScreen);
-        });
+        if (privacyLink) {
+            privacyLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                showScreen(privacyPolicyScreen);
+            });
+        }
 
-        pricingBtn.addEventListener('click', () => {
-            showScreen(pricingScreen);
-        });
+        if (pricingBtn) {
+            pricingBtn.addEventListener('click', () => {
+                showScreen(pricingScreen);
+            });
+        }
 
-        authBtn.addEventListener('click', () => {
-            showScreen(authScreen);
-        });
+        if (authBtn) {
+            authBtn.addEventListener('click', () => {
+                showScreen(authScreen);
+            });
+        }
 
         const vapidPublicKey = 'BOtl0iEZS2FIB2UcKfNQNzA-ikU81fgUPJW8EZtgiC3kEo3YPHlOk5E5wG2kRZbbrlyb2MVg2GaiL88C7kJfflo';
 
@@ -264,33 +278,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        enableNotificationsBtn.addEventListener('click', () => {
-            if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
-                alert('This browser does not support push notifications.');
-                return;
-            }
-
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Notification permission granted.');
-                    navigator.serviceWorker.ready.then(registration => {
-                        registration.pushManager.subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: vapidPublicKey
-                        }).then(subscription => {
-                            console.log('User is subscribed:', subscription);
-                            saveSubscriptionToServer(subscription);
-                        }).catch(err => {
-                            console.error('Failed to subscribe the user: ', err);
-                            alert('Failed to subscribe for notifications. Please try again.');
-                        });
-                    });
-                } else {
-                    console.log('Notification permission denied.');
-                    alert('You have disabled notifications. You can enable them in your browser settings.');
+        if (enableNotificationsBtn) {
+            enableNotificationsBtn.addEventListener('click', () => {
+                if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
+                    alert('This browser does not support push notifications.');
+                    return;
                 }
+
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        console.log('Notification permission granted.');
+                        navigator.serviceWorker.ready.then(registration => {
+                            registration.pushManager.subscribe({
+                                userVisibleOnly: true,
+                                applicationServerKey: vapidPublicKey
+                            }).then(subscription => {
+                                console.log('User is subscribed:', subscription);
+                                saveSubscriptionToServer(subscription);
+                            }).catch(err => {
+                                console.error('Failed to subscribe the user: ', err);
+                                alert('Failed to subscribe for notifications. Please try again.');
+                            });
+                        });
+                    } else {
+                        console.log('Notification permission denied.');
+                        alert('You have disabled notifications. You can enable them in your browser settings.');
+                    }
+                });
             });
-        });
+        }
 
 
         // --- Firebase Auth Logic ---
@@ -357,9 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // --- Auth Event Listeners ---
-        registerForm.addEventListener('submit', handleRegistration);
-        loginForm.addEventListener('submit', handleLogin);
-        googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+        if (registerForm) {
+            registerForm.addEventListener('submit', handleRegistration);
+        }
+        if (loginForm) {
+            loginForm.addEventListener('submit', handleLogin);
+        }
+        if (googleSignInBtn) {
+            googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+        }
 
 
         // --- Video and Image Handling ---
@@ -375,28 +397,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        captureMoodBtn.addEventListener('click', () => {
-            // Create a canvas to capture the video frame
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0);
-            
-            canvas.toBlob((blob) => {
-                detectMood(blob);
-            }, 'image/jpeg');
-        });
+        if (captureMoodBtn) {
+            captureMoodBtn.addEventListener('click', () => {
+                // Create a canvas to capture the video frame
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                
+                canvas.toBlob((blob) => {
+                    detectMood(blob);
+                }, 'image/jpeg');
+            });
+        }
 
-        uploadImageBtn.addEventListener('click', () => imageUpload.click());
+        if (uploadImageBtn) {
+            uploadImageBtn.addEventListener('click', () => imageUpload.click());
+        }
 
-        imageUpload.addEventListener('change', async (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                video.style.display = 'none';
-                detectMood(file);
-            }
-        });
+        if (imageUpload) {
+            imageUpload.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    video.style.display = 'none';
+                    detectMood(file);
+                }
+            });
+        }
 
         // --- Mood Detection Function (Updated for Backend API) ---
 
