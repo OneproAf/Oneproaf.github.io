@@ -56,18 +56,29 @@
         </section>
 
         <section id="ai-psychologist-screen" style="display: none;">
-            <h2>AI Psychologist</h2>
-            
-            <div id="chat-container" style="border: 1px solid #444; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; border-radius: 5px; background-color: #111;">
-                <p style="color: #a7ffeb;"><i>Hello! I am your AI assistant. How can I help you today?</i></p>
-            </div>
+            <div class="chat-container">
+                <header class="chat-header">
+                    <button class="back-button" id="backToHomeBtn4" aria-label="Go back">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                        </svg>
+                    </button>
+                    <h1 class="chat-title">AI Psychologist</h1>
+                </header>
 
-            <div id="chat-input-container" style="display: flex; gap: 10px;">
-                <input type="text" id="userInput" placeholder="Type your message here..." style="flex-grow: 1; padding: 10px; border-radius: 5px; border: 1px solid #555; background-color: #333; color: #fff;">
-                <button id="sendMessageBtn">Send</button>
-            </div>
+                <main class="chat-history" id="chat-history">
+                    <!-- Messages will be dynamically added here -->
+                </main>
 
-            <button id="backToHomeBtn4" class="back-button">Back to Home</button>
+                <footer class="chat-input-area">
+                    <input type="text" id="userInput" placeholder="Type your message...">
+                    <button id="sendMessageBtn" aria-label="Send message">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </footer>
+            </div>
         </section>
 
         <section id="scan-history-screen" style="display: none;">

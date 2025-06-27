@@ -30,7 +30,7 @@ const imageUpload = document.getElementById('imageUpload');
 const uploadImageBtn = document.getElementById('uploadImageBtn');
 
 // AI Psychologist Chat Elements
-const chatContainer = document.getElementById('chat-container');
+const chatHistory = document.getElementById('chat-history');
 const userInput = document.getElementById('userInput');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
 
@@ -120,14 +120,13 @@ async function sendMessageToAI() {
     }
 
     // Display user's message immediately
-    const userMessageElem = document.createElement('p');
-    userMessageElem.textContent = `You: ${userMessage}`;
-    userMessageElem.style.textAlign = 'right';
-    userMessageElem.style.color = '#ffffff';
-    chatContainer.appendChild(userMessageElem);
+    const userMessageElem = document.createElement('div');
+    userMessageElem.classList.add('message', 'user-message');
+    userMessageElem.innerHTML = `<p>${userMessage}</p>`;
+    chatHistory.appendChild(userMessageElem);
     
     userInput.value = ""; // Clear the input box
-    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+    chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to bottom
 
     try {
         const response = await fetch('https://oneproaf-github-io.onrender.com/api/psychologist-chat', {
@@ -146,19 +145,19 @@ async function sendMessageToAI() {
         const aiReply = data.reply;
 
         // Display AI's message
-        const aiMessageElem = document.createElement('p');
-        aiMessageElem.innerHTML = `<i>AI: ${aiReply}</i>`; // Use innerHTML to render formatted text if any
-        aiMessageElem.style.color = '#a7ffeb';
-        chatContainer.appendChild(aiMessageElem);
-        chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+        const aiMessageElem = document.createElement('div');
+        aiMessageElem.classList.add('message', 'ai-message');
+        aiMessageElem.innerHTML = `<p><i>${aiReply}</i></p>`;
+        chatHistory.appendChild(aiMessageElem);
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to bottom
 
     } catch (error) {
         console.error("Error communicating with AI psychologist:", error);
-        const errorElem = document.createElement('p');
-        errorElem.textContent = "AI Assistant: Sorry, I'm having trouble connecting right now. Please try again later.";
-        errorElem.style.color = '#ff8a80'; // Red color for error
-        chatContainer.appendChild(errorElem);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        const errorElem = document.createElement('div');
+        errorElem.classList.add('message', 'ai-message');
+        errorElem.innerHTML = `<p style="color: #ff8a80;">AI Assistant: Sorry, I'm having trouble connecting right now. Please try again later.</p>`;
+        chatHistory.appendChild(errorElem);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 }
 
@@ -168,6 +167,18 @@ userInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         event.preventDefault(); // Prevent default form submission on enter
         sendMessageToAI();
+    }
+});
+
+// Initialize chat with welcome message when AI Psychologist screen is shown
+aiPsychologistBtn.addEventListener('click', () => {
+    showScreen(aiPsychologistScreen);
+    // Add welcome message if chat is empty
+    if (chatHistory.children.length === 0) {
+        const welcomeMessage = document.createElement('div');
+        welcomeMessage.classList.add('message', 'ai-message');
+        welcomeMessage.innerHTML = '<p><i>Hello! I am your AI psychologist. How can I help you today?</i></p>';
+        chatHistory.appendChild(welcomeMessage);
     }
 });
 
