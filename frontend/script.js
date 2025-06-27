@@ -90,7 +90,7 @@ scanMoodHomeBtn.addEventListener('click', () => {
 
 aiPsychologistBtn.addEventListener('click', () => {
     // Open the standalone AI chat page in the same tab
-    window.location.href = 'ai-chat.html';
+    window.location.href = 'ai_chat/index.html';
 });
 
 scanHistoryBtn.addEventListener('click', () => {
