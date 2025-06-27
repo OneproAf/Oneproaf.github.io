@@ -79,8 +79,8 @@ scanMoodHomeBtn.addEventListener('click', () => {
 });
 
 aiPsychologistBtn.addEventListener('click', () => {
-    // Open the standalone AI chat page in a new window/tab
-    window.open('ai-chat.html', '_blank');
+    // Open the standalone AI chat page in the same tab
+    window.location.href = 'ai-chat.html';
 });
 
 scanHistoryBtn.addEventListener('click', () => {
