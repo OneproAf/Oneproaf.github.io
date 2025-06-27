@@ -8,6 +8,9 @@ import multer from 'multer';
 import cors from 'cors';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import SpotifyWebApi from 'spotify-web-api-node';
+const webpush = require('web-push');
+const { Firestore } = require('@google-cloud/firestore');
+const admin = require('firebase-admin');
 
 // Initialize GoogleGenerativeAI
 console.log('Is API Key loaded:', !!process.env.GEMINI_API_KEY);
@@ -15,6 +18,9 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const app = express();
 const port = 8000;
+
+// Initialize Firestore
+const firestore = new Firestore();
 
 // Configure CORS
 const allowedOrigins = [
@@ -84,32 +90,114 @@ function fileToGenerativePart(buffer, mimeType) {
   };
 }
 
-// API endpoint to analyze mood
-app.post('/api/analyze-mood', upload.single('image'), async (req, res) => {
-console.log('Received request for /api/analyze-mood');
-if (!req.file) {
-return res.status(400).json({ error: 'No image file uploaded.' });
+// Configure web-push with VAPID keys
+// Make sure to set these in your environment variables
+const vapidKeys = {
+    publicKey: process.env.VAPID_PUBLIC_KEY,
+    privateKey: process.env.VAPID_PRIVATE_KEY
+};
+webpush.setVapidDetails(
+    'mailto:your-email@example.com', // Replace with your email
+    vapidKeys.publicKey,
+    vapidKeys.privateKey
+);
+
+// Middleware to verify Firebase ID token (optional)
+async function softVerifyFirebaseToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        const idToken = authHeader.split('Bearer ')[1];
+        try {
+            const decodedToken = await admin.auth().verifyIdToken(idToken);
+            req.user = decodedToken; // Attach user to request if token is valid
+        } catch (error) {
+            console.warn('Received an invalid or expired Firebase token.');
+            // Do not block the request, just proceed without a user object
+        }
+    }
+    next();
 }
 
-try {
-const visionModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-const prompt = "Analyze the primary human emotion in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Return only a single, valid JSON object with two keys: a 'mood' key with the dominant emotion as a string, and a 'percentages' key containing all detected expressions and their confidence scores from 0 to 1.";
-
-const imagePart = fileToGenerativePart(req.file.buffer, req.file.mimetype);
-const result = await visionModel.generateContent([prompt, imagePart]);
-const responseText = result.response.text();
-// Clean up the response from the AI
-const cleanedJsonString = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-const jsonResponse = JSON.parse(cleanedJsonString);
-console.log('Successfully analyzed mood:', jsonResponse.mood);
-res.status(200).json(jsonResponse);
-} catch (error) {
-console.error('Detailed AI Error in /analyze-mood:', error);
-res.status(500).json({
-error: "Internal server error during mood analysis.",
-details: error.message
-});
+// Middleware to verify Firebase ID token (strict)
+async function verifyFirebaseToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        console.warn('Received an invalid or missing Firebase token.');
+        return res.status(401).json({ error: 'Unauthorized: Missing or invalid Firebase token.' });
+    }
+    next();
 }
+
+// API endpoint to analyze mood, now with streak logic
+app.post('/api/analyze-mood', upload.single('image'), softVerifyFirebaseToken, async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No image file uploaded.' });
+    }
+
+    try {
+        const imagePart = {
+            inlineData: {
+                data: req.file.buffer.toString("base64"),
+                mimeType: req.file.mimetype,
+            },
+        };
+        const prompt = "Analyze the primary emotion conveyed by the facial expression in this image. The possible emotions are: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Respond ONLY with a JSON object containing two keys: 'mood' (a string with the detected primary emotion, starting with a capital letter) and 'percentages' (an object where keys are all possible emotion strings and values are the confidence scores as decimals from 0 to 1).";
+        
+        const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = gemini.getGenerativeModel({ model: "gemini-pro-vision" });
+        const result = await model.generateContent([prompt, imagePart]);
+        const geminiResponseText = result.response.text();
+        const analysis = JSON.parse(geminiResponseText);
+
+        let responseData = { ...analysis, currentStreak: 0 };
+
+        // --- Streak Logic (only for logged-in users) ---
+        if (req.user) {
+            const userId = req.user.uid;
+            const userRef = firestore.collection('users').doc(userId);
+            const userDoc = await userRef.get();
+            const userData = userDoc.data() || {};
+            
+            let currentStreak = userData.currentStreak || 0;
+            const lastScanTimestamp = userData.lastScanTimestamp;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Start of today
+
+            if (lastScanTimestamp) {
+                const lastScanDate = new Date(lastScanTimestamp.toMillis());
+                lastScanDate.setHours(0, 0, 0, 0); // Start of the last scan day
+
+                const diffTime = today.getTime() - lastScanDate.getTime();
+                const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+                if (diffDays === 1) {
+                    // Scanned yesterday, continue streak
+                    currentStreak++;
+                } else if (diffDays > 1) {
+                    // Scanned before yesterday, reset streak
+                    currentStreak = 1;
+                }
+                // If diffDays is 0, a scan already happened today, so do nothing.
+            } else {
+                // First scan for this user
+                currentStreak = 1;
+            }
+
+            // Update user document
+            await userRef.set({
+                currentStreak: currentStreak,
+                lastScanTimestamp: new Date()
+            }, { merge: true });
+
+            responseData.currentStreak = currentStreak;
+        }
+
+        res.json(responseData);
+    } catch (error) {
+        console.error('Error in /api/analyze-mood:', error);
+        res.status(500).json({ error: 'Failed to analyze mood.', details: error.message });
+    }
 });
 
 // API endpoint for mood-based advice
@@ -325,4 +413,73 @@ app.post('/api/extract-track-names', async (req, res) => {
     console.error('Error extracting track names:', error);
     res.status(500).json({ error: 'Failed to extract track names.', details: error.message });
   }
+});
+
+// New endpoint to save a push subscription
+app.post('/api/save-subscription', verifyFirebaseToken, async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized: No user is logged in.' });
+    }
+
+    const { subscription } = req.body;
+    if (!subscription) {
+        return res.status(400).json({ message: 'Bad Request: No subscription object provided.' });
+    }
+
+    try {
+        const userId = req.user.uid;
+        await firestore.collection('users').doc(userId).set({
+            pushSubscription: subscription
+        }, { merge: true });
+
+        console.log(`Subscription saved for user: ${userId}`);
+        res.status(200).json({ message: 'Subscription saved successfully.' });
+    } catch (error) {
+        console.error('Error saving subscription to Firestore:', error);
+        res.status(500).json({ message: 'Internal Server Error: Could not save subscription.' });
+    }
+});
+
+// New endpoint to send a test push notification
+app.post('/api/send-test-notification', async (req, res) => {
+    // NOTE: For a real app, this endpoint should be protected, e.g., only callable by an admin.
+    const { userId } = req.body;
+    if (!userId) {
+        return res.status(400).json({ message: 'Bad Request: No userId provided.' });
+    }
+
+    try {
+        const userDoc = await firestore.collection('users').doc(userId).get();
+
+        if (!userDoc.exists) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        const { pushSubscription } = userDoc.data();
+
+        if (!pushSubscription) {
+            return res.status(404).json({ message: 'No push subscription found for this user.' });
+        }
+
+        const payload = JSON.stringify({
+            title: 'Hello from MoodScan AI!',
+            body: 'This is your test notification!'
+        });
+
+        await webpush.sendNotification(pushSubscription, payload);
+
+        console.log(`Test notification sent successfully to user: ${userId}`);
+        res.status(200).json({ message: 'Test notification sent successfully.' });
+
+    } catch (error) {
+        // Handle common errors, like an expired subscription
+        if (error.statusCode === 410) {
+            console.log(`Subscription for user ${userId} has expired. Removing from DB.`);
+            // Clean up the invalid subscription from the database
+            await firestore.collection('users').doc(userId).update({ pushSubscription: null });
+            return res.status(410).json({ message: 'Subscription has expired and was removed.' });
+        }
+        console.error(`Error sending notification to user ${userId}:`, error);
+        res.status(500).json({ message: 'Internal Server Error: Could not send notification.' });
+    }
 }); 
