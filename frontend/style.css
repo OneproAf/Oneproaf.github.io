@@ -1,14 +1,26 @@
-/* General Body Styles */
+:root {
+    --background-color: #f4f4f9;
+    --card-background-color: #ffffff;
+    --primary-text-color: #1c1c1e;
+    --secondary-text-color: #8a8a8e;
+    --border-color: #e5e5ea;
+    --accent-color: #007aff;
+    --system-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* General Body & Typography Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--system-font);
     margin: 0;
-    padding: 0;
-    background-color: #1a1a1a; /* Deep, dark charcoal background */
-    color: #e0e0e0; /* Light gray for general text */
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+    min-height: 100vh;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* Header Styles */
@@ -47,19 +59,10 @@ header {
     animation: text-fade-in 1.5s forwards;
 }
 
-.logo-text .mood-text {
-    color: #00e676; /* Vibrant green for "Mood" */
-    animation-delay: 0.2s;
-}
-
-.logo-text .scan-text {
-    color: #69f0ae; /* Lighter green for "Scan" */
-    animation-delay: 0.5s;
-}
-
+.logo-text .mood-text,
+.logo-text .scan-text,
 .logo-text .ai-text {
-    color: #a7ffeb; /* Even lighter green/aqua for "AI" */
-    animation-delay: 0.8s;
+    color: var(--primary-text-color);
 }
 
 /* Keyframes for text fade in animation */
@@ -122,16 +125,17 @@ header {
 
 p.tagline { /* Target the tagline specifically */
     font-size: 1.1em;
-    opacity: 0.9;
-    color: #c0c0c0;
+    color: var(--secondary-text-color);
 }
 
-/* Main Content Areas */
+/* Main Content & Card Styles */
 main {
-    background-color: #2a2a2a; /* Slightly lighter dark gray for content area */
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    background-color: var(--card-background-color);
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
     width: 90%;
     max-width: 900px;
     margin-bottom: 40px;
@@ -153,17 +157,20 @@ main {
     gap: 20px; /* Space between buttons */
     width: 80%; /* Control button section width */
     max-width: 400px; /* Max width for button stack */
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
 }
 
 /* Section Headings */
 section h2 {
-    font-size: 2.2em;
-    color: #00e676; /* Vibrant green accent for headings */
-    margin-bottom: 25px;
-    text-align: center;
-    position: relative;
-    padding-bottom: 10px;
-    text-shadow: 0 0 8px rgba(0, 230, 118, 0.4); /* Subtle glow */
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 24px;
+    text-align: left;
+    text-shadow: none;
+    color: var(--primary-text-color);
 }
 
 section h2::after {
@@ -183,13 +190,13 @@ section h2::after {
     position: relative;
     width: 100%; /* Make it responsive */
     max-width: 640px; /* Max width for video */
-    margin: 0 auto 30px;
-    border: 2px solid #00e676; /* Green border */
-    border-radius: 8px;
+    margin: 0 auto 20px;
+    border-radius: 16px;
     overflow: hidden;
     background-color: #000;
     aspect-ratio: 4/3; /* Maintains 4:3 aspect ratio */
-    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4); /* Stronger glow for video */
+    border: 1px solid var(--border-color);
+    box-shadow: none;
 }
 
 #video, #overlayCanvas {
@@ -203,7 +210,7 @@ section h2::after {
 
 /* Buttons (General) */
 button {
-    background-color: #00c853; /* Bright green for buttons */
+    background-color: var(--accent-color);
     color: white;
     padding: 12px 25px;
     border: none;
@@ -211,9 +218,8 @@ button {
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 600;
-    margin: 10px 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 200, 83, 0.4);
+    margin: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.3s, color 0.3s;
 }
 
 button:hover {
@@ -240,8 +246,8 @@ button:disabled {
     padding: 15px 30px; /* Larger padding for main buttons */
     font-size: 1.3em; /* Larger font size */
     margin: 0; /* Remove default button margin, gap handles spacing */
-    background-color: #00c853;
-    box-shadow: 0 6px 15px rgba(0, 200, 83, 0.5);
+    background-color: var(--accent-color);
+    color: white;
 }
 
 .home-button:hover {
@@ -254,12 +260,18 @@ button:disabled {
     transform: translateY(0);
 }
 
+#captureMoodBtn, #uploadImageBtn {
+    background-color: var(--primary-text-color);
+    color: white;
+    margin-top: 10px;
+}
+
 /* Back buttons */
 .back-button {
-    background-color: #6c757d; /* A neutral gray for back buttons */
-    margin-top: 20px; /* Give it some space */
+    background-color: var(--border-color);
+    color: var(--primary-text-color);
+    margin-top: 24px;
     display: block; /* Make it a block to center it */
-    color: #a7ffeb;
     padding: 10px 20px;
     font-size: 1em;
     box-shadow: none;
@@ -277,19 +289,19 @@ button:disabled {
 }
 
 #moodResult {
-    font-size: 2.5em;
-    font-weight: bold;
-    margin-top: 20px;
-    color: #a7ffeb;
-    text-align: center;
-    text-shadow: 0 0 10px rgba(167, 255, 235, 0.8);
+    font-size: 2em;
+    font-weight: 600;
+    margin-top: 0;
+    color: var(--primary-text-color);
+    text-align: left;
+    text-shadow: none;
 }
 
 #recommendations, #musicRecommendations {
     margin-top: 20px;
     font-size: 1.1em;
     line-height: 1.6;
-    color: #c0c0c0;
+    color: var(--secondary-text-color);
 }
 
 #recommendations p, #musicRecommendations p {
@@ -304,16 +316,76 @@ button:disabled {
     margin-top: 20px;
 }
 
+/* New Chat Interface Styles */
+#chat-container {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 16px;
+}
+
+#chat-container p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: var(--secondary-text-color);
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+#chat-container p i { /* AI messages */
+    background-color: var(--border-color);
+    color: var(--primary-text-color);
+    display: block;
+    float: left;
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-style: normal;
+}
+
+#chat-container p:not(:has(i)) { /* User messages */
+    background-color: var(--accent-color);
+    color: white;
+    float: right;
+    clear: both;
+}
+
+#chat-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#userInput {
+    flex-grow: 1;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background-color);
+    color: var(--primary-text-color);
+    font-size: 1em;
+}
+
+#sendMessageBtn {
+    width: auto;
+    padding: 16px;
+    background-color: var(--accent-color);
+    color: white;
+}
+
 /* Footer Styles */
 footer {
     margin-top: auto; /* Pushes the footer to the bottom */
     padding: 20px;
     text-align: center;
-    color: #777;
+    color: var(--secondary-text-color);
     font-size: 0.9em;
     width: 100%;
-    background-color: #0a0a0a;
-    border-top: 1px solid #222222;
 }
 
 /* Responsive Adjustments */
@@ -430,4 +502,155 @@ footer {
     border: 2px solid var(--accent-color);
     transform: scale(1.02);
     box-shadow: 0 8px 25px rgba(0, 122, 255, 0.1);
+}
+
+/* --- Wellness Library Styles --- */
+.article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.article-card {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.article-card h3 {
+    font-size: 1.25em;
+    color: var(--primary-text-color);
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.article-card p {
+    font-size: 1em;
+    color: var(--secondary-text-color);
+    line-height: 1.6;
+}
+
+/* --- Landing Page Sections --- */
+#home-screen #how-it-works-section,
+#home-screen #testimonials-section,
+#home-screen #faq-section {
+    margin-top: 60px;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+#home-screen #how-it-works-section h2,
+#home-screen #testimonials-section h2,
+#home-screen #faq-section h2 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 40px;
+}
+
+.steps-grid,
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    text-align: left;
+}
+
+.step-card,
+.testimonial-card {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.step-card:hover,
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.step-card h3 {
+    font-size: 2.5em;
+    color: var(--accent-color);
+    margin: 0 0 10px 0;
+}
+
+.step-card h4 {
+    font-size: 1.25em;
+    color: var(--primary-text-color);
+    margin: 0 0 10px 0;
+}
+
+.step-card p {
+    color: var(--secondary-text-color);
+    line-height: 1.6;
+}
+
+.testimonial-card blockquote {
+    font-style: italic;
+    color: var(--primary-text-color);
+    border-left: 4px solid var(--accent-color);
+    padding-left: 16px;
+    margin: 0 0 16px 0;
+    font-size: 1.1em;
+}
+
+.testimonial-card p {
+    font-weight: 600;
+    text-align: right;
+    color: var(--accent-color);
+}
+
+.faq-item {
+    margin-bottom: 24px;
+    text-align: left;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    border-radius: 20px;
+}
+
+.faq-item h3 {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--primary-text-color);
+    margin: 0 0 8px 0;
+}
+
+.faq-item p {
+    color: var(--secondary-text-color);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- Dark Mode Styles --- */
+body.dark-mode {
+    --background-color: #1a1a1a;
+    --card-background-color: #2a2a2a;
+    --primary-text-color: #e0e0e0;
+    --secondary-text-color: #888888;
+    --border-color: #333333;
+    --accent-color: #00e676;
+}
+
+body.dark-mode .premium-plan {
+    box-shadow: 0 8px 25px rgba(0, 230, 118, 0.15);
+}
+
+body.dark-mode a {
+    color: var(--accent-color);
 }

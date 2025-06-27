@@ -17,24 +17,82 @@
             </div>
             <div class="scan-wave"></div>
         </div>
-        <p class="tagline">AI-Based Mood Detection & Wellness Recommender</p>
+        <p class="tagline" data-i18n-key="mainTagline">AI-Based Mood Detection & Wellness Recommender</p>
+        <button id="theme-toggle-btn">🌙</button>
+        <div id="streak-display" style="display: none;">🔥 Daily Streak: <span id="streak-count">0</span></div>
+        <div id="language-switcher">
+            <button id="lang-en-btn">EN</button>
+            <button id="lang-ua-btn">UA</button>
+            <button id="lang-es-btn">ES</button>
+        </div>
     </header>
 
-    <main id="home-screen">
-        <section class="buttons-section">
-            <button id="scanMoodBtn" class="home-button">Scan My Mood</button>
-            <button id="aiPsychologistBtn" class="home-button">AI Psychologist</button>
-            <button id="scanHistoryBtn" class="home-button">Scan History</button>
-            <button id="pricingBtn" class="home-button">Pricing</button>
-            <button id="authBtn" class="home-button">Login / Register</button>
-        </section>
-    </main>
+    <main id="mainContent">
+        <!-- Home Screen -->
+        <section id="home-screen" class="screen">
+            <div class="buttons-section">
+                <button id="scanMoodHomeBtn" class="home-button" data-i18n-key="scanMoodBtn">Scan My Mood</button>
+                <button id="aiPsychologistBtn" class="home-button" data-i18n-key="aiPsychologistBtn">Talk to AI Psychologist</button>
+                <button id="scanHistoryBtn" class="home-button" data-i18n-key="scanHistoryBtn">View Mood History</button>
+                <button id="wellnessBtn" class="home-button" data-i18n-key="wellnessBtn">Wellness Library</button>
+                <button id="pricingBtn" class="home-button" data-i18n-key="pricingBtn">View Premium Plans</button>
+                <button id="authBtn" class="home-button" data-i18n-key="loginBtn">Login / Register</button>
+                <button id="enable-notifications-btn" class="home-button">Enable Daily Reminders</button>
+            </div>
+        
+            <section id="how-it-works-section">
+                <h2>How It Works</h2>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <h3>1.</h3>
+                        <h4>Scan Your Mood</h4>
+                        <p>Simply use your device's camera for a quick, private facial scan. It only takes a moment.</p>
+                    </div>
+                    <div class="step-card">
+                        <h3>2.</h3>
+                        <h4>Get AI Insights</h4>
+                        <p>Our advanced AI analyzes your facial expressions to identify your current mood with high accuracy.</p>
+                    </div>
+                    <div class="step-card">
+                        <h3>3.</h3>
+                        <h4>Receive Guidance</h4>
+                        <p>Get personalized recommendations, music, and the option to chat with our supportive AI psychologist.</p>
+                    </div>
+                </div>
+            </section>
 
-    <main id="app-screens" style="display: none;">
-        <section id="scan-section">
-            <h2>Scan Your Mood</h2>
+            <section id="testimonials-section">
+                <h2>What Users Are Saying</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <blockquote>This app is a game changer for my mental wellness. It's so easy to use and the insights are surprisingly accurate!</blockquote>
+                        <p>- Sarah J.</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <blockquote>I love the AI psychologist feature. It feels like having a supportive friend available 24/7. Highly recommended.</blockquote>
+                        <p>- Mike R.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <h3>Is my data and camera footage private?</h3>
+                    <p>Absolutely. We prioritize your privacy above all. Camera scans are processed directly on your device and are never stored or sent to our servers. Your mood history is encrypted and securely stored. Please see our full Privacy Policy for more details.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is this a replacement for a professional therapist?</h3>
+                    <p>MoodScan AI is designed as a tool for self-awareness and emotional support, not as a replacement for professional medical advice or therapy. It can be a powerful supplement to your overall wellness journey.</p>
+                </div>
+            </section>
+        </section>
+
+        <!-- Scan Mood Section -->
+        <section id="scan-mood-screen" class="screen" style="display: none;">
+            <h2 data-i18n-key="scanHeader">Scan Your Mood</h2>
             <div class="video-container">
-                <video id="video" width="640" height="480" autoplay muted></video>
+                <video id="video" width="640" height="480" autoplay muted playsinline></video>
                 <canvas id="overlayCanvas"></canvas>
             </div>
             <button id="captureMoodBtn">Capture Mood</button>
@@ -43,6 +101,7 @@
             <button id="backToHomeBtn1" class="back-button">Back to Home</button>
         </section>
 
+        <!-- Results Section -->
         <section id="results-section" style="display: none;">
             <h2>Your Mood:</h2>
             <p id="moodResult"></p>
@@ -53,18 +112,14 @@
             <button id="backToHomeBtn2" class="back-button">Back to Home</button>
         </section>
 
-        <section id="chart-section" style="display: none;">
-            <h2>Emotion Dynamics:</h2>
-            <canvas id="moodChart"></canvas>
-            <button id="backToHomeBtn3" class="back-button">Back to Home</button>
-        </section>
-
+        <!-- Scan History Screen -->
         <section id="scan-history-screen" style="display: none;">
             <h2>Scan History</h2>
             <p>Your graph and details of previous scans will be displayed here.</p>
             <button id="backToHomeBtn5" class="back-button">Back to Home</button>
         </section>
 
+        <!-- Auth Screen -->
         <section id="auth-screen" style="display: none;">
             <h2>Login / Register</h2>
             <form id="register-form">
@@ -83,6 +138,7 @@
             <button id="backToHomeBtn6" class="back-button">Back to Home</button>
         </section>
 
+        <!-- Pricing Screen -->
         <section id="pricing-screen" style="display: none;">
             <h2>Pricing Plans</h2>
             <div class="pricing-container">
@@ -116,25 +172,79 @@
             <button id="backToHomeBtn7" class="back-button">Back to Home</button>
         </section>
 
+        <!-- Mood History Dashboard Screen -->
         <section id="mood-history-dashboard-screen" style="display: none;">
             <h2>Mood History</h2>
-            <p>Track your emotional journey over time with detailed analytics and insights.</p>
+            <div id="history-message" style="margin: 20px;"></div>
+            <div class="chart-wrapper" style="position: relative; height:50vh; width:80vw; margin: 20px auto;">
+                <canvas id="moodHistoryChart"></canvas>
+            </div>
             <button id="backToHomeBtn8" class="back-button">Back to Home</button>
         </section>
 
+        <!-- Wellness Content Screen -->
         <section id="wellness-content-screen" style="display: none;">
             <h2>Wellness Library</h2>
-            <p>Access a comprehensive collection of wellness resources, articles, and guided content.</p>
+            <div class="article-grid">
+                <div class="article-card">
+                    <h3>5-Minute Mindfulness Exercise</h3>
+                    <p>A quick and effective exercise to calm your mind and reduce stress anytime, anywhere.</p>
+                </div>
+                <div class="article-card">
+                    <h3>Understanding Anxiety</h3>
+                    <p>Learn about the common signs of anxiety and practical strategies to manage it.</p>
+                </div>
+                <div class="article-card">
+                    <h3>Tips for a Better Sleep</h3>
+                    <p>Discover simple, science-backed tips to improve your sleep quality and wake up refreshed.</p>
+                </div>
+            </div>
             <button id="backToHomeBtn9" class="back-button">Back to Home</button>
+        </section>
+
+        <!-- Privacy Policy Screen -->
+        <section id="privacy-policy-screen" style="display: none;">
+            <h2>Privacy Policy</h2>
+            
+            <h3>Introduction</h3>
+            <p>Welcome to MoodScan AI. This Privacy Policy explains how we collect, use, and protect your information when you use our application.</p>
+
+            <h3>Information We Collect</h3>
+            <h4>Account Information</h4>
+            <p>When you register for an account, we collect your email address and manage your authentication securely via Firebase Authentication.</p>
+            <h4>Mood Data</h4>
+            <p>We store your mood scan results, which include the dominant emotion (e.g., "Happy"), the associated emotion percentages, and the timestamp of the scan. This data is stored in our secure Firestore database to power your personal Mood History dashboard.</p>
+
+            <h3>Image Processing</h3>
+            <p><strong>This is our most important commitment to your privacy:</strong> When you scan your mood, the image is sent to our secure backend server. From there, it is sent to Google's Gemini API for immediate analysis. <strong>We do not save or store your images on our server after the analysis is complete.</strong> Your images are processed in-memory and discarded immediately.</p>
+
+            <h3>Third-Party Services</h3>
+            <p>Our application integrates with third-party services to provide its full functionality. We recommend you review their privacy policies:
+                <ul>
+                    <li><strong>Google & Firebase:</strong> For authentication and database services.</li>
+                    <li><strong>Render & Netlify:</strong> For hosting our backend and frontend.</li>
+                    <li><strong>Spotify:</strong> For music recommendations.</li>
+                </ul>
+            </p>
+
+            <h3>Contact Us</h3>
+            <p>If you have any questions about this Privacy Policy, please contact us at [Your Contact Email Here].</p>
+
+            <button id="backToHomeBtn10" class="back-button">Back to Home</button>
         </section>
     </main>
 
-
     <footer>
         <p>&copy; 2025 MoodScan AI. All rights reserved.</p>
+        <p><a href="#" id="privacy-link">Privacy Policy</a></p>
     </footer>
 
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="translations.js"></script>
 </body>
 </html>
