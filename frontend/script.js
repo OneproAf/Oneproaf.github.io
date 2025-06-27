@@ -14,7 +14,6 @@ const appScreens = document.getElementById('app-screens');
 const scanSection = document.getElementById('scan-section');
 const resultsSection = document.getElementById('results-section');
 const chartSection = document.getElementById('chart-section');
-const aiPsychologistScreen = document.getElementById('ai-psychologist-screen');
 const scanHistoryScreen = document.getElementById('scan-history-screen');
 const authScreen = document.getElementById('auth-screen');
 
@@ -29,16 +28,10 @@ const captureMoodBtn = document.getElementById('captureMoodBtn');
 const imageUpload = document.getElementById('imageUpload');
 const uploadImageBtn = document.getElementById('uploadImageBtn');
 
-// AI Psychologist Chat Elements
-const chatHistory = document.getElementById('chat-history');
-const userInput = document.getElementById('userInput');
-const sendMessageBtn = document.getElementById('sendMessageBtn');
-
 // Back Buttons
 const backToHomeBtn1 = document.getElementById('backToHomeBtn1');
 const backToHomeBtn2 = document.getElementById('backToHomeBtn2');
 const backToHomeBtn3 = document.getElementById('backToHomeBtn3');
-const backToHomeBtn4 = document.getElementById('backToHomeBtn4');
 const backToHomeBtn5 = document.getElementById('backToHomeBtn5');
 const backToHomeBtn6 = document.getElementById('backToHomeBtn6');
 
@@ -54,7 +47,6 @@ function showScreen(screenToShow) {
     scanSection.style.display = 'none';
     resultsSection.style.display = 'none';
     chartSection.style.display = 'none';
-    aiPsychologistScreen.style.display = 'none';
     scanHistoryScreen.style.display = 'none';
     authScreen.style.display = 'none';
 
@@ -87,7 +79,8 @@ scanMoodHomeBtn.addEventListener('click', () => {
 });
 
 aiPsychologistBtn.addEventListener('click', () => {
-    showScreen(aiPsychologistScreen);
+    // Open the standalone AI chat page in a new window/tab
+    window.open('ai-chat.html', '_blank');
 });
 
 scanHistoryBtn.addEventListener('click', () => {
@@ -104,81 +97,9 @@ authBtn.addEventListener('click', () => {
 });
 
 // Add all back button listeners
-[backToHomeBtn1, backToHomeBtn2, backToHomeBtn3, backToHomeBtn4, backToHomeBtn5, backToHomeBtn6].forEach(btn => {
+[backToHomeBtn1, backToHomeBtn2, backToHomeBtn3, backToHomeBtn5, backToHomeBtn6].forEach(btn => {
     if (btn) {
         btn.addEventListener('click', () => showScreen(homeScreen));
-    }
-});
-
-
-// --- NEW: AI Psychologist Chat Logic ---
-
-async function sendMessageToAI() {
-    const userMessage = userInput.value.trim();
-    if (userMessage === "") {
-        return; // Do nothing if the input is empty
-    }
-
-    // Display user's message immediately
-    const userMessageElem = document.createElement('div');
-    userMessageElem.classList.add('message', 'user-message');
-    userMessageElem.innerHTML = `<p>${userMessage}</p>`;
-    chatHistory.appendChild(userMessageElem);
-    
-    userInput.value = ""; // Clear the input box
-    chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to bottom
-
-    try {
-        const response = await fetch('https://oneproaf-github-io.onrender.com/api/psychologist-chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: userMessage })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        const aiReply = data.reply;
-
-        // Display AI's message
-        const aiMessageElem = document.createElement('div');
-        aiMessageElem.classList.add('message', 'ai-message');
-        aiMessageElem.innerHTML = `<p><i>${aiReply}</i></p>`;
-        chatHistory.appendChild(aiMessageElem);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to bottom
-
-    } catch (error) {
-        console.error("Error communicating with AI psychologist:", error);
-        const errorElem = document.createElement('div');
-        errorElem.classList.add('message', 'ai-message');
-        errorElem.innerHTML = `<p style="color: #ff8a80;">AI Assistant: Sorry, I'm having trouble connecting right now. Please try again later.</p>`;
-        chatHistory.appendChild(errorElem);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
-}
-
-// Event listeners for the chat
-sendMessageBtn.addEventListener('click', sendMessageToAI);
-userInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent default form submission on enter
-        sendMessageToAI();
-    }
-});
-
-// Initialize chat with welcome message when AI Psychologist screen is shown
-aiPsychologistBtn.addEventListener('click', () => {
-    showScreen(aiPsychologistScreen);
-    // Add welcome message if chat is empty
-    if (chatHistory.children.length === 0) {
-        const welcomeMessage = document.createElement('div');
-        welcomeMessage.classList.add('message', 'ai-message');
-        welcomeMessage.innerHTML = '<p><i>Hello! I am your AI psychologist. How can I help you today?</i></p>';
-        chatHistory.appendChild(welcomeMessage);
     }
 });
 
