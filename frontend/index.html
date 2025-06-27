@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoodScan AI: AI-Based Mood Detection & Wellness Recommender</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <header>
@@ -64,7 +67,19 @@
 
         <section id="auth-screen" style="display: none;">
             <h2>Login / Register</h2>
-            <p>Forms for user login and registration will be here.</p>
+            <form id="register-form">
+                <h2>Register</h2>
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <form id="login-form">
+                <h2>Login</h2>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Log In</button>
+            </form>
+            <button id="google-signin-btn">Sign In with Google</button>
             <button id="backToHomeBtn6" class="back-button">Back to Home</button>
         </section>
 

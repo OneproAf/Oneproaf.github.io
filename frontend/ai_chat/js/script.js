@@ -40,15 +40,38 @@ document.addEventListener('DOMContentLoaded', () => {
             addMessage(messageText, 'user');
             messageInput.value = ''; // Clear the input field
 
-            // --- AI Response Simulation (REPLACE WITH ACTUAL AI INTEGRATION) ---
-            // In a real application, you would send messageText to your AI backend here.
-            // The AI would process it and send back a response.
-            // For now, let's simulate a delayed AI response.
-            setTimeout(() => {
-                const aiResponse = generateSimpleAiResponse(messageText); // Simple placeholder
-                addMessage(aiResponse, 'ai');
-            }, 1000); // Simulate network delay
-            // --- END AI Response Simulation ---
+            // Show loading indicator
+            const loadingMessage = document.createElement('div');
+            loadingMessage.classList.add('message', 'ai-message');
+            loadingMessage.innerHTML = `<p><i>Typing...</i></p>`;
+            chatHistory.appendChild(loadingMessage);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Send message to backend API
+            fetch('https://oneproaf-github-io.onrender.com/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: messageText }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Remove loading message and add AI response
+                chatHistory.removeChild(loadingMessage);
+                addMessage(data.response, 'ai');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Remove loading message and show error
+                chatHistory.removeChild(loadingMessage);
+                addMessage('Sorry, I seem to be having trouble connecting. Please try again later.', 'ai');
+            });
         }
     }
 

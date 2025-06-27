@@ -1,3 +1,11 @@
+// TODO: PASTE FIREBASE CONFIG OBJECT HERE
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
 // --- Get DOM Elements (Old and New) ---
 
 // Mood Scan & General Elements
@@ -41,6 +49,11 @@ const backToHomeBtn6 = document.getElementById('backToHomeBtn6');
 const backToHomeBtn7 = document.getElementById('backToHomeBtn7');
 const backToHomeBtn8 = document.getElementById('backToHomeBtn8');
 const backToHomeBtn9 = document.getElementById('backToHomeBtn9');
+
+// Auth Elements
+const registerForm = document.getElementById('register-form');
+const loginForm = document.getElementById('login-form');
+const googleSignInBtn = document.getElementById('google-signin-btn');
 
 // --- State Variables ---
 let chartInstance = null;
@@ -116,6 +129,73 @@ authBtn.addEventListener('click', () => {
         btn.addEventListener('click', () => showScreen(homeScreen));
     }
 });
+
+
+// --- Firebase Auth Logic ---
+
+// Register
+async function handleRegistration(event) {
+    event.preventDefault();
+    const email = registerForm['register-email'].value;
+    const password = registerForm['register-password'].value;
+
+    try {
+        await auth.createUserWithEmailAndPassword(email, password);
+        alert('Registration successful!');
+        registerForm.reset();
+        showScreen(homeScreen); // Or a dashboard screen
+    } catch (error) {
+        console.error('Registration Error:', error.message);
+        alert(`Registration failed: ${error.message}`);
+    }
+}
+
+// Login
+async function handleLogin(event) {
+    event.preventDefault();
+    const email = loginForm['login-email'].value;
+    const password = loginForm['login-password'].value;
+
+    try {
+        await auth.signInWithEmailAndPassword(email, password);
+        alert('Login successful!');
+        loginForm.reset();
+        showScreen(homeScreen); // Or a dashboard screen
+    } catch (error) {
+        console.error('Login Error:', error.message);
+        alert(`Login failed: ${error.message}`);
+    }
+}
+
+// Google Sign-In
+async function handleGoogleSignIn() {
+    try {
+        await auth.signInWithPopup(googleProvider);
+        alert('Google Sign-In successful!');
+        showScreen(homeScreen); // Or a dashboard screen
+    } catch (error) {
+        console.error('Google Sign-In Error:', error.message);
+        alert(`Google Sign-In failed: ${error.message}`);
+    }
+}
+
+// Auth State Observer
+auth.onAuthStateChanged(user => {
+    if (user) {
+        console.log('User is logged in:', user.email);
+        // Here you can update the UI to show user is logged in
+        // For example, change 'Login' button to 'Logout'
+    } else {
+        console.log('User is logged out');
+        // Here you can update the UI for a logged-out state
+    }
+});
+
+
+// --- Auth Event Listeners ---
+registerForm.addEventListener('submit', handleRegistration);
+loginForm.addEventListener('submit', handleLogin);
+googleSignInBtn.addEventListener('click', handleGoogleSignIn);
 
 
 // --- Video and Image Handling ---
