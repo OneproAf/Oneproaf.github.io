@@ -247,8 +247,8 @@ app.get('/api/get-playlist-tracks', async (req, res) => {
       console.log('First track item structure:', JSON.stringify(tracksData.body.items[0], null, 2));
     }
 
-    // Prevent crash if Spotify returns null items
-    const names = tracksData.body.items
+    // Prevent crash if Spotify returns null items or items is null
+    const names = (tracksData.body.items || [])
       .filter(item => {
         // Handle different possible structures
         return item && (
