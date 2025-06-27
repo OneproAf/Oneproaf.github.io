@@ -26,8 +26,7 @@ const musicRecommendationsDiv = document.getElementById('musicRecommendations');
 
 // Screen Containers
 const homeScreen = document.getElementById('home-screen');
-const appScreens = document.getElementById('app-screens');
-const scanSection = document.getElementById('scan-section');
+const scanSection = document.getElementById('scan-mood-screen');
 const resultsSection = document.getElementById('results-section');
 const scanHistoryScreen = document.getElementById('scan-history-screen');
 const authScreen = document.getElementById('auth-screen');
@@ -101,29 +100,23 @@ function registerServiceWorker() {
 }
 
 function showScreen(screenToShow) {
-    // Hide all app screens first
-    scanSection.style.display = 'none';
-    resultsSection.style.display = 'none';
-    scanHistoryScreen.style.display = 'none';
-    authScreen.style.display = 'none';
-    pricingScreen.style.display = 'none';
-    moodHistoryDashboardScreen.style.display = 'none';
-    wellnessContentScreen.style.display = 'none';
-    privacyPolicyScreen.style.display = 'none';
+    // Hide all screen sections first
+    const allScreens = document.querySelectorAll('#mainContent > .screen');
+    allScreens.forEach(screen => {
+        screen.style.display = 'none';
+    });
 
-    if (screenToShow === homeScreen) {
-        homeScreen.style.display = 'flex';
-        appScreens.style.display = 'none';
-        // Stop video if returning to home
-        if (video.srcObject) {
-            const tracks = video.srcObject.getTracks();
-            tracks.forEach(track => track.stop());
-            video.srcObject = null;
-        }
-    } else {
-        homeScreen.style.display = 'none';
-        appScreens.style.display = 'block';
-        screenToShow.style.display = 'block';
+    // Show the target screen
+    if (screenToShow) {
+        // The home screen uses flexbox for its layout
+        screenToShow.style.display = (screenToShow.id === 'home-screen') ? 'flex' : 'block';
+    }
+
+    // Stop video if navigating away from the scan screen
+    if (screenToShow !== scanSection && video.srcObject) {
+        const tracks = video.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+        video.srcObject = null;
     }
 }
 
