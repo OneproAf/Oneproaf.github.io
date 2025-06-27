@@ -199,13 +199,12 @@ app.get('/api/get-music', async (req, res) => {
     }
 
     const items = playlistData.body.playlists.items;
-    // Prevent crash if Spotify returns null items
-    const playlists = items
-      .filter(playlist => playlist) // Safely filter out any null items from the list
+    // Prevent crash if Spotify returns null items or items is null
+    const playlists = (items || [])
+      .filter(playlist => playlist)
       .map(playlist => ({
         name: playlist.name,
         url: playlist.external_urls.spotify,
-        // Safely check for an image and provide a fallback if none exists
         imageUrl: (playlist.images && playlist.images.length > 0) ? playlist.images[0].url : 'https://i.scdn.co/image/ab67616d0000b273821d6e34F4f36a545a452583'
       }));
 
