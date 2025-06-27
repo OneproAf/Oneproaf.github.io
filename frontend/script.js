@@ -16,7 +16,7 @@ const firebaseConfig = {
   measurementId: "G-9GC23KKV3G"
 };
 
-// Initialize Firebase (using v8 namespaced API, as used in the rest of the script)
+// Initialize Firebase (using v8 namespaced API)
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
