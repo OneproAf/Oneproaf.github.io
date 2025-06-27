@@ -2,10 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>AI Psychologist Chat</title>
     <style>
         /* Basic Reset & Full-Screen Setup */
+        :root {
+            --vh: 1vh; /* Custom viewport height for mobile */
+        }
+
         html, body {
             margin: 0;
             padding: 0;
@@ -22,12 +29,14 @@
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100vh; /* Fallback */
+            height: calc(var(--vh, 1vh) * 100); /* Use custom viewport height */
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
             background-color: #000000;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         /* Header */
@@ -40,6 +49,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             flex-shrink: 0;
             min-height: 60px;
+            box-sizing: border-box;
         }
 
         .back-button {
@@ -57,6 +67,7 @@
             transition: background-color 0.2s ease;
             min-width: 40px;
             min-height: 40px;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .back-button:hover {
@@ -90,6 +101,7 @@
             flex-direction: column;
             padding-bottom: 20px;
             -webkit-overflow-scrolling: touch;
+            min-height: 0;
         }
 
         /* Message Bubbles */
