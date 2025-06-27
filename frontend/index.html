@@ -239,12 +239,17 @@
         <p><a href="#" id="privacy-link">Privacy Policy</a></p>
     </footer>
 
-    <script defer src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js"></script>
+    
+    <!-- Other Libraries -->
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="translations.js"></script>
-    <script src="script.js"></script>
+
+    <!-- Main App Script (as a module) -->
+    <script type="module" src="script.js"></script>
 
 </body>
 </html>
