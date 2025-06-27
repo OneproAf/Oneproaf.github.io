@@ -199,6 +199,7 @@ app.get('/api/get-music', async (req, res) => {
     }
 
     const items = playlistData.body.playlists.items;
+    // Prevent crash if Spotify returns null items
     const playlists = items
       .filter(playlist => playlist) // Safely filter out any null items from the list
       .map(playlist => ({
@@ -245,7 +246,7 @@ app.get('/api/get-playlist-tracks', async (req, res) => {
       console.log('First track item structure:', JSON.stringify(tracksData.body.items[0], null, 2));
     }
 
-    // Extract track names using flexible filtering
+    // Prevent crash if Spotify returns null items
     const names = tracksData.body.items
       .filter(item => {
         // Handle different possible structures
@@ -288,8 +289,8 @@ app.post('/api/extract-track-names', async (req, res) => {
       return res.status(400).json({ error: 'Invalid data structure. Expected data.tracks.items array.' });
     }
 
-    // Use the exact pattern provided by the user
-    const trackNames = data.tracks.items
+    // Prevent crash if Spotify returns null items
+    const trackNames = (data.tracks.items || [])
       .filter(item => item && item.name)
       .map(item => item.name);
 
