@@ -94,7 +94,7 @@ aiPsychologistBtn.addEventListener('click', () => {
 });
 
 scanHistoryBtn.addEventListener('click', () => {
-    showScreen(chartSection);
+    showScreen(moodHistoryDashboardScreen);
     if (chartInstance) {
         chartInstance.update();
     } else if (moodHistory.length > 0) {
