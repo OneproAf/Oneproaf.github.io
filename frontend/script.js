@@ -118,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const moodHistoryDashboardScreen = document.getElementById('mood-history-dashboard-screen');
         const wellnessContentScreen = document.getElementById('wellness-content-screen');
         const privacyPolicyScreen = document.getElementById('privacy-policy-screen');
+        const projectSupportScreen = document.getElementById('project-support-screen');
 
         // Home Screen Buttons
         const scanMoodHomeBtn = document.getElementById('scanMoodHomeBtn');
@@ -128,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const authBtn = document.getElementById('authBtn');
         const privacyLink = document.getElementById('privacy-link');
         const enableNotificationsBtn = document.getElementById('enable-notifications-btn');
+        const projectSupportBtn = document.getElementById('project-support-btn');
 
         // Scan Screen Action Buttons
         const captureMoodBtn = document.getElementById('captureMoodBtn');
@@ -272,70 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const vapidPublicKey = 'BOtl0iEZS2FIB2UcKfNQNzA-ikU81fgUPJW8EZtgiC3kEo3YPHlOk5E5wG2kRZbbrlyb2MVg2GaiL88C7kJfflo';
-
-        async function saveSubscriptionToServer(subscription) {
-            const idToken = await auth.currentUser?.getIdToken();
-            if (!idToken) {
-                console.error('User must be logged in to save notification subscription.');
-                alert('Please log in to enable reminders.');
-                return;
-            }
-
-            try {
-                const response = await fetch(config.apiUrl('/api/save-subscription'), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${idToken}`
-                    },
-                    body: JSON.stringify(subscription),
-                });
-
-                if (response.ok) {
-                    console.log('Subscription saved successfully.');
-                    alert('Daily reminders enabled!');
-                } else {
-                    const errorData = await response.json();
-                    console.error('Failed to save subscription:', errorData);
-                    alert(`Failed to enable reminders: ${errorData.message}`);
-                }
-            } catch (error) {
-                console.error('Error saving subscription:', error);
-                alert('An error occurred while enabling reminders.');
-            }
-        }
-
-        if (enableNotificationsBtn) {
-            enableNotificationsBtn.addEventListener('click', () => {
-                if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
-                    alert('This browser does not support push notifications.');
-                    return;
-                }
-
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        console.log('Notification permission granted.');
-                        navigator.serviceWorker.ready.then(registration => {
-                            registration.pushManager.subscribe({
-                                userVisibleOnly: true,
-                                applicationServerKey: vapidPublicKey
-                            }).then(subscription => {
-                                console.log('User is subscribed:', subscription);
-                                saveSubscriptionToServer(subscription);
-                            }).catch(err => {
-                                console.error('Failed to subscribe the user: ', err);
-                                alert('Failed to subscribe for notifications. Please try again.');
-                            });
-                        });
-                    } else {
-                        console.log('Notification permission denied.');
-                        alert('You have disabled notifications. You can enable them in your browser settings.');
-                    }
-                });
+        if (projectSupportBtn) {
+            projectSupportBtn.addEventListener('click', function() {
+                showScreen(projectSupportScreen);
             });
         }
-
 
         // --- Firebase Auth Logic ---
 
@@ -867,6 +810,14 @@ document.addEventListener('DOMContentLoaded', () => {
             registerContainer.style.display = 'none';
             loginContainer.style.display = 'block';
         });
+
+        // Add event listener for the new Back to Home button in the support screen
+        const supportBackBtn = projectSupportScreen.querySelector('.back-button');
+        if (supportBackBtn) {
+            supportBackBtn.addEventListener('click', function() {
+                showScreen(homeScreen);
+            });
+        }
     }
 
     // Start waiting for Firebase
