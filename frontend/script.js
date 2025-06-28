@@ -818,6 +818,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 showScreen(homeScreen);
             });
         }
+
+        // Fix back to home buttons - all should go to home-screen
+        const allBackButtons = document.querySelectorAll('.back-button');
+        allBackButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                showScreen(homeScreen);
+            });
+        });
     }
 
     // Start waiting for Firebase
