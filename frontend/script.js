@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8000/api/save-subscription', {
+                const response = await fetch(config.apiUrl('/api/save-subscription'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 }
 
-                const response = await fetch('http://localhost:8000/api/analyze-mood', fetchOptions);
+                const response = await fetch(config.apiUrl('/api/analyze-mood'), fetchOptions);
 
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.statusText}`);
@@ -516,7 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function getMusicRecommendations(mood) {
             try {
-                const response = await fetch(`http://localhost:8000/api/get-music?mood=${encodeURIComponent(mood)}`);
+                const response = await fetch(config.apiUrl(`/api/get-music?mood=${encodeURIComponent(mood)}`));
                 
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.statusText}`);
@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 trackListDiv.innerHTML = '<p style="color: #a7ffeb;">Loading tracks...</p>';
                 
-                const response = await fetch(`http://localhost:8000/api/get-playlist-tracks?playlistId=${encodeURIComponent(playlistId)}`);
+                const response = await fetch(config.apiUrl(`/api/get-playlist-tracks?playlistId=${encodeURIComponent(playlistId)}`));
                 
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.statusText}`);
