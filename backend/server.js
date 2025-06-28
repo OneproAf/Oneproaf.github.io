@@ -11,6 +11,7 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import webpush from 'web-push';
 import { Firestore } from '@google-cloud/firestore';
 import admin from 'firebase-admin';
+import axios from 'axios';
 
 // Initialize GoogleGenerativeAI
 console.log('Is API Key loaded:', !!process.env.GEMINI_API_KEY);
@@ -249,9 +250,9 @@ app.get('/api/get-music', async (req, res) => {
   });
 
   const moodMap = {
-    'Happy': 'happy hits',
-    'Sad': 'sad songs acoustic',
-    'Angry': 'angry workout rock',
+    'Happy': 'happy upbeat',
+    'Sad': 'sad acoustic',
+    'Angry': 'angry rock',
     'Neutral': 'chill focus',
     'Surprised': 'discover weekly',
     'Fearful': 'calm soothing',
@@ -265,30 +266,121 @@ app.get('/api/get-music', async (req, res) => {
     const data = await spotifyApi.clientCredentialsGrant();
     spotifyApi.setAccessToken(data.body['access_token']);
 
-    const playlistData = await spotifyApi.searchPlaylists(searchQuery, { limit: 5 });
+    // Search for tracks (5 tracks)
+    const tracksData = await spotifyApi.searchTracks(searchQuery, { limit: 5 });
+    
+    // Search for playlists (2 playlists)
+    const playlistsData = await spotifyApi.searchPlaylists(searchQuery, { limit: 2 });
 
-    if (!playlistData.body.playlists || !playlistData.body.playlists.items.length) {
-      return res.status(404).json({ error: 'No playlists found for this mood.' });
-    }
+    // Process tracks
+    const tracks = (tracksData.body.tracks?.items || [])
+      .filter(track => track && track.name)
+      .map(track => ({
+        name: track.name,
+        artist: track.artists?.[0]?.name || 'Unknown Artist',
+        url: track.external_urls?.spotify || '#',
+        imageUrl: (track.album?.images && track.album.images.length > 0) 
+          ? track.album.images[0].url 
+          : 'https://i.scdn.co/image/ab67616d0000b273821d6e34F4f36a545a452583'
+      }));
 
-    const items = playlistData.body.playlists.items;
-    // Debug: Log items to help diagnose nulls in production
-    console.log('Spotify playlist items:', items);
-    // Prevent crash if Spotify returns null items or items is null, and only map playlists with a name
-    const playlists = (items || [])
+    // Process playlists
+    const playlists = (playlistsData.body.playlists?.items || [])
       .filter(playlist => playlist && playlist.name)
       .map(playlist => ({
         name: playlist.name,
-        url: playlist.external_urls.spotify,
-        imageUrl: (playlist.images && playlist.images.length > 0) ? playlist.images[0].url : 'https://i.scdn.co/image/ab67616d0000b273821d6e34F4f36a545a452583'
+        url: playlist.external_urls?.spotify || '#',
+        imageUrl: (playlist.images && playlist.images.length > 0) 
+          ? playlist.images[0].url 
+          : 'https://i.scdn.co/image/ab67616d0000b273821d6e34F4f36a545a452583'
       }));
 
-    console.log(`Found ${playlists.length} playlists for the mood.`);
-    res.status(200).json({ playlists });
+    console.log(`Found ${tracks.length} tracks and ${playlists.length} playlists for mood: ${mood}`);
+    
+    res.status(200).json({ 
+      tracks: tracks.slice(0, 5), // Ensure exactly 5 tracks
+      playlists: playlists.slice(0, 2) // Ensure exactly 2 playlists
+    });
 
   } catch (error) {
     console.error('Error fetching from Spotify:', error);
     res.status(500).json({ error: 'Failed to fetch music recommendations.', details: error.message });
+  }
+});
+
+// API endpoint for YouTube Music Recommendations (Premium feature)
+app.get('/api/get-youtube-music', async (req, res) => {
+  const { mood } = req.query;
+
+  if (!mood) {
+    return res.status(400).json({ error: 'Mood query parameter is required.' });
+  }
+
+  if (!process.env.YOUTUBE_API_KEY) {
+    console.warn('YouTube API key not configured, returning empty results');
+    return res.status(200).json({ playlists: [] });
+  }
+
+  const moodMap = {
+    'Happy': 'happy music playlist',
+    'Sad': 'sad music playlist',
+    'Angry': 'angry music playlist',
+    'Neutral': 'chill music playlist',
+    'Surprised': 'discovery music playlist',
+    'Fearful': 'calm music playlist',
+    'Disgusted': 'clean music playlist',
+    'Confused': 'clear music playlist',
+    'Tired': 'lullaby music playlist'
+  };
+  
+  const searchQuery = moodMap[mood] || 'chill music playlist';
+
+  try {
+    const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+      params: {
+        part: 'snippet',
+        q: searchQuery,
+        type: 'playlist',
+        maxResults: 5,
+        key: process.env.YOUTUBE_API_KEY
+      }
+    });
+
+    if (!response.data || !response.data.items) {
+      console.warn('No YouTube data received');
+      return res.status(200).json({ playlists: [] });
+    }
+
+    const playlists = (response.data.items || [])
+      .filter(item => item && item.snippet && item.id && item.id.playlistId)
+      .map(item => ({
+        title: item.snippet.title,
+        url: `https://www.youtube.com/playlist?list=${item.id.playlistId}`,
+        thumbnail: item.snippet.thumbnails?.medium?.url || 
+                   item.snippet.thumbnails?.default?.url ||
+                   'https://via.placeholder.com/120x90?text=No+Image',
+        channelTitle: item.snippet.channelTitle || 'Unknown Channel'
+      }));
+
+    console.log(`Found ${playlists.length} YouTube playlists for mood: ${mood}`);
+    
+    res.status(200).json({ playlists: playlists.slice(0, 5) });
+
+  } catch (error) {
+    console.error('Error fetching from YouTube:', error);
+    
+    // Handle specific YouTube API errors
+    if (error.response && error.response.status === 403) {
+      return res.status(200).json({ 
+        playlists: [],
+        message: 'YouTube API quota exceeded or invalid key'
+      });
+    }
+    
+    res.status(200).json({ 
+      playlists: [],
+      message: 'Unable to fetch YouTube recommendations'
+    });
   }
 });
 

@@ -6,12 +6,51 @@ class AIPsychologistChat {
         this.messageInput = document.getElementById('message-input');
         this.sendButton = document.getElementById('send-button');
         this.backButton = document.querySelector('.back-button');
+        this.themeToggle = document.getElementById('theme-toggle');
         
         this.conversationHistory = [];
         this.isTyping = false;
         
+        this.initializeTheme();
         this.initializeEventListeners();
         this.addWelcomeMessage();
+    }
+    
+    initializeTheme() {
+        // Check for saved theme preference or default to dark
+        const savedTheme = localStorage.getItem('ai-chat-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Set initial theme
+        if (savedTheme) {
+            this.setTheme(savedTheme);
+        } else {
+            this.setTheme(prefersDark ? 'dark' : 'light');
+        }
+    }
+    
+    setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('ai-chat-theme', theme);
+        
+        // Update theme color meta tag for mobile browsers
+        const themeColor = theme === 'light' ? '#006600' : '#004d00';
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', themeColor);
+        }
+        
+        // Update Apple mobile web app status bar style
+        const appleStatusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+        if (appleStatusBar) {
+            appleStatusBar.setAttribute('content', theme === 'light' ? 'default' : 'black-translucent');
+        }
+    }
+    
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
     }
     
     initializeEventListeners() {
@@ -31,8 +70,39 @@ class AIPsychologistChat {
             window.history.back();
         });
         
+        // Theme toggle
+        this.themeToggle.addEventListener('click', () => {
+            this.toggleTheme();
+        });
+        
+        // Keyboard shortcut for theme toggle (Ctrl/Cmd + T)
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 't') {
+                e.preventDefault();
+                this.toggleTheme();
+            }
+        });
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            // Only auto-switch if user hasn't manually set a preference
+            if (!localStorage.getItem('ai-chat-theme')) {
+                this.setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+        
         // Focus input on load
         this.messageInput.focus();
+        
+        // Prevent zoom on double tap in Safari
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     }
     
     addWelcomeMessage() {

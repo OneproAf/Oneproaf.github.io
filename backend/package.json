@@ -20,6 +20,7 @@
     "firebase-admin": "^12.1.1",
     "multer": "^2.0.1",
     "spotify-web-api-node": "^5.0.2",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "axios": "^1.6.7"
   }
 }

@@ -530,6 +530,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const data = await response.json();
                 
+                // Clear the recommendations div
+                musicRecommendationsDiv.innerHTML = '';
+                
+                // Display tracks if available
+                if (data.tracks && data.tracks.length > 0) {
+                    const tracksHTML = data.tracks.map(track => `
+                        <div class="track-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+                            <a href="${track.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                                <img src="${track.imageUrl}" alt="${track.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
+                                <div>
+                                    <div style="font-weight: 500; color: #a7ffeb;">${track.name}</div>
+                                    <div style="font-size: 12px; color: #888;">${track.artist}</div>
+                                </div>
+                            </a>
+                        </div>
+                    `).join('');
+                    
+                    musicRecommendationsDiv.innerHTML += `
+                        <h4 style="color: #a7ffeb; margin-bottom: 10px;">🎵 Top Song Recommendations:</h4>
+                        ${tracksHTML}
+                    `;
+                }
+                
+                // Display playlists if available
                 if (data.playlists && data.playlists.length > 0) {
                     const playlistsHTML = data.playlists.map(playlist => {
                         // Extract playlist ID from URL
@@ -545,12 +569,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                     }).join('');
                     
-                    musicRecommendationsDiv.innerHTML = `
-                        <h4 style="color: #a7ffeb; margin-bottom: 10px;">🎵 Music for Your Mood:</h4>
+                    musicRecommendationsDiv.innerHTML += `
+                        <h4 style="color: #a7ffeb; margin: 20px 0 10px 0;">📋 Playlist Recommendations:</h4>
                         ${playlistsHTML}
                         <div id="trackList" style="margin-top: 15px;"></div>
                     `;
-                } else {
+                }
+                
+                // Show message if no recommendations available
+                if ((!data.tracks || data.tracks.length === 0) && (!data.playlists || data.playlists.length === 0)) {
                     musicRecommendationsDiv.innerHTML = '<p style="color: #888;">No music recommendations available for this mood.</p>';
                 }
             } catch (error) {
@@ -594,6 +621,50 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error('Error fetching playlist tracks:', error);
                 trackListDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load tracks.</p>';
+            }
+        }
+
+        // YouTube Music Recommendations Function (Premium feature)
+        async function getYouTubeMusicRecommendations(mood) {
+            const youtubeRecommendationsDiv = document.getElementById('youtube-music-recommendations');
+            
+            if (!youtubeRecommendationsDiv) {
+                console.warn('YouTube recommendations div not found');
+                return;
+            }
+            
+            try {
+                const response = await fetch(config.apiUrl(`/api/get-youtube-music?mood=${encodeURIComponent(mood)}`));
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.playlists && data.playlists.length > 0) {
+                    const playlistsHTML = data.playlists.map(playlist => `
+                        <div class="youtube-playlist-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+                            <a href="${playlist.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                                <img src="${playlist.thumbnail}" alt="${playlist.title}" style="width: 120px; height: 90px; border-radius: 4px; object-fit: cover;">
+                                <div>
+                                    <div style="font-weight: 500; color: #ff0000;">${playlist.title}</div>
+                                    <div style="font-size: 12px; color: #888;">${playlist.channelTitle}</div>
+                                </div>
+                            </a>
+                        </div>
+                    `).join('');
+                    
+                    youtubeRecommendationsDiv.innerHTML = `
+                        <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
+                        ${playlistsHTML}
+                    `;
+                } else {
+                    youtubeRecommendationsDiv.innerHTML = '<p style="color: #888;">No YouTube music recommendations available for this mood.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching YouTube music recommendations:', error);
+                youtubeRecommendationsDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load YouTube music recommendations.</p>';
             }
         }
 
@@ -666,6 +737,19 @@ document.addEventListener('DOMContentLoaded', () => {
             moodResult.textContent = moodText;
             recommendationsDiv.innerHTML = `<p>${recommendations}</p>`;
             getMusicRecommendations(mood);
+            
+            // Check if user is premium and get YouTube recommendations
+            const currentUser = auth.currentUser;
+            if (currentUser) {
+                // Check if user has premium status (you can implement your own premium check logic)
+                const isPremium = localStorage.getItem('premium-status') === 'true' || 
+                                 currentUser.email?.includes('premium') || 
+                                 currentUser.uid === 'premium-user-id'; // Replace with your premium check logic
+                
+                if (isPremium) {
+                    getYouTubeMusicRecommendations(mood);
+                }
+            }
         }
 
         // Renamed and refactored function to render dashboard charts
