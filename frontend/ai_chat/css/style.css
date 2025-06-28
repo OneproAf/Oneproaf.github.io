@@ -2,20 +2,20 @@
 :root {
     /* Dark theme (default) */
     --bg-primary: #1a1a1a;
-    --bg-secondary: #2a2a2a;
+    --bg-secondary: #000000;
     --bg-tertiary: #0d0d0d;
-    --bg-header: #1a1a1a;
+    --bg-header: #004d00;
     --bg-input: #1a1a1a;
     --bg-input-field: #0d0d0d;
     --text-primary: #e0e0e0;
-    --text-secondary: #888888;
-    --border-color: #333333;
+    --text-secondary: #888;
+    --border-color: #333;
     --border-input: #444;
-    --user-msg-bg: #00e676;
+    --user-msg-bg: #006600;
     --ai-msg-bg: #262626;
-    --send-btn-bg: #00e676;
-    --send-btn-hover: #00a040;
-    --focus-color: #00e676;
+    --send-btn-bg: #006600;
+    --send-btn-hover: #004d00;
+    --focus-color: #006600;
     --shadow: rgba(0,0,0,0.5);
     --typing-bg: #262626;
     --typing-dot: #888;
@@ -26,18 +26,18 @@
     --bg-primary: #f5f5f5;
     --bg-secondary: #ffffff;
     --bg-tertiary: #f8f8f8;
-    --bg-header: #f5f5f5;
+    --bg-header: #006600;
     --bg-input: #f5f5f5;
     --bg-input-field: #ffffff;
     --text-primary: #333333;
     --text-secondary: #666666;
     --border-color: #e0e0e0;
     --border-input: #cccccc;
-    --user-msg-bg: #00e676;
+    --user-msg-bg: #006600;
     --ai-msg-bg: #e8f5e8;
-    --send-btn-bg: #00e676;
-    --send-btn-hover: #00a040;
-    --focus-color: #00e676;
+    --send-btn-bg: #006600;
+    --send-btn-hover: #004d00;
+    --focus-color: #006600;
     --shadow: rgba(0,0,0,0.1);
     --typing-bg: #e8f5e8;
     --typing-dot: #666666;
@@ -274,7 +274,7 @@ html, body {
 .user-message {
     align-self: flex-end; /* Align to the right */
     background-color: var(--user-msg-bg);
-    color: #000000; /* Black text on green */
+    color: white; /* White text on green */
     border-bottom-right-radius: 2px; /* Pointy tail effect */
 }
 
@@ -329,7 +329,7 @@ html, body {
 
 #send-button {
     background-color: var(--send-btn-bg);
-    color: #000000;
+    color: white;
     border: none;
     border-radius: 50%; /* Circular button */
     width: 45px;
