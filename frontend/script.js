@@ -818,6 +818,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 showScreen(homeScreen);
             });
         }
+
+        // After startApplication is called, ensure all .back-button elements go to home
+        const allBackButtons = document.querySelectorAll('.back-button');
+        allBackButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                showScreen(homeScreen);
+            });
+        });
     }
 
     // Start waiting for Firebase
