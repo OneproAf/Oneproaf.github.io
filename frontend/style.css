@@ -1,10 +1,10 @@
 :root {
-    --background-color: #f4f4f9;
-    --card-background-color: #ffffff;
-    --primary-text-color: #1c1c1e;
-    --secondary-text-color: #8a8a8e;
-    --border-color: #e5e5ea;
-    --accent-color: #007aff;
+    --background-color: #1a1a1a;
+    --card-background-color: #2a2a2a;
+    --primary-text-color: #e0e0e0;
+    --secondary-text-color: #888888;
+    --border-color: #333333;
+    --accent-color: #00e676;
     --system-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
@@ -51,9 +51,9 @@ header {
 }
 
 .language-switcher button {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    color: var(--primary-text-color);
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 0.8em;
@@ -65,21 +65,21 @@ header {
 }
 
 .language-switcher button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--border-color);
+    border-color: var(--accent-color);
     transform: translateY(-1px);
 }
 
 .language-switcher button.active {
-    background-color: #00e676;
+    background-color: var(--accent-color);
     color: #000000;
-    border-color: #00e676;
+    border-color: var(--accent-color);
 }
 
 #theme-toggle-btn {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    color: var(--primary-text-color);
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 1em;
@@ -94,8 +94,8 @@ header {
 }
 
 #theme-toggle-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--border-color);
+    border-color: var(--accent-color);
     transform: translateY(-1px) scale(1.05);
 }
 
@@ -276,7 +276,7 @@ section h2::after {
 /* Buttons (General) */
 button {
     background-color: var(--accent-color);
-    color: white;
+    color: #000000;
     padding: 12px 25px;
     border: none;
     border-radius: 30px; /* Pill-shaped buttons */
@@ -290,16 +290,17 @@ button {
 button:hover {
     background-color: #00a040; /* Darker green on hover */
     transform: translateY(-2px); /* Slight lift effect */
-    box-shadow: 0 6px 15px rgba(0, 200, 83, 0.6);
+    box-shadow: 0 6px 15px rgba(0, 230, 118, 0.6);
 }
 
 button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(0, 200, 83, 0.4);
+    box-shadow: 0 2px 5px rgba(0, 230, 118, 0.4);
 }
 
 button:disabled {
-    background-color: #555;
+    background-color: var(--border-color);
+    color: var(--secondary-text-color);
     cursor: not-allowed;
     box-shadow: none;
     opacity: 0.7;
@@ -312,13 +313,13 @@ button:disabled {
     font-size: 1.3em; /* Larger font size */
     margin: 0; /* Remove default button margin, gap handles spacing */
     background-color: var(--accent-color);
-    color: white;
+    color: #000000;
 }
 
 .home-button:hover {
     background-color: #00a040;
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 200, 83, 0.7);
+    box-shadow: 0 8px 20px rgba(0, 230, 118, 0.7);
 }
 
 .home-button:active {
@@ -326,8 +327,8 @@ button:disabled {
 }
 
 #captureMoodBtn, #uploadImageBtn {
-    background-color: var(--primary-text-color);
-    color: white;
+    background-color: var(--accent-color);
+    color: #000000;
     margin-top: 10px;
 }
 
@@ -440,7 +441,7 @@ button:disabled {
     width: auto;
     padding: 16px;
     background-color: var(--accent-color);
-    color: white;
+    color: #000000;
 }
 
 /* Footer Styles */
@@ -854,8 +855,8 @@ body.dark-mode a {
 }
 
 .auth-submit-btn {
-    background: linear-gradient(135deg, var(--accent-color), #0056cc);
-    color: white;
+    background: var(--accent-color);
+    color: #000000;
     border: none;
     padding: 16px 24px;
     border-radius: 12px;
@@ -867,8 +868,9 @@ body.dark-mode a {
 }
 
 .auth-submit-btn:hover {
+    background-color: #00a040;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 230, 118, 0.3);
 }
 
 .auth-submit-btn:active {
@@ -902,8 +904,8 @@ body.dark-mode a {
 
 .google-signin-btn {
     width: 100%;
-    background: white;
-    color: #333;
+    background: var(--card-background-color);
+    color: var(--primary-text-color);
     border: 2px solid var(--border-color);
     padding: 16px 24px;
     border-radius: 12px;
@@ -918,10 +920,10 @@ body.dark-mode a {
 }
 
 .google-signin-btn:hover {
-    background: #f8f9fa;
-    border-color: #dadce0;
+    background: var(--border-color);
+    border-color: var(--accent-color);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 230, 118, 0.2);
 }
 
 .google-signin-btn:active {
@@ -948,7 +950,7 @@ body.dark-mode a {
 }
 
 .auth-switch-btn:hover {
-    color: #0056cc;
+    color: #00a040;
 }
 
 /* Dark mode adjustments for auth */
