@@ -115,8 +115,8 @@ html, body {
     align-items: center;
     justify-content: space-between;
     padding: 15px;
-    background-color: var(--bg-header);
-    color: white;
+    background: linear-gradient(90deg, #00e676 0%, #007aff 100%);
+    color: #fff;
     box-shadow: 0 2px 5px var(--shadow);
     flex-shrink: 0; /* Don't shrink header */
     transition: background-color 0.3s ease;
