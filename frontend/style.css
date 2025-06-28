@@ -993,3 +993,9 @@ body.dark-mode .auth-divider span {
 [data-theme="light"] .logo-text {
     color: #e5e5ea;
 }
+
+[data-theme="light"] .mood-text,
+[data-theme="light"] .scan-text,
+[data-theme="light"] .ai-text {
+    color: #fff;
+}
