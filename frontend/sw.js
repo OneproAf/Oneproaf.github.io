@@ -8,8 +8,7 @@ self.addEventListener('push', function(event) {
   // Default data in case the push message is empty
   let notificationData = {
     title: 'MoodScan AI',
-    body: 'Time for your daily mood check-in!',
-    icon: 'icon-192x192.png' // You will need to create an icon file
+    body: 'Time for your daily mood check-in!'
   };
 
   // If the push message has data, parse it
@@ -23,8 +22,7 @@ self.addEventListener('push', function(event) {
 
   const title = notificationData.title;
   const options = {
-    body: notificationData.body,
-    icon: notificationData.icon
+    body: notificationData.body
   };
 
   event.waitUntil(self.registration.showNotification(title, options));

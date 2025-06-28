@@ -5,8 +5,7 @@ const urlsToCache = [
     './index.html',
     './css/style.css',
     './js/script.js',
-    '../config.js',
-    '../models/icon-192.png'
+    '../config.js'
 ];
 
 // Install event - cache resources
@@ -15,7 +14,15 @@ self.addEventListener('install', (event) => {
         caches.open(CACHE_NAME)
             .then((cache) => {
                 console.log('Opened cache');
-                return cache.addAll(urlsToCache);
+                // Only cache files that exist, skip non-existent files
+                return Promise.allSettled(
+                    urlsToCache.map(url => 
+                        cache.add(url).catch(error => {
+                            console.warn(`Failed to cache ${url}:`, error);
+                            return null;
+                        })
+                    )
+                );
             })
     );
 });
@@ -51,8 +58,6 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('push', (event) => {
     const options = {
         body: event.data ? event.data.text() : 'New message from AI Psychologist',
-        icon: '../models/icon-192.png',
-        badge: '../models/icon-192.png',
         vibrate: [100, 50, 100],
         data: {
             dateOfArrival: Date.now(),
@@ -61,13 +66,11 @@ self.addEventListener('push', (event) => {
         actions: [
             {
                 action: 'explore',
-                title: 'Open Chat',
-                icon: '../models/icon-192.png'
+                title: 'Open Chat'
             },
             {
                 action: 'close',
-                title: 'Close',
-                icon: '../models/icon-192.png'
+                title: 'Close'
             }
         ]
     };
