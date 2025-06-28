@@ -143,8 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const backToHomeBtn8 = document.getElementById('backToHomeBtn8');
         const backToHomeBtn9 = document.getElementById('backToHomeBtn9');
         const backToHomeBtn10 = document.getElementById('backToHomeBtn10');
-        const backToHomeBtn3 = document.getElementById('backToHomeBtn3');
-        const backToHomeBtn4 = document.getElementById('backToHomeBtn4');
 
         // Auth Elements
         const registerForm = document.getElementById('register-form');
@@ -201,8 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Navigation ---
         const navButtons = {
-            scanMoodHomeBtn, aiPsychologistBtn, scanHistoryBtn, pricingBtn, wellnessBtn, authBtn, privacyLink,
-            backToHomeBtn1, backToHomeBtn2, backToHomeBtn5, backToHomeBtn6, backToHomeBtn7, backToHomeBtn8, backToHomeBtn9, backToHomeBtn10
+            scanHistoryBtn, pricingBtn, wellnessBtn, authBtn, privacyLink
         };
 
         for (const button in navButtons) {
@@ -213,6 +210,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
+
+        // Fix back to home buttons - all should go to home-screen
+        const backToHomeButtons = [
+            backToHomeBtn1, backToHomeBtn2, backToHomeBtn5, backToHomeBtn6, 
+            backToHomeBtn7, backToHomeBtn8, backToHomeBtn9, backToHomeBtn10
+        ];
+
+        backToHomeButtons.forEach((button, index) => {
+            if (button) {
+                console.log(`Setting up back to home button ${index + 1}`);
+                button.addEventListener('click', () => {
+                    console.log(`Back to home button ${index + 1} clicked`);
+                    showScreen(homeScreen);
+                });
+            } else {
+                console.warn(`Back to home button ${index + 1} not found in DOM`);
+            }
+        });
 
         if (scanMoodHomeBtn) {
             scanMoodHomeBtn.addEventListener('click', () => {
