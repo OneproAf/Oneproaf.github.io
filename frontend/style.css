@@ -1001,3 +1001,7 @@ body.dark-mode .auth-divider span {
         padding: 14px 20px;
     }
 }
+
+[data-theme="light"] .logo-text {
+    color: #e5e5ea;
+}
