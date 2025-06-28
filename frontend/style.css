@@ -780,3 +780,223 @@ body.dark-mode .premium-plan {
 body.dark-mode a {
     color: var(--accent-color);
 }
+
+/* Auth Screen Styles */
+.auth-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.auth-form-container {
+    background: var(--card-background-color);
+    border-radius: 16px;
+    padding: 32px 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.auth-form-container h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--primary-text-color);
+    text-align: center;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: var(--secondary-text-color);
+    margin-bottom: 32px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--primary-text-color);
+    margin-left: 4px;
+}
+
+.input-group input {
+    padding: 16px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--background-color);
+    color: var(--primary-text-color);
+    font-size: 1em;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.input-group input::placeholder {
+    color: var(--secondary-text-color);
+    opacity: 0.7;
+}
+
+.auth-submit-btn {
+    background: linear-gradient(135deg, var(--accent-color), #0056cc);
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.auth-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3);
+}
+
+.auth-submit-btn:active {
+    transform: translateY(0);
+}
+
+.auth-divider {
+    position: relative;
+    text-align: center;
+    margin: 24px 0;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.auth-divider span {
+    background: var(--card-background-color);
+    padding: 0 16px;
+    color: var(--secondary-text-color);
+    font-size: 0.9em;
+    position: relative;
+    z-index: 1;
+}
+
+.google-signin-btn {
+    width: 100%;
+    background: white;
+    color: #333;
+    border: 2px solid var(--border-color);
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.google-signin-btn:hover {
+    background: #f8f9fa;
+    border-color: #dadce0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.google-signin-btn:active {
+    transform: translateY(0);
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--secondary-text-color);
+    font-size: 0.9em;
+}
+
+.auth-switch-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 4px;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.auth-switch-btn:hover {
+    color: #0056cc;
+}
+
+/* Dark mode adjustments for auth */
+body.dark-mode .auth-form-container {
+    background: #1a1a1a;
+    border-color: #333;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .google-signin-btn {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .google-signin-btn:hover {
+    background: #333;
+    border-color: #555;
+}
+
+body.dark-mode .auth-divider::before {
+    background: #444;
+}
+
+body.dark-mode .auth-divider span {
+    background: #1a1a1a;
+}
+
+/* Responsive auth design */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 16px;
+    }
+    
+    .auth-form-container {
+        padding: 24px 20px;
+    }
+    
+    .auth-form-container h2 {
+        font-size: 1.6em;
+    }
+    
+    .input-group input {
+        padding: 14px 16px;
+    }
+    
+    .auth-submit-btn,
+    .google-signin-btn {
+        padding: 14px 20px;
+    }
+}

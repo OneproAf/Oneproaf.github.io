@@ -153,6 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const streakDisplay = document.getElementById('streak-display');
         const streakCount = document.getElementById('streak-count');
 
+        // Auth form switching elements
+        const switchToRegisterBtn = document.getElementById('switch-to-register');
+        const switchToLoginBtn = document.getElementById('switch-to-login');
+        const loginContainer = document.getElementById('login-container');
+        const registerContainer = document.getElementById('register-container');
+
         // --- Language Switcher Logic ---
         const savedLanguage = localStorage.getItem('language') || 'en';
         setLanguage(savedLanguage);
@@ -751,6 +757,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+
+        // Auth form switching functionality
+        switchToRegisterBtn?.addEventListener('click', () => {
+            loginContainer.style.display = 'none';
+            registerContainer.style.display = 'block';
+        });
+
+        switchToLoginBtn?.addEventListener('click', () => {
+            registerContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+        });
     }
 
     // Start waiting for Firebase
