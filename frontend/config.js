@@ -4,12 +4,10 @@ const config = {
   get apiBaseUrl() {
     // Check if we're in development (localhost) or production
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://localhost:8000';
+      return 'https://oneproaf-github-io.onrender.com';
     } else {
-      // TODO: Deploy your backend to Render.com and update this URL
-      // For now, using localhost for testing
-      return 'http://localhost:8000';
-      // When deployed, change to: return 'https://your-actual-backend-url.onrender.com';
+      // Production URL - your live Render backend
+      return 'https://oneproaf-github-io.onrender.com';
     }
   },
 
