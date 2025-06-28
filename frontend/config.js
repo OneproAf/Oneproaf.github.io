@@ -6,8 +6,10 @@ const config = {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       return 'http://localhost:8000';
     } else {
-      // Production URL - replace with your actual production backend URL
-      return 'https://moodscanai-backend.onrender.com';
+      // TODO: Deploy your backend to Render.com and update this URL
+      // For now, using localhost for testing
+      return 'http://localhost:8000';
+      // When deployed, change to: return 'https://your-actual-backend-url.onrender.com';
     }
   },
 
