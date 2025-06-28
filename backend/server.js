@@ -25,7 +25,7 @@ const firestore = new Firestore();
 // Configure CORS
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://moodscanai.netlify.app' // Your live frontend URL
+  'https://moodscanai.netlify.app'
 ];
 app.use(cors({
   origin: function (origin, callback) {
