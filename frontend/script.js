@@ -65,15 +65,21 @@ function showScreen(screenToShow) {
         screen.style.display = 'none';
     });
 
+    // Handle both DOM elements and string IDs
+    let targetScreen = screenToShow;
+    if (typeof screenToShow === 'string') {
+        targetScreen = document.getElementById(screenToShow);
+    }
+
     // Show the target screen
-    if (screenToShow) {
+    if (targetScreen) {
         // The home screen uses flexbox for its layout
-        screenToShow.style.display = (screenToShow.id === 'home-screen') ? 'flex' : 'block';
+        targetScreen.style.display = (targetScreen.id === 'home-screen') ? 'flex' : 'block';
     }
 
     // Stop video if navigating away from the scan screen
     const video = document.getElementById('video');
-    if (screenToShow !== document.getElementById('scan-mood-screen') && video && video.srcObject) {
+    if (targetScreen !== document.getElementById('scan-mood-screen') && video && video.srcObject) {
         const tracks = video.srcObject.getTracks();
         tracks.forEach(track => track.stop());
         video.srcObject = null;
@@ -196,7 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const button in navButtons) {
             if (navButtons[button]) {
                 navButtons[button].addEventListener('click', () => {
-                    showScreen(button.split('Btn')[0] + '-screen');
+                    const screenId = button.split('Btn')[0] + '-screen';
+                    showScreen(screenId);
                 });
             }
         }
@@ -255,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('/api/save-subscription', {
+                const response = await fetch('http://localhost:8000/api/save-subscription', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -442,25 +449,24 @@ document.addEventListener('DOMContentLoaded', () => {
             showScreen(resultsSection);
 
             try {
-                // Create FormData object
+                // Send the image to the backend for analysis
                 const formData = new FormData();
-                formData.append('image', imageData);
+                formData.append('image', imageData, 'mood-scan.jpg');
 
                 const fetchOptions = {
                     method: 'POST',
-                    body: formData,
-                    headers: {}
+                    body: formData
                 };
-                
-                // Add auth token if user is logged in
-                const user = auth.currentUser;
-                if (user) {
-                    const idToken = await user.getIdToken();
-                    fetchOptions.headers['Authorization'] = `Bearer ${idToken}`;
+
+                // Add authorization header if user is logged in
+                if (auth.currentUser) {
+                    const idToken = await auth.currentUser.getIdToken();
+                    fetchOptions.headers = {
+                        'Authorization': `Bearer ${idToken}`
+                    };
                 }
 
-                // Send to backend API
-                const response = await fetch('https://oneproaf-github-io.onrender.com/api/analyze-mood', fetchOptions);
+                const response = await fetch('http://localhost:8000/api/analyze-mood', fetchOptions);
 
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.statusText}`);
@@ -477,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 latestScanData = data;
 
                 // Save to Firestore if a user is logged in
-                if (user) {
+                if (auth.currentUser) {
                     console.log('User logged in, saving mood data...');
                     const moodData = {
                         mood: data.mood,
@@ -485,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                     try {
-                        const docRef = await db.collection('users').doc(user.uid).collection('moodScans').add(moodData);
+                        const docRef = await db.collection('users').doc(auth.currentUser.uid).collection('moodScans').add(moodData);
                         console.log('Mood data saved successfully with ID:', docRef.id);
                     } catch (error) {
                         console.error('Error saving mood data to Firestore:', error);
@@ -510,7 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function getMusicRecommendations(mood) {
             try {
-                const response = await fetch(`https://oneproaf-github-io.onrender.com/api/get-music?mood=${encodeURIComponent(mood)}`);
+                const response = await fetch(`http://localhost:8000/api/get-music?mood=${encodeURIComponent(mood)}`);
                 
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.statusText}`);
@@ -554,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 trackListDiv.innerHTML = '<p style="color: #a7ffeb;">Loading tracks...</p>';
                 
-                const response = await fetch(`https://oneproaf-github-io.onrender.com/api/get-playlist-tracks?playlistId=${encodeURIComponent(playlistId)}`);
+                const response = await fetch(`http://localhost:8000/api/get-playlist-tracks?playlistId=${encodeURIComponent(playlistId)}`);
                 
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.statusText}`);

@@ -380,44 +380,141 @@ button:disabled {
 
 /* Footer Styles */
 footer {
-    margin-top: auto; /* Pushes the footer to the bottom */
-    padding: 20px;
     text-align: center;
+    padding: 20px;
     color: var(--secondary-text-color);
-    font-size: 0.9em;
     width: 100%;
+    margin-top: auto;
+}
+
+.footer-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.language-switcher {
+    display: flex;
+    gap: 5px;
+}
+
+.language-switcher button {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    color: var(--primary-text-color);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 35px;
+}
+
+.language-switcher button:hover {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.language-switcher button.active {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+#theme-toggle-btn {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    color: var(--primary-text-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 40px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#theme-toggle-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .logo-text {
         font-size: 2.5em;
-        padding-right: 10px;
     }
+    
     .scan-wave {
         width: 50px;
         height: 50px;
     }
+    
     main {
-        padding: 25px;
         width: 95%;
+        padding: 16px;
     }
+    
     section h2 {
-        font-size: 1.8em;
+        font-size: 1.5em;
     }
+    
     .video-container {
         max-width: 100%;
     }
+    
     .home-button {
-        padding: 12px 25px;
-        font-size: 1.2em;
-    }
-    button {
-        padding: 10px 20px;
         font-size: 1em;
     }
+    
+    button {
+        font-size: 0.9em;
+    }
+    
     #moodResult {
-        font-size: 2em;
+        font-size: 1.2em;
+    }
+    
+    .footer-controls {
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .language-switcher button {
+        padding: 5px 10px;
+        font-size: 0.75em;
+        min-width: 30px;
+    }
+    
+    #theme-toggle-btn {
+        padding: 6px 10px;
+        font-size: 0.9em;
+        min-width: 35px;
+        height: 30px;
     }
 }
 
@@ -425,22 +522,46 @@ footer {
     .logo-container {
         flex-direction: column;
     }
+    
     .logo-text {
         font-size: 2em;
-        padding-right: 0;
         margin-bottom: 10px;
     }
+    
     .scan-wave {
         width: 40px;
         height: 40px;
     }
+    
     p.tagline {
         font-size: 0.9em;
     }
+    
     .home-button, button {
-        display: block;
-        width: calc(100% - 20px);
-        margin: 10px auto;
+        font-size: 0.9em;
+        padding: 12px 16px;
+    }
+    
+    .footer-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .language-switcher {
+        gap: 3px;
+    }
+    
+    .language-switcher button {
+        padding: 4px 8px;
+        font-size: 0.7em;
+        min-width: 28px;
+    }
+    
+    #theme-toggle-btn {
+        padding: 5px 8px;
+        font-size: 0.8em;
+        min-width: 32px;
+        height: 28px;
     }
 }
 

@@ -8,9 +8,9 @@ import multer from 'multer';
 import cors from 'cors';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import SpotifyWebApi from 'spotify-web-api-node';
-const webpush = require('web-push');
-const { Firestore } = require('@google-cloud/firestore');
-const admin = require('firebase-admin');
+import webpush from 'web-push';
+import { Firestore } from '@google-cloud/firestore';
+import admin from 'firebase-admin';
 
 // Initialize GoogleGenerativeAI
 console.log('Is API Key loaded:', !!process.env.GEMINI_API_KEY);
@@ -96,11 +96,23 @@ const vapidKeys = {
     publicKey: process.env.VAPID_PUBLIC_KEY,
     privateKey: process.env.VAPID_PRIVATE_KEY
 };
-webpush.setVapidDetails(
-    'mailto:your-email@example.com', // Replace with your email
-    vapidKeys.publicKey,
-    vapidKeys.privateKey
-);
+
+// Only set up VAPID if both keys are provided and valid
+if (vapidKeys.publicKey && vapidKeys.privateKey && 
+    vapidKeys.publicKey !== 'test' && vapidKeys.privateKey !== 'test') {
+    try {
+        webpush.setVapidDetails(
+            'mailto:your-email@example.com', // Replace with your email
+            vapidKeys.publicKey,
+            vapidKeys.privateKey
+        );
+        console.log('VAPID keys configured successfully');
+    } catch (error) {
+        console.warn('Invalid VAPID keys, push notifications will be disabled:', error.message);
+    }
+} else {
+    console.log('VAPID keys not configured, push notifications will be disabled');
+}
 
 // Middleware to verify Firebase ID token (optional)
 async function softVerifyFirebaseToken(req, res, next) {

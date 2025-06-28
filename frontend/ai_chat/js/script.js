@@ -100,7 +100,7 @@ User: ${userMessage}
 AI Psychologist:`;
         
         try {
-            const response = await fetch('https://oneproaf-github-io.onrender.com/api/chat', {
+            const response = await fetch('http://localhost:8000/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
