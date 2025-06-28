@@ -141,74 +141,33 @@ async function verifyFirebaseToken(req, res, next) {
 }
 
 // API endpoint to analyze mood, now with streak logic
-app.post('/api/analyze-mood', upload.single('image'), softVerifyFirebaseToken, async (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No image file uploaded.' });
-    }
+app.post('/api/analyze-mood', upload.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No image file uploaded.' });
+  }
 
-    try {
-        const visionModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = "Analyze the primary human emotion in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Return only a single, valid JSON object with two keys: a 'mood' key with the dominant emotion as a string, and a 'percentages' key containing all detected expressions and their confidence scores from 0 to 1.";
+  try {
+    const visionModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = "Analyze the primary human emotion in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Return only a single, valid JSON object with two keys: a 'mood' key with the dominant emotion as a string, and a 'percentages' key containing all detected expressions and their confidence scores from 0 to 1.";
+    
+    const imagePart = fileToGenerativePart(req.file.buffer, req.file.mimetype);
 
-        const imagePart = fileToGenerativePart(req.file.buffer, req.file.mimetype);
-        const result = await visionModel.generateContent([prompt, imagePart]);
-        const responseText = result.response.text();
-        // Clean up potential markdown formatting from the AI's response
-        const cleanedJsonString = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-        const jsonResponse = JSON.parse(cleanedJsonString);
+    const result = await visionModel.generateContent([prompt, imagePart]);
+    const responseText = result.response.text();
 
-        let responseData = { ...jsonResponse, currentStreak: 0 };
+    // Clean up potential markdown formatting from the AI's response
+    const cleanedJsonString = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+    const jsonResponse = JSON.parse(cleanedJsonString);
 
-        // --- Streak Logic (only for logged-in users) ---
-        if (req.user) {
-            const userId = req.user.uid;
-            const userRef = firestore.collection('users').doc(userId);
-            const userDoc = await userRef.get();
-            const userData = userDoc.data() || {};
-            
-            let currentStreak = userData.currentStreak || 0;
-            const lastScanTimestamp = userData.lastScanTimestamp;
+    res.status(200).json(jsonResponse);
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Start of today
-
-            if (lastScanTimestamp) {
-                const lastScanDate = new Date(lastScanTimestamp.toMillis());
-                lastScanDate.setHours(0, 0, 0, 0); // Start of the last scan day
-
-                const diffTime = today.getTime() - lastScanDate.getTime();
-                const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-                if (diffDays === 1) {
-                    // Scanned yesterday, continue streak
-                    currentStreak++;
-                } else if (diffDays > 1) {
-                    // Scanned before yesterday, reset streak
-                    currentStreak = 1;
-                }
-                // If diffDays is 0, a scan already happened today, so do nothing.
-            } else {
-                // First scan for this user
-                currentStreak = 1;
-            }
-
-            // Update user document
-            await userRef.set({
-                currentStreak: currentStreak,
-                lastScanTimestamp: new Date()
-            }, { merge: true });
-
-            responseData.currentStreak = currentStreak;
-        }
-
-        res.status(200).json(responseData);
-    } catch (error) {
-        console.error('Detailed AI Error in /analyze-mood:', error);
-        res.status(500).json({
-            error: "Internal server error during mood analysis.",
-            details: error.message
-        });
-    }
+  } catch (error) {
+    console.error('Detailed AI Error in /analyze-mood:', error);
+    res.status(500).json({
+      error: "Internal server error during mood analysis.",
+      details: error.message
+    });
+  }
 });
 
 // API endpoint for mood-based advice
