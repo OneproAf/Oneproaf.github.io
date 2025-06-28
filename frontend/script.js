@@ -231,52 +231,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Home Screen Buttons - open new page in same tab
         if (scanMoodHomeBtn) {
             scanMoodHomeBtn.addEventListener('click', () => {
-                showScreen(scanSection);
-                startVideo();
+                window.location.href = 'scan_mood.html';
             });
         }
-
         if (aiPsychologistBtn) {
             aiPsychologistBtn.addEventListener('click', () => {
-                // Open the standalone AI chat page in the same tab
                 window.location.href = 'ai_chat/index.html';
             });
         }
-
         if (scanHistoryBtn) {
-            scanHistoryBtn.addEventListener('click', renderDashboardCharts);
+            scanHistoryBtn.addEventListener('click', () => {
+                window.location.href = 'scan_history.html';
+            });
         }
-
         if (wellnessBtn) {
             wellnessBtn.addEventListener('click', () => {
-                showScreen(wellnessContentScreen);
+                window.location.href = 'wellness.html';
             });
         }
-
-        if (privacyLink) {
-            privacyLink.addEventListener('click', (event) => {
-                event.preventDefault();
-                showScreen(privacyPolicyScreen);
-            });
-        }
-
         if (pricingBtn) {
             pricingBtn.addEventListener('click', () => {
-                showScreen(pricingScreen);
+                window.location.href = 'pricing.html';
             });
         }
-
         if (authBtn) {
             authBtn.addEventListener('click', () => {
-                showScreen(authScreen);
+                window.location.href = 'auth.html';
             });
         }
-
         if (projectSupportBtn) {
-            projectSupportBtn.addEventListener('click', function() {
-                showScreen(projectSupportScreen);
+            projectSupportBtn.addEventListener('click', () => {
+                window.location.href = 'project_support.html';
             });
         }
 
