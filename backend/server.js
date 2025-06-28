@@ -147,21 +147,17 @@ app.post('/api/analyze-mood', upload.single('image'), softVerifyFirebaseToken, a
     }
 
     try {
-        const imagePart = {
-            inlineData: {
-                data: req.file.buffer.toString("base64"),
-                mimeType: req.file.mimetype,
-            },
-        };
-        const prompt = "Analyze the primary emotion conveyed by the facial expression in this image. The possible emotions are: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Respond ONLY with a JSON object containing two keys: 'mood' (a string with the detected primary emotion, starting with a capital letter) and 'percentages' (an object where keys are all possible emotion strings and values are the confidence scores as decimals from 0 to 1).";
-        
-        const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = gemini.getGenerativeModel({ model: "gemini-pro-vision" });
-        const result = await model.generateContent([prompt, imagePart]);
-        const geminiResponseText = result.response.text();
-        const analysis = JSON.parse(geminiResponseText);
+        const visionModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const prompt = "Analyze the primary human emotion in this image. Choose only from this list: Happy, Sad, Angry, Surprised, Neutral, Fearful, Disgusted, Confused, Tired. Return only a single, valid JSON object with two keys: a 'mood' key with the dominant emotion as a string, and a 'percentages' key containing all detected expressions and their confidence scores from 0 to 1.";
 
-        let responseData = { ...analysis, currentStreak: 0 };
+        const imagePart = fileToGenerativePart(req.file.buffer, req.file.mimetype);
+        const result = await visionModel.generateContent([prompt, imagePart]);
+        const responseText = result.response.text();
+        // Clean up potential markdown formatting from the AI's response
+        const cleanedJsonString = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const jsonResponse = JSON.parse(cleanedJsonString);
+
+        let responseData = { ...jsonResponse, currentStreak: 0 };
 
         // --- Streak Logic (only for logged-in users) ---
         if (req.user) {
@@ -205,10 +201,13 @@ app.post('/api/analyze-mood', upload.single('image'), softVerifyFirebaseToken, a
             responseData.currentStreak = currentStreak;
         }
 
-        res.json(responseData);
+        res.status(200).json(responseData);
     } catch (error) {
-        console.error('Error in /api/analyze-mood:', error);
-        res.status(500).json({ error: 'Failed to analyze mood.', details: error.message });
+        console.error('Detailed AI Error in /analyze-mood:', error);
+        res.status(500).json({
+            error: "Internal server error during mood analysis.",
+            details: error.message
+        });
     }
 });
 
