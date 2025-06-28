@@ -231,40 +231,52 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Home Screen Buttons - open new page in same tab
         if (scanMoodHomeBtn) {
             scanMoodHomeBtn.addEventListener('click', () => {
-                window.location.href = 'scan_mood.html';
+                showScreen(scanSection);
+                startVideo();
             });
         }
+
         if (aiPsychologistBtn) {
             aiPsychologistBtn.addEventListener('click', () => {
+                // Open the standalone AI chat page in the same tab
                 window.location.href = 'ai_chat/index.html';
             });
         }
+
         if (scanHistoryBtn) {
-            scanHistoryBtn.addEventListener('click', () => {
-                window.location.href = 'scan_history.html';
-            });
+            scanHistoryBtn.addEventListener('click', renderDashboardCharts);
         }
+
         if (wellnessBtn) {
             wellnessBtn.addEventListener('click', () => {
-                window.location.href = 'wellness.html';
+                showScreen(wellnessContentScreen);
             });
         }
+
+        if (privacyLink) {
+            privacyLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                showScreen(privacyPolicyScreen);
+            });
+        }
+
         if (pricingBtn) {
             pricingBtn.addEventListener('click', () => {
-                window.location.href = 'pricing.html';
+                showScreen(pricingScreen);
             });
         }
+
         if (authBtn) {
             authBtn.addEventListener('click', () => {
-                window.location.href = 'auth.html';
+                showScreen(authScreen);
             });
         }
+
         if (projectSupportBtn) {
-            projectSupportBtn.addEventListener('click', () => {
-                window.location.href = 'project_support.html';
+            projectSupportBtn.addEventListener('click', function() {
+                showScreen(projectSupportScreen);
             });
         }
 
