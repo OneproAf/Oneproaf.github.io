@@ -274,35 +274,37 @@ section h2::after {
 }
 
 /* Buttons (General) */
-button {
-    background-color: var(--accent-color);
-    color: white;
-    padding: 12px 25px;
+button, .home-button, .auth-submit-btn, .google-signin-btn, .auth-switch-btn, #sendMessageBtn, #theme-toggle-btn, .language-switcher button, .back-button {
+    background: linear-gradient(90deg, #00e676 0%, #007aff 100%);
+    color: #fff !important;
+    font-weight: bold;
     border: none;
-    border-radius: 30px; /* Pill-shaped buttons */
-    cursor: pointer;
+    border-radius: 30px;
+    padding: 12px 25px;
     font-size: 1.1em;
-    font-weight: 600;
-    margin: 0;
-    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    outline: none;
 }
 
-button:hover {
-    background-color: #00a040; /* Darker green on hover */
-    transform: translateY(-2px); /* Slight lift effect */
-    box-shadow: 0 6px 15px rgba(0, 200, 83, 0.6);
+button:hover, .home-button:hover, .auth-submit-btn:hover, .google-signin-btn:hover, .auth-switch-btn:hover, #sendMessageBtn:hover, #theme-toggle-btn:hover, .language-switcher button:hover, .back-button:hover {
+    filter: brightness(1.08) saturate(1.2);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
-button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(0, 200, 83, 0.4);
+button:active, .home-button:active, .auth-submit-btn:active, .google-signin-btn:active, .auth-switch-btn:active, #sendMessageBtn:active, #theme-toggle-btn:active, .language-switcher button:active, .back-button:active {
+    filter: brightness(0.95);
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 }
 
-button:disabled {
-    background-color: #555;
+button:disabled, .home-button:disabled, .auth-submit-btn:disabled, .google-signin-btn:disabled, .auth-switch-btn:disabled, #sendMessageBtn:disabled, #theme-toggle-btn:disabled, .language-switcher button:disabled, .back-button:disabled {
+    opacity: 0.6;
     cursor: not-allowed;
+    filter: grayscale(0.3);
     box-shadow: none;
-    opacity: 0.7;
 }
 
 /* Specific Home Screen Buttons */
