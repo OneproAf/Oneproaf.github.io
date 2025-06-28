@@ -51,9 +51,9 @@ header {
 }
 
 .language-switcher button {
-    background: #fff;
-    border: 1.5px solid var(--accent-color);
-    color: var(--accent-color);
+    background: #333333;
+    border: 1.5px solid #333333;
+    color: #fff;
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 0.8em;
@@ -65,23 +65,18 @@ header {
     backdrop-filter: none;
 }
 
-.language-switcher button:hover {
-    background: var(--accent-color);
+.language-switcher button:hover,
+.language-switcher button.active {
+    background: #222;
     color: #fff;
-    border-color: var(--accent-color);
+    border-color: #222;
     transform: translateY(-1px) scale(1.04);
 }
 
-.language-switcher button.active {
-    background: var(--accent-color);
-    color: #fff;
-    border-color: var(--accent-color);
-}
-
 #theme-toggle-btn {
-    background: #f4f4f9;
-    border: 1.5px solid var(--border-color);
-    color: var(--accent-color);
+    background: #333333;
+    border: 1.5px solid #333333;
+    color: #fff;
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 1em;
@@ -97,9 +92,9 @@ header {
 }
 
 #theme-toggle-btn:hover {
-    background: #e5e5ea;
-    color: var(--accent-color);
-    border-color: var(--accent-color);
+    background: #222;
+    color: #fff;
+    border-color: #222;
     transform: translateY(-1px) scale(1.04);
 }
 
