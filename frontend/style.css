@@ -580,7 +580,133 @@ footer a:hover {
     }
 }
 
-/* Responsive Design */
+/* Mobile-optimized loading text sizes */
+@media (max-width: 768px) {
+    .loading-title {
+        font-size: 1.6em !important;
+    }
+    
+    .loading-subtitle {
+        font-size: 1.3em !important;
+    }
+    
+    .loading-steps-title {
+        font-size: 1.1em !important;
+    }
+    
+    .loading-step-text {
+        font-size: 0.8em !important;
+    }
+    
+    .loading-recommendations-title {
+        font-size: 1.1em !important;
+    }
+    
+    .loading-recommendations-text {
+        font-size: 0.9em !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-title {
+        font-size: 1.4em !important;
+    }
+    
+    .loading-subtitle {
+        font-size: 1.1em !important;
+    }
+    
+    .loading-steps-title {
+        font-size: 1em !important;
+    }
+    
+    .loading-step-text {
+        font-size: 0.75em !important;
+    }
+    
+    .loading-recommendations-title {
+        font-size: 1em !important;
+    }
+    
+    .loading-recommendations-text {
+        font-size: 0.85em !important;
+    }
+}
+
+/* Mobile-optimized mood results text sizes */
+@media (max-width: 768px) {
+    .mood-analysis-title {
+        font-size: 1.6em !important;
+    }
+    
+    .mood-result-text {
+        font-size: 1.8em !important;
+    }
+    
+    .ai-recommendations-title {
+        font-size: 1.1em !important;
+    }
+    
+    .ai-recommendations-text {
+        font-size: 0.95em !important;
+    }
+    
+    .music-platform-title {
+        font-size: 1.4em !important;
+    }
+    
+    .music-platform-subtitle {
+        font-size: 0.95em !important;
+    }
+    
+    .music-platform-btn {
+        font-size: 16px !important;
+        padding: 15px 25px !important;
+        min-width: 160px !important;
+    }
+    
+    .pro-tip-text {
+        font-size: 0.85em !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .mood-analysis-title {
+        font-size: 1.4em !important;
+    }
+    
+    .mood-result-text {
+        font-size: 1.5em !important;
+    }
+    
+    .ai-recommendations-title {
+        font-size: 1em !important;
+    }
+    
+    .ai-recommendations-text {
+        font-size: 0.9em !important;
+    }
+    
+    .music-platform-title {
+        font-size: 1.2em !important;
+    }
+    
+    .music-platform-subtitle {
+        font-size: 0.9em !important;
+    }
+    
+    .music-platform-btn {
+        font-size: 14px !important;
+        padding: 12px 20px !important;
+        min-width: 140px !important;
+    }
+    
+    .pro-tip-text {
+        font-size: 0.8em !important;
+    }
+}
+
+/* Ensure proper text rendering on mobile */
 @media (max-width: 768px) {
     .logo-text {
         font-size: 2.5em;

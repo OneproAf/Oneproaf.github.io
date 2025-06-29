@@ -99,7 +99,7 @@ function showMusicPlatformButtons(mood) {
                 font-weight: 700;
                 text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
                 letter-spacing: 1px;
-            ">🎵 Choose Your Music Platform 🎵</h3>
+            " class="music-platform-title">🎵 Choose Your Music Platform 🎵</h3>
             
             <p style="
                 color: #e0e0e0; 
@@ -107,7 +107,7 @@ function showMusicPlatformButtons(mood) {
                 font-size: 1.1em; 
                 line-height: 1.6;
                 opacity: 0.9;
-            ">✨ Discover the perfect tunes for your <strong style="color: #a7ffeb;">${mood}</strong> mood! ✨</p>
+            " class="music-platform-subtitle">✨ Discover the perfect tunes for your <strong style="color: #a7ffeb;">${mood}</strong> mood! ✨</p>
             
             <div style="
                 display: flex; 
@@ -116,7 +116,7 @@ function showMusicPlatformButtons(mood) {
                 flex-wrap: wrap; 
                 margin: 30px 0;
             ">
-                <button onclick="getSpotifyRecommendations('${mood}')" class="music-platform-btn" style="
+                <button onclick="getSpotifyRecommendations('${mood}'); scrollToRecommendations();" class="music-platform-btn" style="
                     display: flex; 
                     align-items: center; 
                     gap: 12px; 
@@ -147,7 +147,7 @@ function showMusicPlatformButtons(mood) {
                     <span>🎧 Spotify</span>
                 </button>
                 
-                <button onclick="getYouTubeMusicRecommendations('${mood}')" class="music-platform-btn" style="
+                <button onclick="getYouTubeMusicRecommendations('${mood}'); scrollToRecommendations();" class="music-platform-btn" style="
                     display: flex; 
                     align-items: center; 
                     gap: 12px; 
@@ -191,13 +191,26 @@ function showMusicPlatformButtons(mood) {
                     font-size: 0.95em; 
                     margin: 0; 
                     line-height: 1.5;
-                ">💡 <strong style="color: #a7ffeb;">Pro Tip:</strong> Click any platform to discover curated music perfect for your current mood! 🎶</p>
+                " class="pro-tip-text">💡 <strong style="color: #a7ffeb;">Pro Tip:</strong> Click any platform to discover curated music perfect for your current mood! 🎶</p>
             </div>
         </div>
         
         <div id="spotify-recommendations" style="margin-top: 25px;"></div>
         <div id="youtube-recommendations" style="margin-top: 25px;"></div>
     `;
+}
+
+// Function to scroll to recommendations when music platform buttons are clicked
+function scrollToRecommendations() {
+    setTimeout(() => {
+        const recommendationsSection = document.getElementById('musicRecommendations');
+        if (recommendationsSection) {
+            recommendationsSection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+    }, 500); // Small delay to allow content to load
 }
 
 // Function to get Spotify recommendations when button is clicked
@@ -986,12 +999,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 ">
                     <h2 style="
                         color: #a7ffeb; 
-                        margin-bottom: 15px; 
+                        margin-bottom: 20px; 
                         font-size: 2.2em; 
                         font-weight: 700;
                         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
                         letter-spacing: 1px;
-                    ">🧠 AI Analysis in Progress 🧠</h2>
+                    " class="loading-title">🧠 AI Analysis in Progress 🧠</h2>
                     
                     <div style="
                         font-size: 1.8em; 
@@ -1002,7 +1015,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         align-items: center;
                         justify-content: center;
                         gap: 15px;
-                    ">
+                    " class="loading-subtitle">
                         <span>Analyzing your mood</span>
                         <div class="loading-dots" style="
                             display: inline-flex;
@@ -1047,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             margin-bottom: 15px; 
                             font-size: 1.3em; 
                             font-weight: 600;
-                        ">🔍 Processing Steps 🔍</h3>
+                        " class="loading-steps-title">🔍 Processing Steps 🔍</h3>
                         <div style="
                             display: flex;
                             justify-content: space-around;
@@ -1066,7 +1079,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     justify-content: center;
                                     font-size: 18px;
                                 ">📷</div>
-                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">Image Capture</p>
+                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;" class="loading-step-text">Image Capture</p>
                             </div>
                             <div style="
                                 width: 30px;
@@ -1086,7 +1099,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     justify-content: center;
                                     font-size: 18px;
                                 ">🧠</div>
-                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">AI Analysis</p>
+                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;" class="loading-step-text">AI Analysis</p>
                             </div>
                             <div style="
                                 width: 30px;
@@ -1107,7 +1120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     justify-content: center;
                                     font-size: 18px;
                                 ">✨</div>
-                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">Results</p>
+                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;" class="loading-step-text">Results</p>
                             </div>
                         </div>
                     </div>
@@ -1129,13 +1142,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         margin-bottom: 15px; 
                         font-size: 1.3em; 
                         font-weight: 600;
-                    ">💡 Preparing Recommendations 💡</h3>
+                    " class="loading-recommendations-title">💡 Preparing Recommendations 💡</h3>
                     <p style="
                         color: #b0b0b0; 
                         font-size: 1em; 
                         margin: 0; 
                         line-height: 1.5;
-                    ">✨ <strong style="color: #a7ffeb;">AI is working:</strong> Analyzing your emotional patterns to provide personalized recommendations! 🎯</p>
+                    " class="loading-recommendations-text">✨ <strong style="color: #a7ffeb;">AI is working:</strong> Analyzing your emotional patterns to provide personalized recommendations! 🎯</p>
                 </div>
             `;
             
@@ -1154,13 +1167,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         margin-bottom: 15px; 
                         font-size: 1.3em; 
                         font-weight: 600;
-                    ">🎵 Preparing Music Recommendations 🎵</h3>
+                    " class="loading-recommendations-title">🎵 Preparing Music Recommendations 🎵</h3>
                     <p style="
                         color: #b0b0b0; 
                         font-size: 1em; 
                         margin: 0; 
                         line-height: 1.5;
-                    ">🎶 <strong style="color: #a7ffeb;">Curating:</strong> Finding the perfect music to match your current mood! 🎧</p>
+                    " class="loading-recommendations-text">🎶 <strong style="color: #a7ffeb;">Curating:</strong> Finding the perfect music to match your current mood! 🎧</p>
                 </div>
             `;
             
@@ -1220,7 +1233,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Call the existing displayMoodResult function with the response data
                 displayMoodResult(data.mood, data.percentages);
-                // updateMoodChart(data.mood); // This is now replaced by displayMoodHistory
 
             } catch (error) {
                 console.error("Error during mood detection:", error);
@@ -1230,78 +1242,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- Music Recommendations Function ---
-
-        async function getMusicRecommendations(mood) {
-            try {
-                const response = await fetch(config.apiUrl(`/api/get-music?mood=${encodeURIComponent(mood)}`));
-                
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                
-                // Clear the recommendations div
-                musicRecommendationsDiv.innerHTML = '';
-                
-                // Display tracks if available
-                if (data.tracks && data.tracks.length > 0) {
-                    const tracksHTML = data.tracks.map(track => `
-                        <div class="track-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-                            <a href="${track.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                                <img src="${track.imageUrl}" alt="${track.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
-                                <div>
-                                    <div style="font-weight: 500; color: #a7ffeb;">${track.name}</div>
-                                    <div style="font-size: 12px; color: #888;">${track.artist}</div>
-                                </div>
-                            </a>
-                        </div>
-                    `).join('');
-                    
-                    musicRecommendationsDiv.innerHTML += `
-                        <h4 style="color: #a7ffeb; margin-bottom: 10px;">🎵 Top Song Recommendations:</h4>
-                        ${tracksHTML}
-                    `;
-                }
-                
-                // Display playlists if available
-                if (data.playlists && data.playlists.length > 0) {
-                    const playlistsHTML = data.playlists.map(playlist => {
-                        // Extract playlist ID from URL
-                        const playlistId = playlist.url.split('/playlist/')[1]?.split('?')[0];
-                        return `
-                            <div class="playlist-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-                                <a href="${playlist.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                                    <img src="${playlist.imageUrl}" alt="${playlist.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
-                                    <span style="font-weight: 500; color: #a7ffeb;">${playlist.name}</span>
-                                </a>
-                                ${playlistId ? `<button onclick="getPlaylistTracks('${playlistId}', '${playlist.name}')" style="margin-left: auto; padding: 5px 10px; background: #1DB954; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">View Tracks</button>` : ''}
-                            </div>
-                        `;
-                    }).join('');
-                    
-                    musicRecommendationsDiv.innerHTML += `
-                        <h4 style="color: #a7ffeb; margin: 20px 0 10px 0;">📋 Playlist Recommendations:</h4>
-                        ${playlistsHTML}
-                        <div id="trackList" style="margin-top: 15px;"></div>
-                    `;
-                }
-                
-                // Show message if no recommendations available
-                if ((!data.tracks || data.tracks.length === 0) && (!data.playlists || data.playlists.length === 0)) {
-                    musicRecommendationsDiv.innerHTML = '<p style="color: #888;">No music recommendations available for this mood.</p>';
-                }
-            } catch (error) {
-                console.error('Error fetching music recommendations:', error);
-                musicRecommendationsDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load music recommendations.</p>';
-            }
-        }
-
+        // Function to display mood results
         function displayMoodResult(mood, expressions) {
             let moodText = '';
             let recommendations = '';
-            let musicGenre = '';
 
             // Convert mood to lowercase for switch statement
             const moodLower = mood.toLowerCase();
@@ -1310,52 +1254,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'happy':
                     moodText = 'Happy! ✨';
                     recommendations = 'Keep up the great spirit! Share your joy with someone.';
-                    musicGenre = 'pop, cheerful, upbeat';
                     break;
                 case 'sad':
                     moodText = 'Sad 😔';
                     recommendations = 'It\'s okay to be sad sometimes. Try listening to calming music, talking to a friend, or going for a walk.';
-                    musicGenre = 'lofi, ambient, classical';
                     break;
                 case 'angry':
                     moodText = 'Angry 😠';
                     recommendations = 'Try taking a deep breath, counting to ten, or engaging in physical activity to let off some steam.';
-                    musicGenre = 'calm, instrumental, jazz';
                     break;
                 case 'surprised':
                     moodText = 'Surprised 😮';
                     recommendations = 'Something unexpected? Try writing down your thoughts or sharing what surprised you with someone.';
-                    musicGenre = 'folk, experimental';
                     break;
                 case 'neutral':
                     moodText = 'Neutral 😐';
                     recommendations = 'Everything is stable. Perhaps it\'s a good time to rest or do something that relaxes you.';
-                    musicGenre = 'chill, acoustic';
                     break;
                 case 'fearful':
                     moodText = 'Fearful 😨';
                     recommendations = 'It\'s natural to feel afraid. Try deep breathing exercises or talking to someone you trust.';
-                    musicGenre = 'calm, soothing, nature sounds';
                     break;
                 case 'disgusted':
                     moodText = 'Disgusted 🤢';
                     recommendations = 'Take a moment to process what you\'re feeling. Sometimes stepping away helps.';
-                    musicGenre = 'clean, fresh, uplifting';
                     break;
                 case 'confused':
                     moodText = 'Confused 😕';
                     recommendations = 'Confusion is a normal part of learning. Try breaking things down into smaller steps.';
-                    musicGenre = 'clear, structured, instrumental';
                     break;
                 case 'tired':
                     moodText = 'Tired 😴';
                     recommendations = 'Rest is important. Consider taking a short break or getting some sleep.';
-                    musicGenre = 'lullaby, ambient, peaceful';
                     break;
                 default:
                     moodText = 'Mood not clearly defined.';
                     recommendations = 'Your mood could not be determined. Please try again.';
-                    musicGenre = 'unknown';
                     break;
             }
 
@@ -1383,7 +1317,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         font-weight: 700;
                         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
                         letter-spacing: 1px;
-                    ">🎭 Your Mood Analysis 🎭</h2>
+                    " class="mood-analysis-title">🎭 Your Mood Analysis 🎭</h2>
                     
                     <div style="
                         font-size: 2.5em; 
@@ -1391,7 +1325,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         font-weight: 700;
                         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
                         animation: pulse 2s infinite;
-                    ">${moodText}</div>
+                    " class="mood-result-text">${moodText}</div>
                     
                     <div style="
                         margin-top: 25px; 
@@ -1405,14 +1339,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             margin-bottom: 15px; 
                             font-size: 1.3em; 
                             font-weight: 600;
-                        ">💡 AI Recommendations 💡</h3>
+                        " class="ai-recommendations-title">💡 AI Recommendations 💡</h3>
                         <p style="
                             color: #e0e0e0; 
                             font-size: 1.1em; 
                             line-height: 1.6;
                             margin: 0;
                             opacity: 0.9;
-                        ">${recommendations}</p>
+                        " class="ai-recommendations-text">${recommendations}</p>
                     </div>
                 </div>
             `;
@@ -1440,96 +1374,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showMusicPlatformButtons(mood);
         }
 
-        // Renamed and refactored function to render dashboard charts
-        async function renderDashboardCharts() {
-            showScreen(moodHistoryDashboardScreen); // Use the correct screen
-            const historyMessage = document.getElementById('history-message');
-            const historyChartCanvas = document.getElementById('moodHistoryChart');
-
-            historyMessage.textContent = ''; // Clear previous messages
-            if (chartInstance) {
-                chartInstance.destroy(); // Clear previous chart instance
-                chartInstance = null;
-            }
-
-            if (!latestScanData) {
-                historyMessage.textContent = "No recent scan data available. Please perform a mood scan first.";
-                historyChartCanvas.style.display = 'none';
-                return;
-            }
-
-            historyChartCanvas.style.display = 'block';
-
-            const { percentages } = latestScanData;
-            const labels = Object.keys(percentages);
-            const data = Object.values(percentages);
-
-            // Get accent color from CSS variables for dynamic theming
-            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
-
-            chartInstance = new Chart(historyChartCanvas, {
-                type: 'radar',
-                data: {
-                    labels: labels.map(label => label.charAt(0).toUpperCase() + label.slice(1)),
-                    datasets: [{
-                        label: 'Emotional Profile',
-                        data: data,
-                        backgroundColor: `${accentColor}33`, // Accent color with 20% opacity
-                        borderColor: accentColor,
-                        borderWidth: 2,
-                        pointBackgroundColor: accentColor,
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--primary-text-color')
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (context.parsed.r !== null) {
-                                        label += `: ${(context.parsed.r * 100).toFixed(1)}%`;
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        r: {
-                            angleLines: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
-                            },
-                            grid: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
-                            },
-                            pointLabels: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--primary-text-color'),
-                                font: {
-                                    size: 12
-                                }
-                            },
-                            ticks: {
-                                backdropColor: 'transparent',
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--secondary-text-color'),
-                                stepSize: 0.2,
-                                callback: value => `${(value * 100)}%`
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 1
-                        }
-                    }
-                }
-            });
-        }
-
         // Auth form switching functionality
         switchToRegisterBtn?.addEventListener('click', () => {
             loginContainer.style.display = 'none';
@@ -1540,14 +1384,6 @@ document.addEventListener('DOMContentLoaded', () => {
             registerContainer.style.display = 'none';
             loginContainer.style.display = 'block';
         });
-
-        // Add event listener for the new Back to Home button in the support screen
-        const supportBackBtn = projectSupportScreen.querySelector('.back-button');
-        if (supportBackBtn) {
-            supportBackBtn.addEventListener('click', function() {
-                router.navigateToScreen('home-screen');
-            });
-        }
 
         // Add event listeners for all back to home buttons
         if (backToHomeBtn1) {
@@ -1570,30 +1406,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (backToHomeBtn6) {
             backToHomeBtn6.addEventListener('click', () => {
-                router.navigateToScreen('home-screen');
-            });
-        }
-
-        if (backToHomeBtn7) {
-            backToHomeBtn7.addEventListener('click', () => {
-                router.navigateToScreen('home-screen');
-            });
-        }
-
-        if (backToHomeBtn8) {
-            backToHomeBtn8.addEventListener('click', () => {
-                router.navigateToScreen('home-screen');
-            });
-        }
-
-        if (backToHomeBtn9) {
-            backToHomeBtn9.addEventListener('click', () => {
-                router.navigateToScreen('home-screen');
-            });
-        }
-
-        if (backToHomeBtn10) {
-            backToHomeBtn10.addEventListener('click', () => {
                 router.navigateToScreen('home-screen');
             });
         }
