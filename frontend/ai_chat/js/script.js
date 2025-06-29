@@ -14,6 +14,9 @@ class AIPsychologistChat {
         this.initializeTheme();
         this.initializeEventListeners();
         this.addWelcomeMessage();
+        
+        // Initialize Color Game System
+        initializeColorGame();
     }
     
     initializeTheme() {
@@ -282,4 +285,105 @@ AI Psychologist:`;
 // Initialize the chat when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new AIPsychologistChat();
-}); 
+});
+
+// Color Game System for AI Chat
+let colorGameEnabled = false;
+
+function initializeColorGame() {
+    const toggleBtn = document.getElementById('colorGameToggle');
+    const statusDiv = document.getElementById('colorGameStatus');
+    
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleColorGame);
+    }
+    
+    // Load color game state from localStorage
+    const savedState = localStorage.getItem('colorGameEnabled');
+    if (savedState === 'true') {
+        colorGameEnabled = true;
+        updateColorGameUI();
+        enableColorGameOnButtons();
+    }
+}
+
+function toggleColorGame() {
+    colorGameEnabled = !colorGameEnabled;
+    
+    if (colorGameEnabled) {
+        enableColorGameOnButtons();
+        showColorGameStatus('Color Game: ON 🎨');
+    } else {
+        disableColorGameOnButtons();
+        showColorGameStatus('Color Game: OFF');
+    }
+    
+    // Save state to localStorage
+    localStorage.setItem('colorGameEnabled', colorGameEnabled.toString());
+    
+    // Update toggle button appearance
+    const toggleBtn = document.getElementById('colorGameToggle');
+    if (toggleBtn) {
+        if (colorGameEnabled) {
+            toggleBtn.classList.add('active');
+            toggleBtn.textContent = '🌈';
+        } else {
+            toggleBtn.classList.remove('active');
+            toggleBtn.textContent = '🎨';
+        }
+    }
+}
+
+function enableColorGameOnButtons() {
+    // AI Chat buttons
+    const buttons = document.querySelectorAll('button, .back-button, #send-button, .theme-toggle');
+    buttons.forEach(button => {
+        button.classList.add('color-game-enabled');
+    });
+    
+    // Add rainbow text to logo
+    const logoTexts = document.querySelectorAll('.mood-text, .scan-text, .ai-text');
+    logoTexts.forEach(text => {
+        text.classList.add('rainbow-text');
+    });
+}
+
+function disableColorGameOnButtons() {
+    // Remove color game classes from all buttons
+    const buttons = document.querySelectorAll('button, .back-button, #send-button, .theme-toggle');
+    buttons.forEach(button => {
+        button.classList.remove('color-game-enabled');
+    });
+    
+    // Remove rainbow text from logo
+    const logoTexts = document.querySelectorAll('.mood-text, .scan-text, .ai-text');
+    logoTexts.forEach(text => {
+        text.classList.remove('rainbow-text');
+    });
+}
+
+function showColorGameStatus(message) {
+    const statusDiv = document.getElementById('colorGameStatus');
+    if (statusDiv) {
+        statusDiv.textContent = message;
+        statusDiv.classList.add('show');
+        
+        // Hide status after 3 seconds
+        setTimeout(() => {
+            statusDiv.classList.remove('show');
+        }, 3000);
+    }
+}
+
+function updateColorGameUI() {
+    const toggleBtn = document.getElementById('colorGameToggle');
+    if (toggleBtn) {
+        if (colorGameEnabled) {
+            toggleBtn.classList.add('active');
+            toggleBtn.textContent = '🌈';
+        } else {
+            toggleBtn.classList.remove('active');
+            toggleBtn.textContent = '🎨';
+        }
+    }
+} 

@@ -29,6 +29,143 @@ function initializeFirebase() {
 // Start Firebase initialization
 initializeFirebase();
 
+// --- Color Game System ---
+let colorGameEnabled = false;
+
+function initializeColorGame() {
+    const toggleBtn = document.getElementById('colorGameToggle');
+    const statusDiv = document.getElementById('colorGameStatus');
+    
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleColorGame);
+    }
+    
+    // Load color game state from localStorage
+    const savedState = localStorage.getItem('colorGameEnabled');
+    if (savedState === 'true') {
+        colorGameEnabled = true;
+        updateColorGameUI();
+        enableColorGameOnButtons();
+    }
+}
+
+function toggleColorGame() {
+    colorGameEnabled = !colorGameEnabled;
+    
+    if (colorGameEnabled) {
+        enableColorGameOnButtons();
+        showColorGameStatus('Color Game: ON 🎨');
+    } else {
+        disableColorGameOnButtons();
+        showColorGameStatus('Color Game: OFF');
+    }
+    
+    // Save state to localStorage
+    localStorage.setItem('colorGameEnabled', colorGameEnabled.toString());
+    
+    // Update toggle button appearance
+    const toggleBtn = document.getElementById('colorGameToggle');
+    if (toggleBtn) {
+        if (colorGameEnabled) {
+            toggleBtn.classList.add('active');
+            toggleBtn.textContent = '🌈';
+        } else {
+            toggleBtn.classList.remove('active');
+            toggleBtn.textContent = '🎨';
+        }
+    }
+}
+
+function enableColorGameOnButtons() {
+    // Main page buttons
+    const buttons = document.querySelectorAll('button, .home-button, .auth-submit-btn, .google-signin-btn, .auth-switch-btn, .back-button');
+    buttons.forEach(button => {
+        button.classList.add('color-game-enabled');
+    });
+    
+    // Language switcher buttons
+    const langButtons = document.querySelectorAll('.language-switcher button');
+    langButtons.forEach(button => {
+        button.classList.add('color-game-enabled');
+    });
+    
+    // Theme toggle button
+    const themeToggle = document.getElementById('theme-toggle-btn');
+    if (themeToggle) {
+        themeToggle.classList.add('color-game-enabled');
+    }
+    
+    // Language switcher container
+    const languageSwitcher = document.querySelector('.language-switcher');
+    if (languageSwitcher) {
+        languageSwitcher.classList.add('color-game-enabled');
+    }
+    
+    // Add rainbow text to logo
+    const logoTexts = document.querySelectorAll('.mood-text, .scan-text, .ai-text');
+    logoTexts.forEach(text => {
+        text.classList.add('rainbow-text');
+    });
+}
+
+function disableColorGameOnButtons() {
+    // Remove color game classes from all buttons
+    const buttons = document.querySelectorAll('button, .home-button, .auth-submit-btn, .google-signin-btn, .auth-switch-btn, .back-button');
+    buttons.forEach(button => {
+        button.classList.remove('color-game-enabled');
+    });
+    
+    // Language switcher buttons
+    const langButtons = document.querySelectorAll('.language-switcher button');
+    langButtons.forEach(button => {
+        button.classList.remove('color-game-enabled');
+    });
+    
+    // Theme toggle button
+    const themeToggle = document.getElementById('theme-toggle-btn');
+    if (themeToggle) {
+        themeToggle.classList.remove('color-game-enabled');
+    }
+    
+    // Language switcher container
+    const languageSwitcher = document.querySelector('.language-switcher');
+    if (languageSwitcher) {
+        languageSwitcher.classList.remove('color-game-enabled');
+    }
+    
+    // Remove rainbow text from logo
+    const logoTexts = document.querySelectorAll('.mood-text, .scan-text, .ai-text');
+    logoTexts.forEach(text => {
+        text.classList.remove('rainbow-text');
+    });
+}
+
+function showColorGameStatus(message) {
+    const statusDiv = document.getElementById('colorGameStatus');
+    if (statusDiv) {
+        statusDiv.textContent = message;
+        statusDiv.classList.add('show');
+        
+        // Hide status after 3 seconds
+        setTimeout(() => {
+            statusDiv.classList.remove('show');
+        }, 3000);
+    }
+}
+
+function updateColorGameUI() {
+    const toggleBtn = document.getElementById('colorGameToggle');
+    if (toggleBtn) {
+        if (colorGameEnabled) {
+            toggleBtn.classList.add('active');
+            toggleBtn.textContent = '🌈';
+        } else {
+            toggleBtn.classList.remove('active');
+            toggleBtn.textContent = '🎨';
+        }
+    }
+}
+
 // --- State Variables ---
 let chartInstance = null;
 const moodHistory = [];
@@ -754,6 +891,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Load saved theme from localStorage
         const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
         applyTheme(savedTheme);
+
+        // --- Initialize Color Game System ---
+        initializeColorGame();
 
         // --- Screen & Initial Setup ---
         showScreen(homeScreen);
