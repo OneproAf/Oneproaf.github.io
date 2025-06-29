@@ -40,51 +40,121 @@ function showMusicPlatformButtons(mood) {
     if (!musicRecommendationsDiv) return;
     
     musicRecommendationsDiv.innerHTML = `
-        <h4 style="color: #a7ffeb; margin-bottom: 20px;">🎵 Choose Your Music Platform:</h4>
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <button onclick="getSpotifyRecommendations('${mood}')" class="music-platform-btn" style="
+        <div style="
+            text-align: center; 
+            padding: 30px 20px; 
+            background: linear-gradient(135deg, rgba(167, 255, 235, 0.1), rgba(255, 255, 255, 0.05)); 
+            border-radius: 20px; 
+            border: 1px solid rgba(167, 255, 235, 0.2); 
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        ">
+            <h3 style="
+                color: #a7ffeb; 
+                margin-bottom: 15px; 
+                font-size: 1.8em; 
+                font-weight: 700;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                letter-spacing: 1px;
+            ">🎵 Choose Your Music Platform 🎵</h3>
+            
+            <p style="
+                color: #e0e0e0; 
+                margin-bottom: 25px; 
+                font-size: 1.1em; 
+                line-height: 1.6;
+                opacity: 0.9;
+            ">✨ Discover the perfect tunes for your <strong style="color: #a7ffeb;">${mood}</strong> mood! ✨</p>
+            
+            <div style="
                 display: flex; 
-                align-items: center; 
-                gap: 10px; 
-                padding: 15px 25px; 
-                background: linear-gradient(45deg, #1DB954, #1ed760); 
-                color: white; 
-                border: none; 
-                border-radius: 25px; 
-                font-size: 16px; 
-                font-weight: 600; 
-                cursor: pointer; 
-                transition: transform 0.2s, box-shadow 0.2s;
-                box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-                </svg>
-                Spotify
-            </button>
-            <button onclick="getYouTubeMusicRecommendations('${mood}')" class="music-platform-btn" style="
-                display: flex; 
-                align-items: center; 
-                gap: 10px; 
-                padding: 15px 25px; 
-                background: linear-gradient(45deg, #FF0000, #ff4444); 
-                color: white; 
-                border: none; 
-                border-radius: 25px; 
-                font-size: 16px; 
-                font-weight: 600; 
-                cursor: pointer; 
-                transition: transform 0.2s, box-shadow 0.2s;
-                box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                YouTube Music
-            </button>
+                gap: 25px; 
+                justify-content: center; 
+                flex-wrap: wrap; 
+                margin: 30px 0;
+            ">
+                <button onclick="getSpotifyRecommendations('${mood}')" class="music-platform-btn" style="
+                    display: flex; 
+                    align-items: center; 
+                    gap: 12px; 
+                    padding: 18px 30px; 
+                    background: linear-gradient(135deg, #1DB954, #1ed760, #1DB954); 
+                    color: white; 
+                    border: none; 
+                    border-radius: 50px; 
+                    font-size: 18px; 
+                    font-weight: 700; 
+                    cursor: pointer; 
+                    transition: all 0.3s ease;
+                    box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+                    position: relative;
+                    overflow: hidden;
+                    min-width: 200px;
+                    justify-content: center;
+                " onmouseover="
+                    this.style.transform='translateY(-5px) scale(1.05)'; 
+                    this.style.boxShadow='0 15px 35px rgba(29, 185, 84, 0.6)';
+                " onmouseout="
+                    this.style.transform='translateY(0) scale(1)'; 
+                    this.style.boxShadow='0 8px 25px rgba(29, 185, 84, 0.4)';
+                ">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                    </svg>
+                    <span>🎧 Spotify</span>
+                </button>
+                
+                <button onclick="getYouTubeMusicRecommendations('${mood}')" class="music-platform-btn" style="
+                    display: flex; 
+                    align-items: center; 
+                    gap: 12px; 
+                    padding: 18px 30px; 
+                    background: linear-gradient(135deg, #FF0000, #ff4444, #FF0000); 
+                    color: white; 
+                    border: none; 
+                    border-radius: 50px; 
+                    font-size: 18px; 
+                    font-weight: 700; 
+                    cursor: pointer; 
+                    transition: all 0.3s ease;
+                    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+                    position: relative;
+                    overflow: hidden;
+                    min-width: 200px;
+                    justify-content: center;
+                " onmouseover="
+                    this.style.transform='translateY(-5px) scale(1.05)'; 
+                    this.style.boxShadow='0 15px 35px rgba(255, 0, 0, 0.6)';
+                " onmouseout="
+                    this.style.transform='translateY(0) scale(1)'; 
+                    this.style.boxShadow='0 8px 25px rgba(255, 0, 0, 0.4)';
+                ">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    <span>🎵 YouTube Music</span>
+                </button>
+            </div>
+            
+            <div style="
+                margin-top: 20px; 
+                padding: 15px; 
+                background: rgba(255, 255, 255, 0.05); 
+                border-radius: 15px; 
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            ">
+                <p style="
+                    color: #b0b0b0; 
+                    font-size: 0.95em; 
+                    margin: 0; 
+                    line-height: 1.5;
+                ">💡 <strong style="color: #a7ffeb;">Pro Tip:</strong> Click any platform to discover curated music perfect for your current mood! 🎶</p>
+            </div>
         </div>
-        <div id="spotify-recommendations" style="margin-top: 20px;"></div>
-        <div id="youtube-recommendations" style="margin-top: 20px;"></div>
+        
+        <div id="spotify-recommendations" style="margin-top: 25px;"></div>
+        <div id="youtube-recommendations" style="margin-top: 25px;"></div>
     `;
 }
 
@@ -110,20 +180,48 @@ async function getSpotifyRecommendations(mood) {
         // Display tracks if available
         if (data.tracks && data.tracks.length > 0) {
             const tracksHTML = data.tracks.map(track => `
-                <div class="track-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-                    <a href="${track.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                        <img src="${track.imageUrl}" alt="${track.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
-                        <div>
-                            <div style="font-weight: 500; color: #1DB954;">${track.name}</div>
-                            <div style="font-size: 12px; color: #888;">${track.artist}</div>
+                <div class="track-item" style="
+                    margin: 15px 0; 
+                    padding: 15px; 
+                    border: 1px solid rgba(29, 185, 84, 0.3); 
+                    border-radius: 15px; 
+                    background: linear-gradient(135deg, rgba(29, 185, 84, 0.1), rgba(255,255,255,0.05)); 
+                    backdrop-filter: blur(10px);
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0, 0, 0, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.2)'">
+                    <a href="${track.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px;">
+                        <img src="${track.imageUrl}" alt="${track.name}" style="width: 70px; height: 70px; border-radius: 10px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                        <div style="flex-grow: 1;">
+                            <div style="font-weight: 600; color: #1DB954; font-size: 1.1em; margin-bottom: 5px;">🎵 ${track.name}</div>
+                            <div style="font-size: 13px; color: #888; font-weight: 500;">👤 ${track.artist}</div>
                         </div>
+                        <div style="color: #1DB954; font-size: 24px;">▶️</div>
                     </a>
                 </div>
             `).join('');
             
             spotifyDiv.innerHTML += `
-                <h4 style="color: #1DB954; margin-bottom: 10px;">🎵 Spotify Recommendations:</h4>
-                ${tracksHTML}
+                <div style="
+                    text-align: center; 
+                    margin: 30px 0 20px 0; 
+                    padding: 20px; 
+                    background: linear-gradient(135deg, rgba(29, 185, 84, 0.1), rgba(255,255,255,0.05)); 
+                    border-radius: 20px; 
+                    border: 1px solid rgba(29, 185, 84, 0.2);
+                ">
+                    <h4 style="
+                        color: #1DB954; 
+                        margin-bottom: 15px; 
+                        font-size: 1.5em; 
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                    ">🎧 Spotify Recommendations 🎧</h4>
+                    <p style="color: #e0e0e0; margin-bottom: 0; font-size: 1em;">Perfect tracks for your mood! Click to listen on Spotify</p>
+                </div>
+                <div style="max-width: 600px; margin: 0 auto;">
+                    ${tracksHTML}
+                </div>
             `;
         }
         
@@ -332,23 +430,63 @@ function showFallbackYouTubeRecommendations(mood, container) {
     const recommendations = moodRecommendations[mood.toLowerCase()] || moodRecommendations['happy'];
     
     const songsHTML = recommendations.map(song => `
-        <div class="youtube-song-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-            <a href="${song.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                <img src="${song.thumbnail}" alt="${song.title}" style="width: 120px; height: 90px; border-radius: 4px; object-fit: cover;">
-                <div>
-                    <div style="font-weight: 500; color: #ff0000;">${song.title}</div>
-                    <div style="font-size: 12px; color: #888;">${song.artist}</div>
+        <div class="youtube-song-item" style="
+            margin: 15px 0; 
+            padding: 15px; 
+            border: 1px solid rgba(255, 0, 0, 0.3); 
+            border-radius: 15px; 
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(255,255,255,0.05)); 
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0, 0, 0, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.2)'">
+            <a href="${song.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px;">
+                <img src="${song.thumbnail}" alt="${song.title}" style="width: 120px; height: 90px; border-radius: 10px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                <div style="flex-grow: 1;">
+                    <div style="font-weight: 600; color: #ff0000; font-size: 1.1em; margin-bottom: 5px;">🎵 ${song.title}</div>
+                    <div style="font-size: 13px; color: #888; font-weight: 500;">👤 ${song.artist}</div>
                 </div>
+                <div style="color: #ff0000; font-size: 24px;">▶️</div>
             </a>
         </div>
     `).join('');
 
     container.innerHTML = `
-        <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
-        ${songsHTML}
-        <p style="color: #888; font-size: 12px; margin-top: 10px;">
-            💡 These are popular songs from YouTube Music for your mood. Click any song to listen!
-        </p>
+        <div style="
+            text-align: center; 
+            margin: 30px 0 20px 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(255,255,255,0.05)); 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        ">
+            <h4 style="
+                color: #ff0000; 
+                margin-bottom: 15px; 
+                font-size: 1.5em; 
+                font-weight: 700;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            ">🎵 YouTube Music Recommendations 🎵</h4>
+            <p style="color: #e0e0e0; margin-bottom: 0; font-size: 1em;">Perfect songs for your mood! Click to watch on YouTube</p>
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;">
+            ${songsHTML}
+        </div>
+        <div style="
+            text-align: center; 
+            margin-top: 20px; 
+            padding: 15px; 
+            background: rgba(255, 255, 255, 0.05); 
+            border-radius: 15px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+            <p style="
+                color: #b0b0b0; 
+                font-size: 0.95em; 
+                margin: 0; 
+                line-height: 1.5;
+            ">💡 <strong style="color: #ff0000;">Pro Tip:</strong> These are popular songs from YouTube Music for your mood. Click any song to listen! 🎶</p>
+        </div>
     `;
 }
 
