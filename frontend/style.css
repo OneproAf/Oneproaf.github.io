@@ -436,9 +436,9 @@ section h2 {
     object-fit: cover; /* Covers the container */
 }
 
-/* Buttons (General) */
+/* Buttons (General) - Updated with Logo Colors */
 button, .home-button, .auth-submit-btn, .google-signin-btn, .auth-switch-btn, #sendMessageBtn, .back-button {
-    background: linear-gradient(90deg, #00e676 0%, #007aff 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff !important;
     font-weight: bold;
     border: none;
@@ -447,20 +447,20 @@ button, .home-button, .auth-submit-btn, .google-signin-btn, .auth-switch-btn, #s
     font-size: 1.1em;
     cursor: pointer;
     transition: background 0.3s, box-shadow 0.2s, transform 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     outline: none;
 }
 
 button:hover, .home-button:hover, .auth-submit-btn:hover, .google-signin-btn:hover, .auth-switch-btn:hover, #sendMessageBtn:hover, .back-button:hover {
-    filter: brightness(1.08) saturate(1.2);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 16px rgba(240, 147, 251, 0.4);
 }
 
 button:active, .home-button:active, .auth-submit-btn:active, .google-signin-btn:active, .auth-switch-btn:active, #sendMessageBtn:active, .back-button:active {
-    filter: brightness(0.95);
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     transform: scale(0.98);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    box-shadow: 0 1px 4px rgba(79, 172, 254, 0.4);
 }
 
 button:disabled, .home-button:disabled, .auth-submit-btn:disabled, .google-signin-btn:disabled, .auth-switch-btn:disabled, #sendMessageBtn:disabled, .back-button:disabled {
@@ -476,40 +476,54 @@ button:disabled, .home-button:disabled, .auth-submit-btn:disabled, .google-signi
     padding: 15px 30px; /* Larger padding for main buttons */
     font-size: 1.3em; /* Larger font size */
     margin: 0; /* Remove default button margin, gap handles spacing */
-    background-color: var(--accent-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
 }
 
 .home-button:hover {
-    background-color: #00a040;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 200, 83, 0.7);
+    box-shadow: 0 8px 20px rgba(240, 147, 251, 0.6);
 }
 
 .home-button:active {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     transform: translateY(0);
 }
 
 #captureMoodBtn, #uploadImageBtn {
-    background-color: var(--primary-text-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     margin-top: 10px;
 }
 
+#captureMoodBtn:hover, #uploadImageBtn:hover {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+#captureMoodBtn:active, #uploadImageBtn:active {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
 /* Back buttons */
 .back-button {
-    background-color: var(--border-color);
-    color: var(--primary-text-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
     margin-top: 24px;
     display: block; /* Make it a block to center it */
     padding: 10px 20px;
     font-size: 1em;
-    box-shadow: none;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .back-button:hover {
-    background-color: #555;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(240, 147, 251, 0.4);
+}
+
+.back-button:active {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
 /* Results & Chat Section */
@@ -604,8 +618,9 @@ button:disabled, .home-button:disabled, .auth-submit-btn:disabled, .google-signi
 #sendMessageBtn {
     width: auto;
     padding: 16px;
-    background-color: var(--accent-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 /* Footer Styles */
@@ -623,11 +638,12 @@ footer p {
 }
 
 footer a {
-    color: var(--accent-color);
+    color: #667eea;
     text-decoration: none;
 }
 
 footer a:hover {
+    color: #f093fb;
     text-decoration: underline;
 }
 
@@ -1222,7 +1238,7 @@ body.dark-mode a {
 }
 
 .auth-submit-btn {
-    background: linear-gradient(135deg, var(--accent-color), #0056cc);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     padding: 16px 24px;
@@ -1232,14 +1248,17 @@ body.dark-mode a {
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 8px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .auth-submit-btn:hover {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
 }
 
 .auth-submit-btn:active {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     transform: translateY(0);
 }
 
@@ -1270,9 +1289,9 @@ body.dark-mode a {
 
 .google-signin-btn {
     width: 100%;
-    background: white;
-    color: #333;
-    border: 2px solid var(--border-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: 2px solid transparent;
     padding: 16px 24px;
     border-radius: 12px;
     font-size: 1em;
@@ -1283,16 +1302,17 @@ body.dark-mode a {
     align-items: center;
     justify-content: center;
     gap: 12px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .google-signin-btn:hover {
-    background: #f8f9fa;
-    border-color: #dadce0;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
 }
 
 .google-signin-btn:active {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     transform: translateY(0);
 }
 
@@ -1306,7 +1326,7 @@ body.dark-mode a {
 .auth-switch-btn {
     background: none;
     border: none;
-    color: var(--accent-color);
+    color: #667eea;
     font-weight: 600;
     cursor: pointer;
     padding: 0;
@@ -1316,7 +1336,7 @@ body.dark-mode a {
 }
 
 .auth-switch-btn:hover {
-    color: #0056cc;
+    color: #f093fb;
 }
 
 /* Dark mode adjustments for auth */
@@ -1327,14 +1347,14 @@ body.dark-mode .auth-form-container {
 }
 
 body.dark-mode .google-signin-btn {
-    background: #2a2a2a;
-    color: #e0e0e0;
-    border-color: #444;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
 }
 
 body.dark-mode .google-signin-btn:hover {
-    background: #333;
-    border-color: #555;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border-color: transparent;
 }
 
 body.dark-mode .auth-divider::before {

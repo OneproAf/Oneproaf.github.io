@@ -115,7 +115,7 @@ html, body {
     align-items: center;
     justify-content: space-between;
     padding: 15px;
-    background: linear-gradient(90deg, #00e676 0%, #007aff 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
     box-shadow: 0 2px 5px var(--shadow);
     flex-shrink: 0; /* Don't shrink header */
@@ -500,7 +500,7 @@ html, body {
 }
 
 #send-button {
-    background: linear-gradient(90deg, #00e676 0%, #007aff 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
     border: none;
     border-radius: 50%; /* Circular button */
@@ -510,7 +510,7 @@ html, body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 1px 2px var(--shadow);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     transition: background 0.2s, transform 0.2s;
     -webkit-tap-highlight-color: transparent;
     /* Hardware acceleration */
@@ -527,13 +527,15 @@ html, body {
 }
 
 #send-button:hover {
-    filter: brightness(1.08) saturate(1.2);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     transform: scale(1.05) translateZ(0);
+    box-shadow: 0 4px 16px rgba(240, 147, 251, 0.4);
 }
 
 #send-button:active {
-    filter: brightness(0.95);
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     transform: scale(0.95) translateZ(0);
+    box-shadow: 0 1px 4px rgba(79, 172, 254, 0.4);
 }
 
 #send-button:disabled {
