@@ -114,6 +114,7 @@ header {
     white-space: nowrap; /* Keeps words on one line if possible */
     overflow: hidden; /* Hides text before animation */
     padding-right: 15px; /* Space between text and wave */
+    color: #ffffff; /* Set logo text to white */
 }
 
 .logo-text span {
@@ -126,7 +127,7 @@ header {
 .logo-text .mood-text,
 .logo-text .scan-text,
 .logo-text .ai-text {
-    color: var(--primary-text-color);
+    /* Color will be inherited from .logo-text */
 }
 
 /* Keyframes for text fade in animation */
@@ -990,12 +991,17 @@ body.dark-mode .auth-divider span {
     }
 }
 
-[data-theme="light"] .logo-text {
-    color: #e5e5ea;
+/* Light theme styles */
+[data-theme="light"] {
+    --background-color: #f4f4f9;
+    --card-background-color: #ffffff;
+    --primary-text-color: #1c1c1e;
+    --secondary-text-color: #8a8a8e;
+    --border-color: #e5e5ea;
 }
 
 [data-theme="light"] .mood-text,
 [data-theme="light"] .scan-text,
 [data-theme="light"] .ai-text {
-    color: #fff;
+    color: #1c1c1e;
 }
