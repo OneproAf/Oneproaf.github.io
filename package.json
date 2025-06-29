@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node-youtube-music": "^0.10.3"
+  }
+}
