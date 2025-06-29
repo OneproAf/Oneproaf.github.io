@@ -34,6 +34,48 @@ let chartInstance = null;
 const moodHistory = [];
 let latestScanData = null;
 
+// --- Router System ---
+const router = {
+    routes: {
+        '/': 'home-screen',
+        '/scan-my-mood': 'scan-mood-screen',
+        '/ai-psychologist': 'ai-psychologist-screen',
+        '/scan-history': 'scan-history-screen',
+        '/wellness-library': 'wellness-content-screen',
+        '/pricing': 'pricing-screen',
+        '/login': 'auth-screen',
+        '/project-support': 'project-support-screen'
+    },
+    
+    init() {
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (event) => {
+            this.navigateToPath(window.location.pathname, false);
+        });
+        
+        // Handle initial page load
+        this.navigateToPath(window.location.pathname, false);
+    },
+    
+    navigateToPath(path, updateHistory = true) {
+        const screenId = this.routes[path] || 'home-screen';
+        
+        // Update browser history if needed
+        if (updateHistory) {
+            window.history.pushState({}, '', path);
+        }
+        
+        // Show the appropriate screen
+        showScreen(document.getElementById(screenId));
+    },
+    
+    navigateToScreen(screenId, updateHistory = true) {
+        // Find the path for this screen
+        const path = Object.keys(this.routes).find(key => this.routes[key] === screenId) || '/';
+        this.navigateToPath(path, updateHistory);
+    }
+};
+
 // --- Global Music Functions ---
 function showMusicPlatformButtons(mood) {
     const musicRecommendationsDiv = document.getElementById('musicRecommendations');
@@ -569,6 +611,14 @@ function showScreen(screenToShow) {
     if (targetScreen) {
         // The home screen uses flexbox for its layout
         targetScreen.style.display = (targetScreen.id === 'home-screen') ? 'flex' : 'block';
+        
+        // Update URL if router is available
+        if (window.router && targetScreen.id !== 'home-screen') {
+            const path = Object.keys(router.routes).find(key => router.routes[key] === targetScreen.id);
+            if (path && path !== '/') {
+                window.history.pushState({}, '', path);
+            }
+        }
     }
 
     // Stop video if navigating away from the scan screen
@@ -593,6 +643,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startApplication() {
+        // Initialize router
+        window.router = router;
+        router.init();
+        
         // --- Get DOM Elements (Old and New) ---
 
         // Mood Scan & General Elements
@@ -717,7 +771,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (scanMoodHomeBtn) {
             scanMoodHomeBtn.addEventListener('click', () => {
-                showScreen(scanSection);
+                router.navigateToScreen('scan-mood-screen');
                 startVideo();
             });
         }
@@ -730,37 +784,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (scanHistoryBtn) {
-            scanHistoryBtn.addEventListener('click', renderDashboardCharts);
+            scanHistoryBtn.addEventListener('click', () => {
+                router.navigateToScreen('scan-history-screen');
+                renderDashboardCharts();
+            });
         }
 
         if (wellnessBtn) {
             wellnessBtn.addEventListener('click', () => {
-                showScreen(wellnessContentScreen);
+                router.navigateToScreen('wellness-content-screen');
             });
         }
 
         if (privacyLink) {
             privacyLink.addEventListener('click', (event) => {
                 event.preventDefault();
-                showScreen(privacyPolicyScreen);
+                router.navigateToScreen('privacy-policy-screen');
             });
         }
 
         if (pricingBtn) {
             pricingBtn.addEventListener('click', () => {
-                showScreen(pricingScreen);
+                router.navigateToScreen('pricing-screen');
             });
         }
 
         if (authBtn) {
             authBtn.addEventListener('click', () => {
-                showScreen(authScreen);
+                router.navigateToScreen('auth-screen');
             });
         }
 
         if (projectSupportBtn) {
             projectSupportBtn.addEventListener('click', function() {
-                showScreen(projectSupportScreen);
+                router.navigateToScreen('project-support-screen');
             });
         }
 
@@ -1206,7 +1263,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const supportBackBtn = projectSupportScreen.querySelector('.back-button');
         if (supportBackBtn) {
             supportBackBtn.addEventListener('click', function() {
-                showScreen(homeScreen);
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        // Add event listeners for all back to home buttons
+        if (backToHomeBtn1) {
+            backToHomeBtn1.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        if (backToHomeBtn2) {
+            backToHomeBtn2.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        if (backToHomeBtn5) {
+            backToHomeBtn5.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        if (backToHomeBtn6) {
+            backToHomeBtn6.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        if (backToHomeBtn7) {
+            backToHomeBtn7.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        if (backToHomeBtn8) {
+            backToHomeBtn8.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        if (backToHomeBtn9) {
+            backToHomeBtn9.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
+            });
+        }
+
+        if (backToHomeBtn10) {
+            backToHomeBtn10.addEventListener('click', () => {
+                router.navigateToScreen('home-screen');
             });
         }
     }
