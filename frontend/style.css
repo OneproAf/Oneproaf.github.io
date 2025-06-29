@@ -124,10 +124,28 @@ header {
     animation: text-fade-in 1.5s forwards;
 }
 
-.logo-text .mood-text,
-.logo-text .scan-text,
+.logo-text .mood-text {
+    background: linear-gradient(135deg, #1DB954, #1ed760, #1DB954);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: mood-text-glow 3s ease-in-out infinite;
+}
+
+.logo-text .scan-text {
+    background: linear-gradient(135deg, #FF0000, #ff4444, #FF0000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: scan-text-glow 3s ease-in-out infinite;
+}
+
 .logo-text .ai-text {
-    /* Color will be inherited from .logo-text */
+    background: linear-gradient(135deg, #a7ffeb, #ffffff, #a7ffeb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: ai-text-glow 3s ease-in-out infinite;
 }
 
 /* Keyframes for text fade in animation */
@@ -138,29 +156,77 @@ header {
     }
 }
 
-/* Scan Wave Animation */
+/* Text glow animations */
+@keyframes mood-text-glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(29, 185, 84, 0.5));
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(29, 185, 84, 0.8));
+    }
+}
+
+@keyframes scan-text-glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+    }
+}
+
+@keyframes ai-text-glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(167, 255, 235, 0.5));
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(167, 255, 235, 0.8));
+    }
+}
+
+/* Human Face Scanning Animation */
 .scan-wave {
-    width: 60px; /* Width of the wave effect */
-    height: 60px; /* Height of the wave effect */
-    border: 4px solid #00e676; /* Vibrant green border for the wave */
-    border-radius: 50%; /* Make it circular */
+    width: 60px; /* Width of the face scanning effect */
+    height: 60px; /* Height of the face scanning effect */
+    border: 4px solid #1DB954; /* Spotify green border */
+    border-radius: 50%; /* Make it circular like a face */
     position: relative;
     overflow: hidden;
     transform: scale(0); /* Start scaled down */
     animation: wave-scale-in 0.8s forwards 1.2s; /* Scale in after text */
-    box-shadow: 0 0 15px rgba(0, 230, 118, 0.6); /* Glow effect */
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.6); /* Green glow effect */
 }
 
+/* Face scanning line */
 .scan-wave::before {
     content: '';
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 4px; /* Thickness of the pulse line */
-    background: linear-gradient(to right, transparent, #a7ffeb, transparent); /* Lighter green pulse */
-    transform: translateY(-50%) translateX(-100%); /* Start off-screen left */
-    animation: pulse-scan 2s infinite linear 1.8s; /* Animate pulse across the circle */
+    height: 100%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(29, 185, 84, 0.8) 90deg,
+        rgba(255, 0, 0, 0.8) 180deg,
+        rgba(167, 255, 235, 0.8) 270deg,
+        transparent 360deg
+    );
+    border-radius: 50%;
+    animation: face-scan 3s infinite linear 1.8s;
+}
+
+/* Face features */
+.scan-wave::after {
+    content: '👤';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    z-index: 2;
+    animation: face-pulse 2s infinite ease-in-out 2s;
 }
 
 /* Keyframes for wave scale in animation */
@@ -170,21 +236,36 @@ header {
     }
 }
 
-/* Keyframes for pulse scan animation */
-@keyframes pulse-scan {
+/* Keyframes for face scanning animation */
+@keyframes face-scan {
     0% {
-        transform: translateY(-50%) translateX(-100%);
-        opacity: 0;
+        transform: rotate(0deg);
+        opacity: 0.3;
     }
-    20% {
-        opacity: 1;
+    25% {
+        opacity: 0.8;
     }
-    80% {
-        opacity: 1;
+    50% {
+        opacity: 0.3;
+    }
+    75% {
+        opacity: 0.8;
     }
     100% {
-        transform: translateY(-50%) translateX(100%);
-        opacity: 0;
+        transform: rotate(360deg);
+        opacity: 0.3;
+    }
+}
+
+/* Keyframes for face pulse animation */
+@keyframes face-pulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
     }
 }
 
