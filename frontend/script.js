@@ -810,9 +810,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (privacyLink) {
-            privacyLink.addEventListener('click', (event) => {
-                event.preventDefault();
-                router.navigateToScreen('privacy-policy-screen');
+            privacyLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open('privacy-policy.html', '_blank');
             });
         }
 

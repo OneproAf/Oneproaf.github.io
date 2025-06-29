@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - MoodScan AI</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #000000;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+            --border-color: #333;
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --hover-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --active-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 2px solid;
+            border-image: var(--accent-gradient) 1;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+
+        .content {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1, h2, h3, h4 {
+            margin: 25px 0 15px 0;
+            color: var(--text-primary);
+        }
+
+        h1 {
+            font-size: 2em;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            border-left: 4px solid;
+            border-image: var(--accent-gradient) 1;
+            padding-left: 15px;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-size: 1.1em;
+            color: var(--text-secondary);
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            border-image: var(--accent-gradient) 1;
+            margin: 20px 0;
+        }
+
+        .back-button {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            display: block;
+            margin: 30px auto;
+            text-decoration: none;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .back-button:hover {
+            background: var(--hover-gradient);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(240, 147, 251, 0.4);
+        }
+
+        .back-button:active {
+            background: var(--active-gradient);
+            transform: scale(0.98);
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            margin: 20px 0;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 2em;
+            }
+            
+            .title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">MoodScan AI</div>
+            <h1 class="title">Privacy Policy</h1>
+            <p class="subtitle">Your privacy and data security are our top priorities</p>
+        </div>
+
+        <div class="content">
+            <div class="highlight">
+                <strong>Last Updated:</strong> January 15, 2025<br>
+                <strong>Effective Date:</strong> January 15, 2025
+            </div>
+
+            <h2>1. Introduction</h2>
+            <p>Welcome to MoodScan AI ("we," "our," or "us"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mood analysis application and related services (collectively, the "Service").</p>
+            
+            <p>By using our Service, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our Service.</p>
+
+            <h2>2. Information We Collect</h2>
+            
+            <h3>2.1 Personal Information</h3>
+            <ul>
+                <li><strong>Account Information:</strong> Email address, password (encrypted), and authentication data when you create an account</li>
+                <li><strong>Profile Information:</strong> Any additional information you choose to provide in your user profile</li>
+                <li><strong>Usage Data:</strong> Information about how you use our Service, including mood scan frequency and preferences</li>
+            </ul>
+
+            <h3>2.2 Mood Analysis Data</h3>
+            <ul>
+                <li><strong>Mood Results:</strong> Emotional analysis results including dominant emotions, confidence scores, and emotional percentages</li>
+                <li><strong>Scan Timestamps:</strong> Date and time of each mood scan</li>
+                <li><strong>Mood History:</strong> Historical mood data for trend analysis and personal insights</li>
+            </ul>
+
+            <h3>2.3 Image Processing</h3>
+            <div class="highlight">
+                <strong>IMPORTANT:</strong> When you use our mood scanning feature, your image is processed as follows:
+                <ul>
+                    <li>Images are sent to our secure backend server</li>
+                    <li>Images are immediately forwarded to Google's Gemini API for analysis</li>
+                    <li><strong>We do NOT store, save, or retain your images after analysis</strong></li>
+                    <li>Images are processed in-memory and discarded immediately</li>
+                    <li>Only the emotional analysis results are stored, not the original images</li>
+                </ul>
+            </div>
+
+            <h2>3. How We Use Your Information</h2>
+            <ul>
+                <li><strong>Service Provision:</strong> To provide, maintain, and improve our mood analysis service</li>
+                <li><strong>Personalization:</strong> To personalize your experience and provide relevant music recommendations</li>
+                <li><strong>Analytics:</strong> To analyze usage patterns and improve our Service (using anonymized data)</li>
+                <li><strong>Communication:</strong> To send you important updates about our Service</li>
+                <li><strong>Support:</strong> To provide customer support and respond to your inquiries</li>
+            </ul>
+
+            <h2>4. Data Storage and Security</h2>
+            <h3>4.1 Data Storage</h3>
+            <ul>
+                <li>All data is stored securely using Firebase Firestore</li>
+                <li>Authentication is handled by Firebase Authentication</li>
+                <li>Data is encrypted in transit and at rest</li>
+                <li>We implement industry-standard security measures</li>
+            </ul>
+
+            <h3>4.2 Data Retention</h3>
+            <ul>
+                <li>Mood data is retained for as long as your account is active</li>
+                <li>You can delete your account and all associated data at any time</li>
+                <li>Deactivated accounts are permanently deleted after 30 days</li>
+            </ul>
+
+            <h2>5. Third-Party Services</h2>
+            <p>Our Service integrates with the following third-party services:</p>
+            <ul>
+                <li><strong>Google Firebase:</strong> Authentication and database services</li>
+                <li><strong>Google Gemini API:</strong> AI-powered mood analysis</li>
+                <li><strong>Spotify API:</strong> Music recommendations</li>
+                <li><strong>Render:</strong> Backend hosting services</li>
+                <li><strong>Netlify:</strong> Frontend hosting services</li>
+            </ul>
+            <p>Each third-party service has its own privacy policy. We recommend reviewing their policies for complete information.</p>
+
+            <h2>6. Your Rights and Choices</h2>
+            <h3>6.1 Access and Control</h3>
+            <ul>
+                <li>Access your personal data and mood history</li>
+                <li>Update or correct your account information</li>
+                <li>Delete your account and all associated data</li>
+                <li>Export your data in a portable format</li>
+            </ul>
+
+            <h3>6.2 Opt-Out Options</h3>
+            <ul>
+                <li>Unsubscribe from email communications</li>
+                <li>Disable notifications in your account settings</li>
+                <li>Limit data collection through browser settings</li>
+            </ul>
+
+            <h2>7. Children's Privacy</h2>
+            <p>Our Service is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately.</p>
+
+            <h2>8. International Data Transfers</h2>
+            <p>Your information may be transferred to and processed in countries other than your own. We ensure that such transfers comply with applicable data protection laws and implement appropriate safeguards.</p>
+
+            <h2>9. Changes to This Privacy Policy</h2>
+            <p>We may update this Privacy Policy from time to time. We will notify you of any changes by:</p>
+            <ul>
+                <li>Posting the new Privacy Policy on this page</li>
+                <li>Sending you an email notification</li>
+                <li>Updating the "Last Updated" date at the top of this policy</li>
+            </ul>
+            <p>Your continued use of the Service after any changes constitutes acceptance of the updated policy.</p>
+
+            <h2>10. Legal Basis for Processing (GDPR)</h2>
+            <p>If you are located in the European Economic Area (EEA), we process your personal data based on:</p>
+            <ul>
+                <li><strong>Consent:</strong> When you explicitly agree to our data processing</li>
+                <li><strong>Contract:</strong> To provide our services under our terms of service</li>
+                <li><strong>Legitimate Interest:</strong> To improve our services and prevent fraud</li>
+            </ul>
+
+            <h2>11. California Privacy Rights (CCPA)</h2>
+            <p>If you are a California resident, you have the right to:</p>
+            <ul>
+                <li>Know what personal information we collect and how we use it</li>
+                <li>Request deletion of your personal information</li>
+                <li>Opt-out of the sale of personal information (we do not sell personal information)</li>
+                <li>Non-discrimination for exercising your privacy rights</li>
+            </ul>
+
+            <h2>12. Contact Information</h2>
+            <div class="contact-info">
+                <p><strong>MoodScan AI</strong><br>
+                <strong>Email:</strong> oneproafcompany@gmail.com<br>
+                <strong>Support:</strong> For technical support and privacy inquiries</p>
+                
+                <p><strong>Data Protection Officer:</strong><br>
+                For privacy-specific inquiries and data subject requests</p>
+            </div>
+
+            <h2>13. Dispute Resolution</h2>
+            <p>If you have concerns about our privacy practices, we encourage you to contact us first. If we cannot resolve your concern, you may have the right to lodge a complaint with your local data protection authority.</p>
+
+            <h2>14. Governing Law</h2>
+            <p>This Privacy Policy is governed by and construed in accordance with the laws of the jurisdiction in which MoodScan AI operates, without regard to conflict of law principles.</p>
+
+            <div class="last-updated">
+                <p>This Privacy Policy was last updated on January 15, 2025.</p>
+                <p>For questions about this Privacy Policy, please contact us at oneproafcompany@gmail.com</p>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-button">← Back to MoodScan AI</a>
+    </div>
+</body>
+</html> 
