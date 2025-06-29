@@ -472,6 +472,33 @@ footer a:hover {
     }
 }
 
+/* Loading Animations */
+@keyframes loadingDot {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes loadingLine {
+    0% {
+        opacity: 0.3;
+        transform: scaleX(0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+    100% {
+        opacity: 0.3;
+        transform: scaleX(0.5);
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .logo-text {

@@ -942,15 +942,228 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function detectMood(imageData) {
             if (!imageData) {
-                moodResult.textContent = "No image data provided.";
+                moodResult.innerHTML = `
+                    <div style="
+                        text-align: center; 
+                        padding: 30px 20px; 
+                        background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 255, 255, 0.05)); 
+                        border-radius: 20px; 
+                        border: 1px solid rgba(255, 107, 107, 0.2); 
+                        margin: 20px 0;
+                        backdrop-filter: blur(10px);
+                        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                    ">
+                        <h2 style="
+                            color: #ff6b6b; 
+                            margin-bottom: 15px; 
+                            font-size: 2.2em; 
+                            font-weight: 700;
+                            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                            letter-spacing: 1px;
+                        ">⚠️ Error ⚠️</h2>
+                        <p style="
+                            color: #e0e0e0; 
+                            font-size: 1.2em; 
+                            margin: 0;
+                        ">No image data provided.</p>
+                    </div>
+                `;
                 showScreen(resultsSection);
                 return;
             }
 
-            // Show loading indicator
-            moodResult.textContent = "Analyzing your mood...";
-            recommendationsDiv.innerHTML = '';
-            musicRecommendationsDiv.innerHTML = '';
+            // Show beautifully styled loading indicator
+            moodResult.innerHTML = `
+                <div style="
+                    text-align: center; 
+                    padding: 30px 20px; 
+                    background: linear-gradient(135deg, rgba(167, 255, 235, 0.1), rgba(255, 255, 255, 0.05)); 
+                    border-radius: 20px; 
+                    border: 1px solid rgba(167, 255, 235, 0.2); 
+                    margin: 20px 0;
+                    backdrop-filter: blur(10px);
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                ">
+                    <h2 style="
+                        color: #a7ffeb; 
+                        margin-bottom: 15px; 
+                        font-size: 2.2em; 
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                        letter-spacing: 1px;
+                    ">🧠 AI Analysis in Progress 🧠</h2>
+                    
+                    <div style="
+                        font-size: 1.8em; 
+                        margin: 20px 0; 
+                        font-weight: 600;
+                        color: #a7ffeb;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 15px;
+                    ">
+                        <span>Analyzing your mood</span>
+                        <div class="loading-dots" style="
+                            display: inline-flex;
+                            gap: 5px;
+                        ">
+                            <span style="
+                                width: 8px;
+                                height: 8px;
+                                background: #a7ffeb;
+                                border-radius: 50%;
+                                animation: loadingDot 1.4s infinite ease-in-out;
+                                animation-delay: 0s;
+                            "></span>
+                            <span style="
+                                width: 8px;
+                                height: 8px;
+                                background: #a7ffeb;
+                                border-radius: 50%;
+                                animation: loadingDot 1.4s infinite ease-in-out;
+                                animation-delay: 0.2s;
+                            "></span>
+                            <span style="
+                                width: 8px;
+                                height: 8px;
+                                background: #a7ffeb;
+                                border-radius: 50%;
+                                animation: loadingDot 1.4s infinite ease-in-out;
+                                animation-delay: 0.4s;
+                            "></span>
+                        </div>
+                    </div>
+                    
+                    <div style="
+                        margin-top: 25px; 
+                        padding: 20px; 
+                        background: rgba(255, 255, 255, 0.05); 
+                        border-radius: 15px; 
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                    ">
+                        <h3 style="
+                            color: #a7ffeb; 
+                            margin-bottom: 15px; 
+                            font-size: 1.3em; 
+                            font-weight: 600;
+                        ">🔍 Processing Steps 🔍</h3>
+                        <div style="
+                            display: flex;
+                            justify-content: space-around;
+                            align-items: center;
+                            margin: 15px 0;
+                        ">
+                            <div style="text-align: center;">
+                                <div style="
+                                    width: 40px;
+                                    height: 40px;
+                                    background: #a7ffeb;
+                                    border-radius: 50%;
+                                    margin: 0 auto 10px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 18px;
+                                ">📷</div>
+                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">Image Capture</p>
+                            </div>
+                            <div style="
+                                width: 30px;
+                                height: 2px;
+                                background: linear-gradient(90deg, #a7ffeb, transparent);
+                                animation: loadingLine 2s infinite;
+                            "></div>
+                            <div style="text-align: center;">
+                                <div style="
+                                    width: 40px;
+                                    height: 40px;
+                                    background: #a7ffeb;
+                                    border-radius: 50%;
+                                    margin: 0 auto 10px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 18px;
+                                ">🧠</div>
+                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">AI Analysis</p>
+                            </div>
+                            <div style="
+                                width: 30px;
+                                height: 2px;
+                                background: linear-gradient(90deg, #a7ffeb, transparent);
+                                animation: loadingLine 2s infinite;
+                                animation-delay: 0.5s;
+                            "></div>
+                            <div style="text-align: center;">
+                                <div style="
+                                    width: 40px;
+                                    height: 40px;
+                                    background: #a7ffeb;
+                                    border-radius: 50%;
+                                    margin: 0 auto 10px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 18px;
+                                ">✨</div>
+                                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">Results</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Show styled loading for recommendations
+            recommendationsDiv.innerHTML = `
+                <div style="
+                    text-align: center; 
+                    margin: 20px 0; 
+                    padding: 20px; 
+                    background: rgba(255, 255, 255, 0.03); 
+                    border-radius: 15px; 
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                ">
+                    <h3 style="
+                        color: #a7ffeb; 
+                        margin-bottom: 15px; 
+                        font-size: 1.3em; 
+                        font-weight: 600;
+                    ">💡 Preparing Recommendations 💡</h3>
+                    <p style="
+                        color: #b0b0b0; 
+                        font-size: 1em; 
+                        margin: 0; 
+                        line-height: 1.5;
+                    ">✨ <strong style="color: #a7ffeb;">AI is working:</strong> Analyzing your emotional patterns to provide personalized recommendations! 🎯</p>
+                </div>
+            `;
+            
+            // Show styled loading for music recommendations
+            musicRecommendationsDiv.innerHTML = `
+                <div style="
+                    text-align: center; 
+                    margin: 20px 0; 
+                    padding: 20px; 
+                    background: rgba(255, 255, 255, 0.03); 
+                    border-radius: 15px; 
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                ">
+                    <h3 style="
+                        color: #a7ffeb; 
+                        margin-bottom: 15px; 
+                        font-size: 1.3em; 
+                        font-weight: 600;
+                    ">🎵 Preparing Music Recommendations 🎵</h3>
+                    <p style="
+                        color: #b0b0b0; 
+                        font-size: 1em; 
+                        margin: 0; 
+                        line-height: 1.5;
+                    ">🎶 <strong style="color: #a7ffeb;">Curating:</strong> Finding the perfect music to match your current mood! 🎧</p>
+                </div>
+            `;
+            
             showScreen(resultsSection);
 
             try {
