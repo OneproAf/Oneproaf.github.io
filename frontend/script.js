@@ -623,62 +623,118 @@ document.addEventListener('DOMContentLoaded', () => {
             const moodRecommendations = {
                 'happy': [
                     {
-                        title: "Happy - Pharrell Williams",
-                        artist: "Pharrell Williams",
-                        url: "https://www.youtube.com/watch?v=y6Sxv-sUYtM",
-                        thumbnail: "https://i.ytimg.com/vi/y6Sxv-sUYtM/mqdefault.jpg"
+                        title: "Blinding Lights",
+                        artist: "The Weeknd",
+                        url: "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
+                        thumbnail: "https://i.ytimg.com/vi/4NRXx6U8ABQ/mqdefault.jpg"
                     },
                     {
-                        title: "Walking on Sunshine - Katrina & The Waves",
-                        artist: "Katrina & The Waves",
-                        url: "https://www.youtube.com/watch?v=iPUmE-tne5U",
-                        thumbnail: "https://i.ytimg.com/vi/iPUmE-tne5U/mqdefault.jpg"
+                        title: "Levitating",
+                        artist: "Dua Lipa",
+                        url: "https://www.youtube.com/watch?v=TUVcZfQe-Kw",
+                        thumbnail: "https://i.ytimg.com/vi/TUVcZfQe-Kw/mqdefault.jpg"
                     },
                     {
-                        title: "Good As Hell - Lizzo",
-                        artist: "Lizzo",
-                        url: "https://www.youtube.com/watch?v=Wr9ye2pJqEQ",
-                        thumbnail: "https://i.ytimg.com/vi/Wr9ye2pJqEQ/mqdefault.jpg"
+                        title: "Sunflower",
+                        artist: "Post Malone & Swae Lee",
+                        url: "https://www.youtube.com/watch?v=ApXoWvfEYVU",
+                        thumbnail: "https://i.ytimg.com/vi/ApXoWvfEYVU/mqdefault.jpg"
                     },
                     {
-                        title: "Can't Stop The Feeling! - Justin Timberlake",
-                        artist: "Justin Timberlake",
-                        url: "https://www.youtube.com/watch?v=ru0K8uYEZWw",
-                        thumbnail: "https://i.ytimg.com/vi/ru0K8uYEZWw/mqdefault.jpg"
+                        title: "Sugar",
+                        artist: "Maroon 5",
+                        url: "https://www.youtube.com/watch?v=09R8_2nJtjg",
+                        thumbnail: "https://i.ytimg.com/vi/09R8_2nJtjg/mqdefault.jpg"
                     },
                     {
-                        title: "Uptown Funk - Mark Ronson ft. Bruno Mars",
-                        artist: "Mark Ronson ft. Bruno Mars",
-                        url: "https://www.youtube.com/watch?v=OPf0YbXqDm0",
-                        thumbnail: "https://i.ytimg.com/vi/OPf0YbXqDm0/mqdefault.jpg"
+                        title: "Shape of You",
+                        artist: "Ed Sheeran",
+                        url: "https://www.youtube.com/watch?v=JGwWNGJdvx8",
+                        thumbnail: "https://i.ytimg.com/vi/JGwWNGJdvx8/mqdefault.jpg"
+                    },
+                    {
+                        title: "Dance Monkey",
+                        artist: "Tones and I",
+                        url: "https://www.youtube.com/watch?v=q0hyYWKXF0Q",
+                        thumbnail: "https://i.ytimg.com/vi/q0hyYWKXF0Q/mqdefault.jpg"
+                    },
+                    {
+                        title: "Watermelon Sugar",
+                        artist: "Harry Styles",
+                        url: "https://www.youtube.com/watch?v=7-x3uD5z1bQ",
+                        thumbnail: "https://i.ytimg.com/vi/7-x3uD5z1bQ/mqdefault.jpg"
+                    },
+                    {
+                        title: "Don't Start Now",
+                        artist: "Dua Lipa",
+                        url: "https://www.youtube.com/watch?v=oygrmJFKYZY",
+                        thumbnail: "https://i.ytimg.com/vi/oygrmJFKYZY/mqdefault.jpg"
                     }
                 ],
                 'sad': [
                     {
-                        title: "All of Me - John Legend",
-                        artist: "John Legend",
-                        url: "https://www.youtube.com/watch?v=450p7goxZqg",
-                        thumbnail: "https://i.ytimg.com/vi/450p7goxZqg/mqdefault.jpg"
+                        title: "Someone You Loved",
+                        artist: "Lewis Capaldi",
+                        url: "https://www.youtube.com/watch?v=zABLecsR5UE",
+                        thumbnail: "https://i.ytimg.com/vi/zABLecsR5UE/mqdefault.jpg"
                     },
                     {
-                        title: "Say Something - A Great Big World",
-                        artist: "A Great Big World",
-                        url: "https://www.youtube.com/watch?v=-2U0Ivkn2Ds",
-                        thumbnail: "https://i.ytimg.com/vi/-2U0Ivkn2Ds/mqdefault.jpg"
+                        title: "Before You Go",
+                        artist: "Lewis Capaldi",
+                        url: "https://www.youtube.com/watch?v=Jtauh8GcxBY",
+                        thumbnail: "https://i.ytimg.com/vi/Jtauh8GcxBY/mqdefault.jpg"
+                    },
+                    {
+                        title: "Lovely",
+                        artist: "Billie Eilish & Khalid",
+                        url: "https://www.youtube.com/watch?v=V1Pl8CzNzCw",
+                        thumbnail: "https://i.ytimg.com/vi/V1Pl8CzNzCw/mqdefault.jpg"
+                    },
+                    {
+                        title: "when the party's over",
+                        artist: "Billie Eilish",
+                        url: "https://www.youtube.com/watch?v=pbMwTqkKSps",
+                        thumbnail: "https://i.ytimg.com/vi/pbMwTqkKSps/mqdefault.jpg"
                     }
                 ],
                 'angry': [
                     {
-                        title: "In The End - Linkin Park",
-                        artist: "Linkin Park",
-                        url: "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
-                        thumbnail: "https://i.ytimg.com/vi/eVTXPUF4Oz4/mqdefault.jpg"
+                        title: "Bad Guy",
+                        artist: "Billie Eilish",
+                        url: "https://www.youtube.com/watch?v=DyDfgMOUjCI",
+                        thumbnail: "https://i.ytimg.com/vi/DyDfgMOUjCI/mqdefault.jpg"
                     },
                     {
-                        title: "Numb - Linkin Park",
-                        artist: "Linkin Park",
-                        url: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
-                        thumbnail: "https://i.ytimg.com/vi/kXYiU_JCYtU/mqdefault.jpg"
+                        title: "Break My Heart",
+                        artist: "Dua Lipa",
+                        url: "https://www.youtube.com/watch?v=Nj2U6rhnucI",
+                        thumbnail: "https://i.ytimg.com/vi/Nj2U6rhnucI/mqdefault.jpg"
+                    },
+                    {
+                        title: "Circles",
+                        artist: "Post Malone",
+                        url: "https://www.youtube.com/watch?v=wXhTHyIgQ_U",
+                        thumbnail: "https://i.ytimg.com/vi/wXhTHyIgQ_U/mqdefault.jpg"
+                    }
+                ],
+                'neutral': [
+                    {
+                        title: "Stay",
+                        artist: "Kid LAROI & Justin Bieber",
+                        url: "https://www.youtube.com/watch?v=kTJczUoc26U",
+                        thumbnail: "https://i.ytimg.com/vi/kTJczUoc26U/mqdefault.jpg"
+                    },
+                    {
+                        title: "Shivers",
+                        artist: "Ed Sheeran",
+                        url: "https://www.youtube.com/watch?v=Il0S8BoucSA",
+                        thumbnail: "https://i.ytimg.com/vi/Il0S8BoucSA/mqdefault.jpg"
+                    },
+                    {
+                        title: "As It Was",
+                        artist: "Harry Styles",
+                        url: "https://www.youtube.com/watch?v=H5v3kku4y6Q",
+                        thumbnail: "https://i.ytimg.com/vi/H5v3kku4y6Q/mqdefault.jpg"
                     }
                 ]
             };
@@ -701,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
                 ${songsHTML}
                 <p style="color: #888; font-size: 12px; margin-top: 10px;">
-                    💡 These are popular songs for your mood. Click any song to listen on YouTube!
+                    💡 These are popular songs from YouTube Music for your mood. Click any song to listen!
                 </p>
             `;
         }
