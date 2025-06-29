@@ -608,12 +608,102 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${playlistsHTML}
                     `;
                 } else {
-                    youtubeRecommendationsDiv.innerHTML = '<p style="color: #888;">No YouTube music recommendations available for this mood.</p>';
+                    // Fallback: Show recommended songs when API returns no results
+                    showFallbackYouTubeRecommendations(mood, youtubeRecommendationsDiv);
                 }
             } catch (error) {
                 console.error('Error fetching YouTube music recommendations:', error);
-                youtubeRecommendationsDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load YouTube music recommendations.</p>';
+                // Fallback: Show recommended songs when API fails
+                showFallbackYouTubeRecommendations(mood, youtubeRecommendationsDiv);
             }
+        }
+
+        // Fallback function to show recommended songs when YouTube API is unavailable
+        function showFallbackYouTubeRecommendations(mood, container) {
+            const moodRecommendations = {
+                'happy': [
+                    {
+                        title: "Happy - Pharrell Williams",
+                        artist: "Pharrell Williams",
+                        url: "https://www.youtube.com/watch?v=y6Sxv-sUYtM",
+                        thumbnail: "https://i.ytimg.com/vi/y6Sxv-sUYtM/mqdefault.jpg"
+                    },
+                    {
+                        title: "Walking on Sunshine - Katrina & The Waves",
+                        artist: "Katrina & The Waves",
+                        url: "https://www.youtube.com/watch?v=iPUmE-tne5U",
+                        thumbnail: "https://i.ytimg.com/vi/iPUmE-tne5U/mqdefault.jpg"
+                    },
+                    {
+                        title: "Good As Hell - Lizzo",
+                        artist: "Lizzo",
+                        url: "https://www.youtube.com/watch?v=Wr9ye2pJqEQ",
+                        thumbnail: "https://i.ytimg.com/vi/Wr9ye2pJqEQ/mqdefault.jpg"
+                    },
+                    {
+                        title: "Can't Stop The Feeling! - Justin Timberlake",
+                        artist: "Justin Timberlake",
+                        url: "https://www.youtube.com/watch?v=ru0K8uYEZWw",
+                        thumbnail: "https://i.ytimg.com/vi/ru0K8uYEZWw/mqdefault.jpg"
+                    },
+                    {
+                        title: "Uptown Funk - Mark Ronson ft. Bruno Mars",
+                        artist: "Mark Ronson ft. Bruno Mars",
+                        url: "https://www.youtube.com/watch?v=OPf0YbXqDm0",
+                        thumbnail: "https://i.ytimg.com/vi/OPf0YbXqDm0/mqdefault.jpg"
+                    }
+                ],
+                'sad': [
+                    {
+                        title: "All of Me - John Legend",
+                        artist: "John Legend",
+                        url: "https://www.youtube.com/watch?v=450p7goxZqg",
+                        thumbnail: "https://i.ytimg.com/vi/450p7goxZqg/mqdefault.jpg"
+                    },
+                    {
+                        title: "Say Something - A Great Big World",
+                        artist: "A Great Big World",
+                        url: "https://www.youtube.com/watch?v=-2U0Ivkn2Ds",
+                        thumbnail: "https://i.ytimg.com/vi/-2U0Ivkn2Ds/mqdefault.jpg"
+                    }
+                ],
+                'angry': [
+                    {
+                        title: "In The End - Linkin Park",
+                        artist: "Linkin Park",
+                        url: "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
+                        thumbnail: "https://i.ytimg.com/vi/eVTXPUF4Oz4/mqdefault.jpg"
+                    },
+                    {
+                        title: "Numb - Linkin Park",
+                        artist: "Linkin Park",
+                        url: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
+                        thumbnail: "https://i.ytimg.com/vi/kXYiU_JCYtU/mqdefault.jpg"
+                    }
+                ]
+            };
+
+            const recommendations = moodRecommendations[mood.toLowerCase()] || moodRecommendations['happy'];
+            
+            const songsHTML = recommendations.map(song => `
+                <div class="youtube-song-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+                    <a href="${song.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                        <img src="${song.thumbnail}" alt="${song.title}" style="width: 120px; height: 90px; border-radius: 4px; object-fit: cover;">
+                        <div>
+                            <div style="font-weight: 500; color: #ff0000;">${song.title}</div>
+                            <div style="font-size: 12px; color: #888;">${song.artist}</div>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
+                ${songsHTML}
+                <p style="color: #888; font-size: 12px; margin-top: 10px;">
+                    💡 These are popular songs for your mood. Click any song to listen on YouTube!
+                </p>
+            `;
         }
 
         function displayMoodResult(mood, expressions) {
@@ -686,18 +776,8 @@ document.addEventListener('DOMContentLoaded', () => {
             recommendationsDiv.innerHTML = `<p>${recommendations}</p>`;
             getMusicRecommendations(mood);
             
-            // Check if user is premium and get YouTube recommendations
-            const currentUser = auth.currentUser;
-            if (currentUser) {
-                // Check if user has premium status (you can implement your own premium check logic)
-                const isPremium = localStorage.getItem('premium-status') === 'true' || 
-                                 currentUser.email?.includes('premium') || 
-                                 currentUser.uid === 'premium-user-id'; // Replace with your premium check logic
-                
-                if (isPremium) {
-                    getYouTubeMusicRecommendations(mood);
-                }
-            }
+            // Always show YouTube recommendations (with fallback for non-premium users)
+            getYouTubeMusicRecommendations(mood);
         }
 
         // Renamed and refactored function to render dashboard charts
