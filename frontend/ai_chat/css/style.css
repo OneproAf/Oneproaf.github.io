@@ -105,6 +105,8 @@ html, body {
     -webkit-box-shadow: 0 0 20px var(--shadow);
     transition: background-color 0.3s ease;
     will-change: transform;
+    /* Ensure proper positioning on mobile */
+    position: relative;
 }
 
 /* Header */
@@ -118,9 +120,12 @@ html, body {
     box-shadow: 0 2px 5px var(--shadow);
     flex-shrink: 0; /* Don't shrink header */
     transition: background-color 0.3s ease;
-    /* Prevent header from being affected by scroll */
-    position: relative;
-    z-index: 10;
+    /* Ensure header is always visible */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    /* Add safe area support for notched devices */
+    padding-top: max(15px, env(safe-area-inset-top));
 }
 
 .header-left {
@@ -225,6 +230,8 @@ html, body {
     transition: background-color 0.3s ease;
     -webkit-overflow-scrolling: touch;
     will-change: scroll-position;
+    /* Ensure proper height calculation */
+    min-height: 0;
 }
 
 /* Custom scrollbar for Webkit browsers (Chrome, Safari) */
@@ -278,12 +285,17 @@ html, body {
 .chat-input-area {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
-    padding-bottom: calc(10px + env(safe-area-inset-bottom)); /* iPhone X safe area */
+    gap: 10px;
+    padding: 15px;
     background-color: var(--bg-input);
     border-top: 1px solid var(--border-color);
-    flex-shrink: 0;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    flex-shrink: 0; /* Don't shrink input area */
+    /* Ensure input area stays above keyboard */
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+    /* Add safe area support for notched devices */
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
 }
 
 #message-input {
@@ -433,16 +445,28 @@ html, body {
 @media (max-width: 600px) {
     body {
         padding: 0;
+        /* Ensure full height on mobile */
+        height: 100vh;
+        height: -webkit-fill-available;
     }
 
     .chat-container {
         border-radius: 0;
         box-shadow: none;
         -webkit-box-shadow: none;
+        /* Ensure full height on mobile */
+        height: 100vh;
+        height: -webkit-fill-available;
     }
 
     .chat-header {
         padding: 12px 15px;
+        /* Ensure header is always visible */
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        /* Add safe area support */
+        padding-top: max(12px, env(safe-area-inset-top));
     }
 
     .chat-title {
@@ -451,6 +475,9 @@ html, body {
 
     .chat-history {
         padding: 10px;
+        /* Ensure proper height calculation */
+        flex: 1;
+        min-height: 0;
     }
 
     .message {
@@ -461,16 +488,59 @@ html, body {
 
     .chat-input-area {
         padding: 8px 10px;
-        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+        /* Ensure input area stays above keyboard */
+        position: sticky;
+        bottom: 0;
+        z-index: 50;
+        /* Add safe area support */
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        /* Add background to ensure visibility */
+        background-color: var(--bg-input);
+        border-top: 1px solid var(--border-color);
     }
 
     #message-input {
         padding: 10px 15px;
         font-size: 15px;
+        /* Prevent zoom on focus */
+        font-size: 16px;
     }
 
     #send-button {
         padding: 10px;
+    }
+}
+
+/* Additional mobile optimizations for iOS */
+@supports (-webkit-touch-callout: none) {
+    .chat-container {
+        /* Use viewport height for iOS */
+        height: 100vh;
+        height: -webkit-fill-available;
+    }
+    
+    .chat-input-area {
+        /* Ensure input area is above keyboard on iOS */
+        position: sticky;
+        bottom: 0;
+        z-index: 50;
+        /* Add extra padding for iOS keyboard */
+        padding-bottom: max(15px, env(safe-area-inset-bottom) + 10px);
+    }
+}
+
+/* Additional mobile optimizations for Android */
+@supports not (-webkit-touch-callout: none) {
+    .chat-container {
+        /* Use viewport height for Android */
+        height: 100vh;
+    }
+    
+    .chat-input-area {
+        /* Ensure input area is above keyboard on Android */
+        position: sticky;
+        bottom: 0;
+        z-index: 50;
     }
 }
 
