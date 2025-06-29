@@ -34,6 +34,362 @@ let chartInstance = null;
 const moodHistory = [];
 let latestScanData = null;
 
+// --- Global Music Functions ---
+function showMusicPlatformButtons(mood) {
+    const musicRecommendationsDiv = document.getElementById('musicRecommendations');
+    if (!musicRecommendationsDiv) return;
+    
+    musicRecommendationsDiv.innerHTML = `
+        <h4 style="color: #a7ffeb; margin-bottom: 20px;">🎵 Choose Your Music Platform:</h4>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="getSpotifyRecommendations('${mood}')" class="music-platform-btn" style="
+                display: flex; 
+                align-items: center; 
+                gap: 10px; 
+                padding: 15px 25px; 
+                background: linear-gradient(45deg, #1DB954, #1ed760); 
+                color: white; 
+                border: none; 
+                border-radius: 25px; 
+                font-size: 16px; 
+                font-weight: 600; 
+                cursor: pointer; 
+                transition: transform 0.2s, box-shadow 0.2s;
+                box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                </svg>
+                Spotify
+            </button>
+            <button onclick="getYouTubeMusicRecommendations('${mood}')" class="music-platform-btn" style="
+                display: flex; 
+                align-items: center; 
+                gap: 10px; 
+                padding: 15px 25px; 
+                background: linear-gradient(45deg, #FF0000, #ff4444); 
+                color: white; 
+                border: none; 
+                border-radius: 25px; 
+                font-size: 16px; 
+                font-weight: 600; 
+                cursor: pointer; 
+                transition: transform 0.2s, box-shadow 0.2s;
+                box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                YouTube Music
+            </button>
+        </div>
+        <div id="spotify-recommendations" style="margin-top: 20px;"></div>
+        <div id="youtube-recommendations" style="margin-top: 20px;"></div>
+    `;
+}
+
+// Function to get Spotify recommendations when button is clicked
+async function getSpotifyRecommendations(mood) {
+    const spotifyDiv = document.getElementById('spotify-recommendations');
+    if (!spotifyDiv) return;
+    
+    spotifyDiv.innerHTML = '<p style="color: #a7ffeb;">Loading Spotify recommendations...</p>';
+    
+    try {
+        const response = await fetch(config.apiUrl(`/api/get-music?mood=${encodeURIComponent(mood)}`));
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        // Clear the recommendations div
+        spotifyDiv.innerHTML = '';
+        
+        // Display tracks if available
+        if (data.tracks && data.tracks.length > 0) {
+            const tracksHTML = data.tracks.map(track => `
+                <div class="track-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+                    <a href="${track.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                        <img src="${track.imageUrl}" alt="${track.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
+                        <div>
+                            <div style="font-weight: 500; color: #1DB954;">${track.name}</div>
+                            <div style="font-size: 12px; color: #888;">${track.artist}</div>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+            
+            spotifyDiv.innerHTML += `
+                <h4 style="color: #1DB954; margin-bottom: 10px;">🎵 Spotify Recommendations:</h4>
+                ${tracksHTML}
+            `;
+        }
+        
+        // Display playlists if available
+        if (data.playlists && data.playlists.length > 0) {
+            const playlistsHTML = data.playlists.map(playlist => {
+                // Extract playlist ID from URL
+                const playlistId = playlist.url.split('/playlist/')[1]?.split('?')[0];
+                return `
+                    <div class="playlist-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+                        <a href="${playlist.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                            <img src="${playlist.imageUrl}" alt="${playlist.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
+                            <span style="font-weight: 500; color: #1DB954;">${playlist.name}</span>
+                        </a>
+                        ${playlistId ? `<button onclick="getPlaylistTracks('${playlistId}', '${playlist.name}')" style="margin-left: auto; padding: 5px 10px; background: #1DB954; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">View Tracks</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            spotifyDiv.innerHTML += `
+                <h4 style="color: #1DB954; margin: 20px 0 10px 0;">📋 Spotify Playlists:</h4>
+                ${playlistsHTML}
+                <div id="trackList" style="margin-top: 15px;"></div>
+            `;
+        }
+        
+        // Show message if no recommendations available
+        if ((!data.tracks || data.tracks.length === 0) && (!data.playlists || data.playlists.length === 0)) {
+            spotifyDiv.innerHTML = '<p style="color: #888;">No Spotify recommendations available for this mood.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching Spotify recommendations:', error);
+        spotifyDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load Spotify recommendations.</p>';
+    }
+}
+
+// YouTube Music Recommendations Function (Premium feature)
+async function getYouTubeMusicRecommendations(mood) {
+    const youtubeRecommendationsDiv = document.getElementById('youtube-recommendations');
+    
+    if (!youtubeRecommendationsDiv) {
+        console.warn('YouTube recommendations div not found');
+        return;
+    }
+    
+    youtubeRecommendationsDiv.innerHTML = '<p style="color: #ff0000;">Loading YouTube Music recommendations...</p>';
+    
+    try {
+        const response = await fetch(config.apiUrl(`/api/get-youtube-music?mood=${encodeURIComponent(mood)}`));
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.playlists && data.playlists.length > 0) {
+            const playlistsHTML = data.playlists.map(playlist => `
+                <div class="youtube-playlist-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+                    <a href="${playlist.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                        <img src="${playlist.thumbnail}" alt="${playlist.title}" style="width: 120px; height: 90px; border-radius: 4px; object-fit: cover;">
+                        <div>
+                            <div style="font-weight: 500; color: #ff0000;">${playlist.title}</div>
+                            <div style="font-size: 12px; color: #888;">${playlist.channelTitle}</div>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+            
+            youtubeRecommendationsDiv.innerHTML = `
+                <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
+                ${playlistsHTML}
+            `;
+        } else {
+            // Fallback: Show recommended songs when API returns no results
+            showFallbackYouTubeRecommendations(mood, youtubeRecommendationsDiv);
+        }
+    } catch (error) {
+        console.error('Error fetching YouTube music recommendations:', error);
+        // Fallback: Show recommended songs when API fails
+        showFallbackYouTubeRecommendations(mood, youtubeRecommendationsDiv);
+    }
+}
+
+// Fallback function to show recommended songs when YouTube API is unavailable
+function showFallbackYouTubeRecommendations(mood, container) {
+    const moodRecommendations = {
+        'happy': [
+            {
+                title: "Blinding Lights",
+                artist: "The Weeknd",
+                url: "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
+                thumbnail: "https://i.ytimg.com/vi/4NRXx6U8ABQ/mqdefault.jpg"
+            },
+            {
+                title: "Levitating",
+                artist: "Dua Lipa",
+                url: "https://www.youtube.com/watch?v=TUVcZfQe-Kw",
+                thumbnail: "https://i.ytimg.com/vi/TUVcZfQe-Kw/mqdefault.jpg"
+            },
+            {
+                title: "Sunflower",
+                artist: "Post Malone & Swae Lee",
+                url: "https://www.youtube.com/watch?v=ApXoWvfEYVU",
+                thumbnail: "https://i.ytimg.com/vi/ApXoWvfEYVU/mqdefault.jpg"
+            },
+            {
+                title: "Sugar",
+                artist: "Maroon 5",
+                url: "https://www.youtube.com/watch?v=09R8_2nJtjg",
+                thumbnail: "https://i.ytimg.com/vi/09R8_2nJtjg/mqdefault.jpg"
+            },
+            {
+                title: "Shape of You",
+                artist: "Ed Sheeran",
+                url: "https://www.youtube.com/watch?v=JGwWNGJdvx8",
+                thumbnail: "https://i.ytimg.com/vi/JGwWNGJdvx8/mqdefault.jpg"
+            },
+            {
+                title: "Dance Monkey",
+                artist: "Tones and I",
+                url: "https://www.youtube.com/watch?v=q0hyYWKXF0Q",
+                thumbnail: "https://i.ytimg.com/vi/q0hyYWKXF0Q/mqdefault.jpg"
+            },
+            {
+                title: "Watermelon Sugar",
+                artist: "Harry Styles",
+                url: "https://www.youtube.com/watch?v=7-x3uD5z1bQ",
+                thumbnail: "https://i.ytimg.com/vi/7-x3uD5z1bQ/mqdefault.jpg"
+            },
+            {
+                title: "Don't Start Now",
+                artist: "Dua Lipa",
+                url: "https://www.youtube.com/watch?v=oygrmJFKYZY",
+                thumbnail: "https://i.ytimg.com/vi/oygrmJFKYZY/mqdefault.jpg"
+            }
+        ],
+        'sad': [
+            {
+                title: "Someone You Loved",
+                artist: "Lewis Capaldi",
+                url: "https://www.youtube.com/watch?v=zABLecsR5UE",
+                thumbnail: "https://i.ytimg.com/vi/zABLecsR5UE/mqdefault.jpg"
+            },
+            {
+                title: "Before You Go",
+                artist: "Lewis Capaldi",
+                url: "https://www.youtube.com/watch?v=Jtauh8GcxBY",
+                thumbnail: "https://i.ytimg.com/vi/Jtauh8GcxBY/mqdefault.jpg"
+            },
+            {
+                title: "Lovely",
+                artist: "Billie Eilish & Khalid",
+                url: "https://www.youtube.com/watch?v=V1Pl8CzNzCw",
+                thumbnail: "https://i.ytimg.com/vi/V1Pl8CzNzCw/mqdefault.jpg"
+            },
+            {
+                title: "when the party's over",
+                artist: "Billie Eilish",
+                url: "https://www.youtube.com/watch?v=pbMwTqkKSps",
+                thumbnail: "https://i.ytimg.com/vi/pbMwTqkKSps/mqdefault.jpg"
+            }
+        ],
+        'angry': [
+            {
+                title: "Bad Guy",
+                artist: "Billie Eilish",
+                url: "https://www.youtube.com/watch?v=DyDfgMOUjCI",
+                thumbnail: "https://i.ytimg.com/vi/DyDfgMOUjCI/mqdefault.jpg"
+            },
+            {
+                title: "Break My Heart",
+                artist: "Dua Lipa",
+                url: "https://www.youtube.com/watch?v=Nj2U6rhnucI",
+                thumbnail: "https://i.ytimg.com/vi/Nj2U6rhnucI/mqdefault.jpg"
+            },
+            {
+                title: "Circles",
+                artist: "Post Malone",
+                url: "https://www.youtube.com/watch?v=wXhTHyIgQ_U",
+                thumbnail: "https://i.ytimg.com/vi/wXhTHyIgQ_U/mqdefault.jpg"
+            }
+        ],
+        'neutral': [
+            {
+                title: "Stay",
+                artist: "Kid LAROI & Justin Bieber",
+                url: "https://www.youtube.com/watch?v=kTJczUoc26U",
+                thumbnail: "https://i.ytimg.com/vi/kTJczUoc26U/mqdefault.jpg"
+            },
+            {
+                title: "Shivers",
+                artist: "Ed Sheeran",
+                url: "https://www.youtube.com/watch?v=Il0S8BoucSA",
+                thumbnail: "https://i.ytimg.com/vi/Il0S8BoucSA/mqdefault.jpg"
+            },
+            {
+                title: "As It Was",
+                artist: "Harry Styles",
+                url: "https://www.youtube.com/watch?v=H5v3kku4y6Q",
+                thumbnail: "https://i.ytimg.com/vi/H5v3kku4y6Q/mqdefault.jpg"
+            }
+        ]
+    };
+
+    const recommendations = moodRecommendations[mood.toLowerCase()] || moodRecommendations['happy'];
+    
+    const songsHTML = recommendations.map(song => `
+        <div class="youtube-song-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
+            <a href="${song.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                <img src="${song.thumbnail}" alt="${song.title}" style="width: 120px; height: 90px; border-radius: 4px; object-fit: cover;">
+                <div>
+                    <div style="font-weight: 500; color: #ff0000;">${song.title}</div>
+                    <div style="font-size: 12px; color: #888;">${song.artist}</div>
+                </div>
+            </a>
+        </div>
+    `).join('');
+
+    container.innerHTML = `
+        <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
+        ${songsHTML}
+        <p style="color: #888; font-size: 12px; margin-top: 10px;">
+            💡 These are popular songs from YouTube Music for your mood. Click any song to listen!
+        </p>
+    `;
+}
+
+// New function to get playlist tracks (global)
+async function getPlaylistTracks(playlistId, playlistName) {
+    const trackListDiv = document.getElementById('trackList');
+    
+    try {
+        trackListDiv.innerHTML = '<p style="color: #a7ffeb;">Loading tracks...</p>';
+        
+        const response = await fetch(config.apiUrl(`/api/get-playlist-tracks?playlistId=${encodeURIComponent(playlistId)}`));
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.trackNames && data.trackNames.length > 0) {
+            const tracksHTML = data.trackNames.map((trackName, index) => `
+                <div style="padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <span style="color: #888; margin-right: 10px;">${index + 1}.</span>
+                    <span style="color: #e0e0e0;">${trackName}</span>
+                </div>
+            `).join('');
+            
+            trackListDiv.innerHTML = `
+                <h5 style="color: #a7ffeb; margin: 15px 0 10px 0;">📝 Tracks in "${playlistName}":</h5>
+                <div style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px;">
+                    ${tracksHTML}
+                </div>
+            `;
+        } else {
+            trackListDiv.innerHTML = '<p style="color: #888;">No tracks found in this playlist.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching playlist tracks:', error);
+        trackListDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load tracks.</p>';
+    }
+}
+
 // --- Navigation Logic ---
 
 function setLanguage(lang) {
@@ -512,7 +868,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <img src="${playlist.imageUrl}" alt="${playlist.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
                                     <span style="font-weight: 500; color: #a7ffeb;">${playlist.name}</span>
                                 </a>
-                                ${playlistId ? `<button onclick="getPlaylistTracks('${playlistId}', '${playlist.name}')" style="margin-left: auto; padding: 5px 10px; background: #1db954; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">View Tracks</button>` : ''}
+                                ${playlistId ? `<button onclick="getPlaylistTracks('${playlistId}', '${playlist.name}')" style="margin-left: auto; padding: 5px 10px; background: #1DB954; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">View Tracks</button>` : ''}
                             </div>
                         `;
                     }).join('');
@@ -532,236 +888,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error fetching music recommendations:', error);
                 musicRecommendationsDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load music recommendations.</p>';
             }
-        }
-
-        // New function to get playlist tracks
-        async function getPlaylistTracks(playlistId, playlistName) {
-            const trackListDiv = document.getElementById('trackList');
-            
-            try {
-                trackListDiv.innerHTML = '<p style="color: #a7ffeb;">Loading tracks...</p>';
-                
-                const response = await fetch(config.apiUrl(`/api/get-playlist-tracks?playlistId=${encodeURIComponent(playlistId)}`));
-                
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                
-                if (data.trackNames && data.trackNames.length > 0) {
-                    const tracksHTML = data.trackNames.map((trackName, index) => `
-                        <div style="padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <span style="color: #888; margin-right: 10px;">${index + 1}.</span>
-                            <span style="color: #e0e0e0;">${trackName}</span>
-                        </div>
-                    `).join('');
-                    
-                    trackListDiv.innerHTML = `
-                        <h5 style="color: #a7ffeb; margin: 15px 0 10px 0;">📝 Tracks in "${playlistName}":</h5>
-                        <div style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px;">
-                            ${tracksHTML}
-                        </div>
-                    `;
-                } else {
-                    trackListDiv.innerHTML = '<p style="color: #888;">No tracks found in this playlist.</p>';
-                }
-            } catch (error) {
-                console.error('Error fetching playlist tracks:', error);
-                trackListDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load tracks.</p>';
-            }
-        }
-
-        // YouTube Music Recommendations Function (Premium feature)
-        async function getYouTubeMusicRecommendations(mood) {
-            const youtubeRecommendationsDiv = document.getElementById('youtube-recommendations');
-            
-            if (!youtubeRecommendationsDiv) {
-                console.warn('YouTube recommendations div not found');
-                return;
-            }
-            
-            youtubeRecommendationsDiv.innerHTML = '<p style="color: #ff0000;">Loading YouTube Music recommendations...</p>';
-            
-            try {
-                const response = await fetch(config.apiUrl(`/api/get-youtube-music?mood=${encodeURIComponent(mood)}`));
-                
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                
-                if (data.playlists && data.playlists.length > 0) {
-                    const playlistsHTML = data.playlists.map(playlist => `
-                        <div class="youtube-playlist-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-                            <a href="${playlist.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                                <img src="${playlist.thumbnail}" alt="${playlist.title}" style="width: 120px; height: 90px; border-radius: 4px; object-fit: cover;">
-                                <div>
-                                    <div style="font-weight: 500; color: #ff0000;">${playlist.title}</div>
-                                    <div style="font-size: 12px; color: #888;">${playlist.channelTitle}</div>
-                                </div>
-                            </a>
-                        </div>
-                    `).join('');
-                    
-                    youtubeRecommendationsDiv.innerHTML = `
-                        <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
-                        ${playlistsHTML}
-                    `;
-                } else {
-                    // Fallback: Show recommended songs when API returns no results
-                    showFallbackYouTubeRecommendations(mood, youtubeRecommendationsDiv);
-                }
-            } catch (error) {
-                console.error('Error fetching YouTube music recommendations:', error);
-                // Fallback: Show recommended songs when API fails
-                showFallbackYouTubeRecommendations(mood, youtubeRecommendationsDiv);
-            }
-        }
-
-        // Fallback function to show recommended songs when YouTube API is unavailable
-        function showFallbackYouTubeRecommendations(mood, container) {
-            const moodRecommendations = {
-                'happy': [
-                    {
-                        title: "Blinding Lights",
-                        artist: "The Weeknd",
-                        url: "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
-                        thumbnail: "https://i.ytimg.com/vi/4NRXx6U8ABQ/mqdefault.jpg"
-                    },
-                    {
-                        title: "Levitating",
-                        artist: "Dua Lipa",
-                        url: "https://www.youtube.com/watch?v=TUVcZfQe-Kw",
-                        thumbnail: "https://i.ytimg.com/vi/TUVcZfQe-Kw/mqdefault.jpg"
-                    },
-                    {
-                        title: "Sunflower",
-                        artist: "Post Malone & Swae Lee",
-                        url: "https://www.youtube.com/watch?v=ApXoWvfEYVU",
-                        thumbnail: "https://i.ytimg.com/vi/ApXoWvfEYVU/mqdefault.jpg"
-                    },
-                    {
-                        title: "Sugar",
-                        artist: "Maroon 5",
-                        url: "https://www.youtube.com/watch?v=09R8_2nJtjg",
-                        thumbnail: "https://i.ytimg.com/vi/09R8_2nJtjg/mqdefault.jpg"
-                    },
-                    {
-                        title: "Shape of You",
-                        artist: "Ed Sheeran",
-                        url: "https://www.youtube.com/watch?v=JGwWNGJdvx8",
-                        thumbnail: "https://i.ytimg.com/vi/JGwWNGJdvx8/mqdefault.jpg"
-                    },
-                    {
-                        title: "Dance Monkey",
-                        artist: "Tones and I",
-                        url: "https://www.youtube.com/watch?v=q0hyYWKXF0Q",
-                        thumbnail: "https://i.ytimg.com/vi/q0hyYWKXF0Q/mqdefault.jpg"
-                    },
-                    {
-                        title: "Watermelon Sugar",
-                        artist: "Harry Styles",
-                        url: "https://www.youtube.com/watch?v=7-x3uD5z1bQ",
-                        thumbnail: "https://i.ytimg.com/vi/7-x3uD5z1bQ/mqdefault.jpg"
-                    },
-                    {
-                        title: "Don't Start Now",
-                        artist: "Dua Lipa",
-                        url: "https://www.youtube.com/watch?v=oygrmJFKYZY",
-                        thumbnail: "https://i.ytimg.com/vi/oygrmJFKYZY/mqdefault.jpg"
-                    }
-                ],
-                'sad': [
-                    {
-                        title: "Someone You Loved",
-                        artist: "Lewis Capaldi",
-                        url: "https://www.youtube.com/watch?v=zABLecsR5UE",
-                        thumbnail: "https://i.ytimg.com/vi/zABLecsR5UE/mqdefault.jpg"
-                    },
-                    {
-                        title: "Before You Go",
-                        artist: "Lewis Capaldi",
-                        url: "https://www.youtube.com/watch?v=Jtauh8GcxBY",
-                        thumbnail: "https://i.ytimg.com/vi/Jtauh8GcxBY/mqdefault.jpg"
-                    },
-                    {
-                        title: "Lovely",
-                        artist: "Billie Eilish & Khalid",
-                        url: "https://www.youtube.com/watch?v=V1Pl8CzNzCw",
-                        thumbnail: "https://i.ytimg.com/vi/V1Pl8CzNzCw/mqdefault.jpg"
-                    },
-                    {
-                        title: "when the party's over",
-                        artist: "Billie Eilish",
-                        url: "https://www.youtube.com/watch?v=pbMwTqkKSps",
-                        thumbnail: "https://i.ytimg.com/vi/pbMwTqkKSps/mqdefault.jpg"
-                    }
-                ],
-                'angry': [
-                    {
-                        title: "Bad Guy",
-                        artist: "Billie Eilish",
-                        url: "https://www.youtube.com/watch?v=DyDfgMOUjCI",
-                        thumbnail: "https://i.ytimg.com/vi/DyDfgMOUjCI/mqdefault.jpg"
-                    },
-                    {
-                        title: "Break My Heart",
-                        artist: "Dua Lipa",
-                        url: "https://www.youtube.com/watch?v=Nj2U6rhnucI",
-                        thumbnail: "https://i.ytimg.com/vi/Nj2U6rhnucI/mqdefault.jpg"
-                    },
-                    {
-                        title: "Circles",
-                        artist: "Post Malone",
-                        url: "https://www.youtube.com/watch?v=wXhTHyIgQ_U",
-                        thumbnail: "https://i.ytimg.com/vi/wXhTHyIgQ_U/mqdefault.jpg"
-                    }
-                ],
-                'neutral': [
-                    {
-                        title: "Stay",
-                        artist: "Kid LAROI & Justin Bieber",
-                        url: "https://www.youtube.com/watch?v=kTJczUoc26U",
-                        thumbnail: "https://i.ytimg.com/vi/kTJczUoc26U/mqdefault.jpg"
-                    },
-                    {
-                        title: "Shivers",
-                        artist: "Ed Sheeran",
-                        url: "https://www.youtube.com/watch?v=Il0S8BoucSA",
-                        thumbnail: "https://i.ytimg.com/vi/Il0S8BoucSA/mqdefault.jpg"
-                    },
-                    {
-                        title: "As It Was",
-                        artist: "Harry Styles",
-                        url: "https://www.youtube.com/watch?v=H5v3kku4y6Q",
-                        thumbnail: "https://i.ytimg.com/vi/H5v3kku4y6Q/mqdefault.jpg"
-                    }
-                ]
-            };
-
-            const recommendations = moodRecommendations[mood.toLowerCase()] || moodRecommendations['happy'];
-            
-            const songsHTML = recommendations.map(song => `
-                <div class="youtube-song-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-                    <a href="${song.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                        <img src="${song.thumbnail}" alt="${song.title}" style="width: 120px; height: 90px; border-radius: 4px; object-fit: cover;">
-                        <div>
-                            <div style="font-weight: 500; color: #ff0000;">${song.title}</div>
-                            <div style="font-size: 12px; color: #888;">${song.artist}</div>
-                        </div>
-                    </a>
-                </div>
-            `).join('');
-
-            container.innerHTML = `
-                <h4 style="color: #ff0000; margin-bottom: 10px;">🎵 YouTube Music Recommendations:</h4>
-                ${songsHTML}
-                <p style="color: #888; font-size: 12px; margin-top: 10px;">
-                    💡 These are popular songs from YouTube Music for your mood. Click any song to listen!
-                </p>
-            `;
         }
 
         function displayMoodResult(mood, expressions) {
@@ -944,129 +1070,6 @@ document.addEventListener('DOMContentLoaded', () => {
             supportBackBtn.addEventListener('click', function() {
                 showScreen(homeScreen);
             });
-        }
-
-        // Function to show music platform buttons
-        function showMusicPlatformButtons(mood) {
-            musicRecommendationsDiv.innerHTML = `
-                <h4 style="color: #a7ffeb; margin-bottom: 20px;">🎵 Choose Your Music Platform:</h4>
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="getSpotifyRecommendations('${mood}')" class="music-platform-btn" style="
-                        display: flex; 
-                        align-items: center; 
-                        gap: 10px; 
-                        padding: 15px 25px; 
-                        background: linear-gradient(45deg, #1DB954, #1ed760); 
-                        color: white; 
-                        border: none; 
-                        border-radius: 25px; 
-                        font-size: 16px; 
-                        font-weight: 600; 
-                        cursor: pointer; 
-                        transition: transform 0.2s, box-shadow 0.2s;
-                        box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
-                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-                        </svg>
-                        Spotify
-                    </button>
-                    <button onclick="getYouTubeMusicRecommendations('${mood}')" class="music-platform-btn" style="
-                        display: flex; 
-                        align-items: center; 
-                        gap: 10px; 
-                        padding: 15px 25px; 
-                        background: linear-gradient(45deg, #FF0000, #ff4444); 
-                        color: white; 
-                        border: none; 
-                        border-radius: 25px; 
-                        font-size: 16px; 
-                        font-weight: 600; 
-                        cursor: pointer; 
-                        transition: transform 0.2s, box-shadow 0.2s;
-                        box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                        YouTube Music
-                    </button>
-                </div>
-                <div id="spotify-recommendations" style="margin-top: 20px;"></div>
-                <div id="youtube-recommendations" style="margin-top: 20px;"></div>
-            `;
-        }
-
-        // Function to get Spotify recommendations when button is clicked
-        async function getSpotifyRecommendations(mood) {
-            const spotifyDiv = document.getElementById('spotify-recommendations');
-            if (!spotifyDiv) return;
-            
-            spotifyDiv.innerHTML = '<p style="color: #a7ffeb;">Loading Spotify recommendations...</p>';
-            
-            try {
-                const response = await fetch(config.apiUrl(`/api/get-music?mood=${encodeURIComponent(mood)}`));
-                
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                
-                // Clear the recommendations div
-                spotifyDiv.innerHTML = '';
-                
-                // Display tracks if available
-                if (data.tracks && data.tracks.length > 0) {
-                    const tracksHTML = data.tracks.map(track => `
-                        <div class="track-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-                            <a href="${track.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                                <img src="${track.imageUrl}" alt="${track.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
-                                <div>
-                                    <div style="font-weight: 500; color: #1DB954;">${track.name}</div>
-                                    <div style="font-size: 12px; color: #888;">${track.artist}</div>
-                                </div>
-                            </a>
-                        </div>
-                    `).join('');
-                    
-                    spotifyDiv.innerHTML += `
-                        <h4 style="color: #1DB954; margin-bottom: 10px;">🎵 Spotify Recommendations:</h4>
-                        ${tracksHTML}
-                    `;
-                }
-                
-                // Display playlists if available
-                if (data.playlists && data.playlists.length > 0) {
-                    const playlistsHTML = data.playlists.map(playlist => {
-                        // Extract playlist ID from URL
-                        const playlistId = playlist.url.split('/playlist/')[1]?.split('?')[0];
-                        return `
-                            <div class="playlist-item" style="margin: 10px 0; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(255,255,255,0.05);">
-                                <a href="${playlist.url}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                                    <img src="${playlist.imageUrl}" alt="${playlist.name}" style="width: 60px; height: 60px; border-radius: 4px; object-fit: cover;">
-                                    <span style="font-weight: 500; color: #1DB954;">${playlist.name}</span>
-                                </a>
-                                ${playlistId ? `<button onclick="getPlaylistTracks('${playlistId}', '${playlist.name}')" style="margin-left: auto; padding: 5px 10px; background: #1DB954; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">View Tracks</button>` : ''}
-                            </div>
-                        `;
-                    }).join('');
-                    
-                    spotifyDiv.innerHTML += `
-                        <h4 style="color: #1DB954; margin: 20px 0 10px 0;">📋 Spotify Playlists:</h4>
-                        ${playlistsHTML}
-                        <div id="trackList" style="margin-top: 15px;"></div>
-                    `;
-                }
-                
-                // Show message if no recommendations available
-                if ((!data.tracks || data.tracks.length === 0) && (!data.playlists || data.playlists.length === 0)) {
-                    spotifyDiv.innerHTML = '<p style="color: #888;">No Spotify recommendations available for this mood.</p>';
-                }
-            } catch (error) {
-                console.error('Error fetching Spotify recommendations:', error);
-                spotifyDiv.innerHTML = '<p style="color: #ff8a80;">Unable to load Spotify recommendations.</p>';
-            }
         }
     }
 
