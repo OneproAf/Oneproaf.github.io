@@ -456,7 +456,23 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Responsive Adjustments */
+/* Mood Result Animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .logo-text {
         font-size: 2.5em;
@@ -509,6 +525,24 @@ footer a:hover {
         font-size: 0.9em;
         min-width: 35px;
         height: 30px;
+    }
+    
+    .buttons-section {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .home-button {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .step-card, .testimonial-card {
+        margin: 10px 0;
+    }
+    
+    .steps-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
     }
 }
 

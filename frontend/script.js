@@ -1151,8 +1151,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 moodText += ` (${(expressions[mood] * 100).toFixed(1)}%)`;
             }
             
-            moodResult.textContent = moodText;
-            recommendationsDiv.innerHTML = `<p>${recommendations}</p>`;
+            // Update mood result with beautiful styling
+            moodResult.innerHTML = `
+                <div style="
+                    text-align: center; 
+                    padding: 30px 20px; 
+                    background: linear-gradient(135deg, rgba(167, 255, 235, 0.1), rgba(255, 255, 255, 0.05)); 
+                    border-radius: 20px; 
+                    border: 1px solid rgba(167, 255, 235, 0.2); 
+                    margin: 20px 0;
+                    backdrop-filter: blur(10px);
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                ">
+                    <h2 style="
+                        color: #a7ffeb; 
+                        margin-bottom: 15px; 
+                        font-size: 2.2em; 
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                        letter-spacing: 1px;
+                    ">🎭 Your Mood Analysis 🎭</h2>
+                    
+                    <div style="
+                        font-size: 2.5em; 
+                        margin: 20px 0; 
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                        animation: pulse 2s infinite;
+                    ">${moodText}</div>
+                    
+                    <div style="
+                        margin-top: 25px; 
+                        padding: 20px; 
+                        background: rgba(255, 255, 255, 0.05); 
+                        border-radius: 15px; 
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                    ">
+                        <h3 style="
+                            color: #a7ffeb; 
+                            margin-bottom: 15px; 
+                            font-size: 1.3em; 
+                            font-weight: 600;
+                        ">💡 AI Recommendations 💡</h3>
+                        <p style="
+                            color: #e0e0e0; 
+                            font-size: 1.1em; 
+                            line-height: 1.6;
+                            margin: 0;
+                            opacity: 0.9;
+                        ">${recommendations}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Update recommendations div with beautiful styling
+            recommendationsDiv.innerHTML = `
+                <div style="
+                    text-align: center; 
+                    margin: 20px 0; 
+                    padding: 15px; 
+                    background: rgba(255, 255, 255, 0.03); 
+                    border-radius: 15px; 
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                ">
+                    <p style="
+                        color: #b0b0b0; 
+                        font-size: 0.95em; 
+                        margin: 0; 
+                        line-height: 1.5;
+                    ">✨ <strong style="color: #a7ffeb;">AI Insight:</strong> Your emotional state has been analyzed with advanced facial recognition technology! 🧠</p>
+                </div>
+            `;
             
             // Show music platform buttons instead of automatic recommendations
             showMusicPlatformButtons(mood);
