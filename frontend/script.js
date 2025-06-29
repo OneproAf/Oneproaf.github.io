@@ -213,22 +213,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Fix back to home buttons - all should go to home-screen
-        const backToHomeButtons = [
-            backToHomeBtn1, backToHomeBtn2, backToHomeBtn5, backToHomeBtn6, 
-            backToHomeBtn7, backToHomeBtn8, backToHomeBtn9, backToHomeBtn10
-        ];
-
-        backToHomeButtons.forEach((button, index) => {
-            if (button) {
-                console.log(`Setting up back to home button ${index + 1}`);
-                button.addEventListener('click', () => {
-                    console.log(`Back to home button ${index + 1} clicked`);
-                    showScreen(homeScreen);
-                });
-            } else {
-                console.warn(`Back to home button ${index + 1} not found in DOM`);
-            }
+        // Fix back to home buttons - all should go to home-screen and reload
+        const allBackButtons = document.querySelectorAll('.back-button');
+        allBackButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                window.location.href = '/';
+            });
         });
 
         if (scanMoodHomeBtn) {
@@ -818,14 +808,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 showScreen(homeScreen);
             });
         }
-
-        // After startApplication is called, ensure all .back-button elements go to home
-        const allBackButtons = document.querySelectorAll('.back-button');
-        allBackButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                showScreen(homeScreen);
-            });
-        });
     }
 
     // Start waiting for Firebase
